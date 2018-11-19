@@ -1,0 +1,32 @@
+
+<!-- The Modal -->
+<div class="modal fade" id="loadWorkflowModal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+
+			<!-- Modal Header -->
+			<div class="modal-header">
+				<h4 class="modal-title">Load Workflow</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Modal body -->
+			<div class="modal-body">
+				<form role="form" class="form-horizontal" name="createWorkflowForm">
+					<div class="form-group">
+						<label for="workflowName" class="control-label"> Workflow Name</label>
+						<div class="COL-SM-8">
+							<input type="text" class="form-control" id="workflowName"
+								placeholder="Name" ng-model="workflow.name" />
+						</div>
+					</div>
+					<div class="form-group">
+					<button class="btn btn-primary btn-sm" ng-click="loadWorkflow()" 
+											data-dismiss="modal">Submit</button>
+					</div>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+</div>
