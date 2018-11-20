@@ -82,6 +82,8 @@ $scope.handlePreviousRequest = function(){
 	
 	if(load=="true"){
 		$scope.loadWf(url.searchParams.get("name"));
+	}else if(create=="true"){
+	    $("#newWorkflowModal").modal("show");
 	}
 	
 	
@@ -685,7 +687,7 @@ $scope.handlePreviousRequest = function(){
 		console.log("load main welcome dialogue");
 		//$("#welcomepage").modal("show");
 		
-		$scope.handlePreviousRequest();
+
 	}; // end init
 
 	/**************************************************************************************

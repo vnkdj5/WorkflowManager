@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>WELCOME PAGE</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <style>
+.welcomebtn {
+	background-color: DodgerBlue;
+	border: none;
+	color: white;
+	padding: 12px 12px;
+	font-size: 12px;
+	cursor: pointer;
+}
+.welcomebtn:hover {
+	background-color: RoyalBlue;
+}
+input[type=text] {
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	box-sizing: border-box;
+	border: 1px solid #555;
+	outline: none;
+}
+input[type=text]:focus {
+	background-color: lightblue;
+}
+</style>
+
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="scripts/welcomeController.js"></script>
+
+</head>
+<body ng-app="myApp" ng-controller="controller">
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <!-- Brand -->
+    <a class="navbar-brand" style="font-size:1.25rem;" href="#">Workflow Manager</a>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+
+    </div>
+</nav>
+<div >
+    <div class="container">
+        <br />
+
+        <div class="row">
+            <div class="col-sm-3 ">
+                <button class="welcomebtn"
+                        ng-click="createWorkflow()">
+                    <i class="fa fa-play"></i> Create workflow
+                </button>
+
+            </div>
+            <div class="col-sm-6 ">
+                <input type="text" ng-model="search" ng-change="filter()"
+                       placeholder="Search..." class=form-control />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-12" ng-show="filter_data > 0">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <th>SrNo&nbsp;<a><ng-click="sort_with('number');">
+                        <i class="glyphicon glyphicon-sort"></a></i></th>
+                    <th>Name&nbsp;<a><ng-click="sort_with('name');">
+                        <i class="glyphicon glyphicon-sort"></a></i></th>
+                    <th>Last-Modified&nbsp;<a><ng-click="sort_with('time');">
+                        <i class="glyphicon glyphicon-sort"></a></i></th>
+                    <th>Options&nbsp;</th>
+                    </thead>
+                    <tbody>
+                    <tr
+                            ng-repeat="data in searched = (file | filter:search | orderBy : base :reverse)|
+									beginning_data:(current_grid-1)*data_limit| limitTo:data_limit">
+                        <td>{{$index+1}}</td>
+                        <td>{{data.name}}</td>
+                        <td>{{data.timestamp}}</td>
+                        <td>
+                            <button class="welcomebtn"
+                                    ng-click="deleteWf($index,data.name)">
+                                <i class="fa fa-trash"></i> delete
+                            </button>
+                            <button class="welcomebtn" ng-click="loadWorkflow(data.name)">
+                                <i class="fa fa-play"></i> load
+                            </button>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12" ng-show="filter_data == 0">
+                <div class="col-md-12">
+                    <h4>No Workflow available</h4>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
