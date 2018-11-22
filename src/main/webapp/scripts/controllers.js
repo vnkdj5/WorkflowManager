@@ -249,12 +249,7 @@ $scope.handlePreviousRequest = function(){
 				function success(response){
 					$scope.validGraphLinks=response.data;
 					//notify.showInfo("Info!", "valid Links Loaded")
-					console.log($scope.validGraphLinks);
-					//load welcome
-					
 
-					
-					//$("#welcomepage").modal("show");
 				},
 				function error(response){
 
@@ -274,9 +269,11 @@ $scope.handlePreviousRequest = function(){
 					{
 						$scope.model=component.config;
 					}
+/*
 
 					console.log($scope.model);
 					console.log($scope.schema + " "+ $scope.form);
+*/
 
 					$('#myModal').modal('show');
 
@@ -374,7 +371,6 @@ $scope.handlePreviousRequest = function(){
 		});
 
 		$scope.myDiagram.contextMenu = myContextMenu;
-		console.log("Context Menu: "+JSON.stringify($scope.myDiagram.contextMenu));
 		// We don't want the div acting as a context menu to have a (browser) context menu!
 		cxElement.addEventListener("contextmenu", function(e) {
 
@@ -422,7 +418,7 @@ $scope.handlePreviousRequest = function(){
 				let inputLink=linkDataArr.find(link => link.to==linkTo).from;
 				let outputLink=linkDataArr.find(link => link.from==linkFrom).to;
 				
-				console.log("i:"+inputLink+"o:"+outputLink+"d:"+duplicateLink);
+				//console.log("i:"+inputLink+"o:"+outputLink+"d:"+duplicateLink);
 				
 				if(!validLink || inputLink!=linkFrom || outputLink!=linkTo || duplicateLink!=index){
 					MD.model.removeLinkData(e.newValue);
@@ -682,45 +678,8 @@ $scope.handlePreviousRequest = function(){
 
 					});
 
-		// $scope.myPalette.model.nodeDataArray=$scope.loadComponents();
-		// console.log($scope.loadComponents());
-		console.log("load main welcome dialogue");
-		//$("#welcomepage").modal("show");
-		
-
 	}; // end init
 
-	/**************************************************************************************
-	 * 	File Uploading
-	 * 
-	 * 
-	 * [  // specify the contents of the Palette
-		            { category: "Start", text: "Start" },
-		            { category:"MongoWriter",text: "MongoWriter" },
-		            { category:"CsvReader",text: "CsvReader"},
-		            {category:"Mapper", text:"Mapper"},
-		            { category: "End", text: "End" }
-		          ]
-	 * **********************************************************************************/
-	$scope.dataUpload = true;
-	$scope.errVisibility = false;
-	$scope.uploadFile = function(){
-		var file = $scope.myFile;
-		//console.log('file is ' );
-		// console.dir(file);
-		var uploadUrl = "/WorkflowManager/uploadfile";
-		//console.log(fileUpload);
-		fileUpload.uploadFileToUrl(file, uploadUrl).then(function(result){
-			$scope.response = fileUpload.getResponse();
-			//  console.log($scope.response);
-			$scope.content=$scope.response;
-			$scope.errVisibility = true;
-		}, function(error) {
-			alert('error');
-		})
-	};
-	
-	
 }]);
 
 
