@@ -37,12 +37,12 @@ app.controller('controller', function($scope, $http, $timeout,welcomeService) {
 
 	$scope.createWorkflow = function(){
 		console.log("workflow creaate");
-		window.location.href = "/WorkflowManager/index.html?create=true"
+		window.location.href = "/WorkflowManager/index.html?create=1"
 	};
 
 	$scope.loadWorkflow = function(name){
 		console.log("workflow creaate");
-		window.location.href = "/WorkflowManager/index.html?load=true&name="+name;
+		window.location.href = "/WorkflowManager/index.html?load=1&name="+name;
 	};
     $http.get('/WorkflowManager/getAll').then(function(user_data) {
         $scope.file = user_data.data;
