@@ -115,6 +115,7 @@ $scope.handlePreviousRequest = function(){
 		//$scope.myDiagram.model.nodeDataArray.find(component => component.category!=null && component.category!=undefined && component.category=="CsvReader" && component.config!=null).valid=true;
 
 		$scope.selectedComponent=null;
+		$scope.myDiagram.isModified = true;
 		$("#myModal").modal("hide");
 	}
 //	run the workflow method
@@ -140,7 +141,7 @@ $scope.handlePreviousRequest = function(){
 
 	};
 	$rootScope.$on('uploadEvent', function(evt, data) {//Executed only for fileupload event
-		$scope.model.filePath=data;
+		$scope.model.filePath.push(data);
 	});
 
 

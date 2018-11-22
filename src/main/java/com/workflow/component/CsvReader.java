@@ -2,12 +2,13 @@ package com.workflow.component;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.opencsv.*;
 
 public class CsvReader implements Component{
 
-	String[] csvFilePath = {""};
+	ArrayList<String> csvFilePath;
 	CSVReader reader;
 	String[] headers;
 	int totalFiles;
@@ -15,11 +16,11 @@ public class CsvReader implements Component{
 	
 	@Override
 	public boolean init(Entity config) {
-		csvFilePath[0] = (String) config.getObjectByName("file"); 
-		totalFiles = 1;//csvFilePath.length;
+		csvFilePath = (ArrayList<String>) config.getObjectByName("filePath"); 
+		totalFiles = csvFilePath.size();
 		readCompleteFile=0;
 		try {
-			reader = new CSVReader(new FileReader(csvFilePath[readCompleteFile]));
+			reader = new CSVReader(new FileReader(csvFilePath.get(readCompleteFile)));
 			headers = reader.readNext();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -47,7 +48,7 @@ public class CsvReader implements Component{
 			}else if(record==null && readCompleteFile<totalFiles){
 				readCompleteFile++;
 				if(readCompleteFile<totalFiles) {
-					reader = new CSVReader(new FileReader(csvFilePath[readCompleteFile]));
+					reader = new CSVReader(new FileReader(csvFilePath.get(readCompleteFile)));
 				}else {
 					return null;
 				}
@@ -70,10 +71,10 @@ public class CsvReader implements Component{
 				+ ",\"properties\":{\"file\":{\"title\":\"CSV File Upload\",\"type\":\"array\",\"format\":\"multifile\",\"x-schema-form\":{\"type\":\"array\"},"
 				+ "\"pattern\":{\"mimeType\":\"text/*\",\"validationMessage\":\"Text Files only \"},"
 				+ "\"maxSize\":{\"maximum\":\"1024MB\",\"validationMessage\":\"File upload limit reached: \"}},"
-				+ "\"filePath\":{\"title\":\"File Path\",\"type\":\"string\"}},"
+				+ "\"filePath\":{\"title\":\"File Paths\",\"type\":\"array\",\"items\":{\"type\":\"string\"}}},"
 				+ "\"required\":[\"file\"]},"
 				+ "\"form\":[{\"key\":\"file\",\"type\":\"nwpFileUpload\",\"endpoint\":\"/WorkflowManager/uploadfile\",\"onChange\":\"updated(model,form)\"}"
-				+ ",{\"title\":\"Uploaded Path\",\"key\":\"filePath\",\"type\":\"text\"},"
+				+ ",{\"title\":\"Uploaded Path\",\"key\":\"filePath\",\"type\":\"array\"},"
 				+ "{\"type\":\"submit\",\"title\":\"Save\"}]}";
 	}
 
