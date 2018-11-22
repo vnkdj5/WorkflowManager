@@ -110,6 +110,7 @@ public class Helper {
 	public HashMap<String,String> getHeaders(String filePath){
 		HashMap<String, String> headerInfo=new HashMap<>();
 		String[] headers;
+		String[] entry;
 		FileReader fr=null;
 		try {
 			fr=new FileReader(filePath);
@@ -120,15 +121,18 @@ public class Helper {
 		CSVReader reader=new CSVReader(fr);
 		try {
 			headers=reader.readNext();
+			entry=reader.readNext();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 		for(int i=0;i<headers.length;i++) {
-			if(headers[i].toLowerCase().equals("true") || headers[i].toLowerCase().equals("false"))
+			if(entry[i].toLowerCase().equals("true") || entry[i].toLowerCase().equals("false"))
 				headerInfo.put(headers[i], "boolean");
-			else if(StringUtils.isNumeric(headers[i]))
+			else if(StringUtils.isNumeric(entry[i]))
 				headerInfo.put(headers[i], "int");
+			else if(entry[i].matches("[0-9]([.][0-9])*[0-9]*"))
+				headerInfo.put(headers[i], "float");
 			else headerInfo.put(headers[i], "String");
 		}
 		return headerInfo;
