@@ -80,9 +80,10 @@ $scope.handlePreviousRequest = function(){
 	var create = url.searchParams.get("create");
 	var load = url.searchParams.get("load");
 	
-	if(load=="true"){
+	if(load==1){
 		$scope.loadWf(url.searchParams.get("name"));
-	}else if(create=="true"){
+	}else if(create==1){
+		console.log($scope.myDiagram.model.nodeDataArray.length>0 && $scope.myDiagram.model.linkDataArray.length>0);
 	    $("#newWorkflowModal").modal("show");
 	}
 	
@@ -113,6 +114,7 @@ $scope.handlePreviousRequest = function(){
 		//$scope.myDiagram.model.nodeDataArray.find(component => component.category!=null && component.category!=undefined && component.category=="CsvReader" && component.config!=null).valid=true;
 
 		$scope.selectedComponent=null;
+		$scope.myDiagram.isModified = true;
 		$("#myModal").modal("hide");
 	}
 //	run the workflow method
@@ -138,7 +140,7 @@ $scope.handlePreviousRequest = function(){
 
 	};
 	$rootScope.$on('uploadEvent', function(evt, data) {//Executed only for fileupload event
-		$scope.model.filePath=data;
+		$scope.model.filePath.push(data);
 	});
 
 
@@ -155,8 +157,17 @@ $scope.handlePreviousRequest = function(){
 					//alert(response.data)
 					notify.showSuccess("Success!", "Workflow created Successsfully.");
 					graph = response.data.Graph.jgraph;
-					$scope.myDiagram.model = go.Model.fromJson(graph);
+
+					if($scope.myDiagram.model.nodeDataArray.length>0 || $scope.myDiagram.model.linkDataArray.length>0){
+						$scope.save();
+					}else{
+						$scope.myDiagram.model = go.Model.fromJson(graph);
+					}
+
+
 					$scope.currentWorkflowName = response.data.Graph.name;
+
+
 					//alert(graph)
 					$("#newWorkflowModal").modal("hide");
 
@@ -677,6 +688,12 @@ $scope.handlePreviousRequest = function(){
 
 
 					});
+
+		// $scope.myPalette.model.nodeDataArray=$scope.loadComponents();
+		// console.log($scope.loadComponents());
+		console.log("load main welcome dialogue");
+		//$("#welcomepage").modal("show");
+		$scope.handlePreviousRequest();
 
 	}; // end init
 

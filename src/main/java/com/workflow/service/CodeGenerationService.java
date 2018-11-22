@@ -24,11 +24,11 @@ public class CodeGenerationService {
 		
 		//CsvReader csv = new CsvReader();
 		Component csv = (Component) help.getObjectByClassName("CsvReader");
-		csv.init(graph.getNodes().get(0).getConfig());
+		csv.init(graph.getNodes().get(0).getConfig(),null,null);
 		
 		//MongoWriter mw = new MongoWriter();
 		Component mw = (Component) help.getObjectByClassName("MongoWriter");
-		mw.init(graph.getNodes().get(1).getConfig());
+		mw.init(graph.getNodes().get(1).getConfig(),null,null);
 		
 		Entity out;
 		

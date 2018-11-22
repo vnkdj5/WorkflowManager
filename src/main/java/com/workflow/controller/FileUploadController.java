@@ -1,8 +1,9 @@
 package com.workflow.controller;
-
+import com.workflow.service.Helper;
 import java.io.*;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class FileUploadController {
 
+	@Autowired
+	Helper helper;
 	@RequestMapping(value="/uploadfile", method=RequestMethod.POST)
 	public ResponseEntity<HashMap> uploadFile(@RequestParam("file") MultipartFile file){
 		
@@ -39,6 +42,7 @@ public class FileUploadController {
 						new FileOutputStream(serverFile));
 				stream.write(bytes);
 				stream.close();
+				map.put("headers", helper.getHeaders(serverFile.getAbsolutePath()));
 				map.put("message", "File Uploaded successfully");
 				map.put("path",serverFile.getAbsolutePath());
 				return new ResponseEntity<HashMap>(map,HttpStatus.OK);

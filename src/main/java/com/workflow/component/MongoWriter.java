@@ -22,7 +22,7 @@ public class MongoWriter implements Component{
 	}
 
 	@Override
-	public boolean init(Entity config) {
+	public boolean init(Entity config,Entity input,Entity output) {
 		mongo = new MongoClient((String)config.getObjectByName("url"),27017);
 		db = mongo.getDatabase((String)config.getObjectByName("database"));
 		collection = db.getCollection((String)config.getObjectByName("collection"));

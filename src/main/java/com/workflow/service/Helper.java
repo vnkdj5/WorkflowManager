@@ -1,5 +1,8 @@
 package com.workflow.service;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +22,7 @@ import com.mongodb.MongoClientException;
 import com.mongodb.MongoCredential;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.ServerAddress;
+import com.opencsv.CSVReader;
 import com.workflow.component.*;
 
 @Service("helper")
@@ -102,4 +107,34 @@ public class Helper {
 		return true;
 	}
 
+	public HashMap<String,String> getHeaders(String filePath){
+		HashMap<String, String> headerInfo=new HashMap<>();
+		String[] headers;
+		String[] entry;
+		FileReader fr=null;
+		try {
+			fr=new FileReader(filePath);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		CSVReader reader=new CSVReader(fr);
+		try {
+			headers=reader.readNext();
+			entry=reader.readNext();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		for(int i=0;i<headers.length;i++) {
+			if(entry[i].toLowerCase().equals("true") || entry[i].toLowerCase().equals("false"))
+				headerInfo.put(headers[i], "boolean");
+			else if(StringUtils.isNumeric(entry[i]))
+				headerInfo.put(headers[i], "int");
+			else if(entry[i].matches("[0-9]([.][0-9])*[0-9]*"))
+				headerInfo.put(headers[i], "float");
+			else headerInfo.put(headers[i], "String");
+		}
+		return headerInfo;
+	}
 }

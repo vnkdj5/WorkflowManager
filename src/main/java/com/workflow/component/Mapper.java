@@ -1,17 +1,33 @@
 package com.workflow.component;
 
-public class Mapper implements Component{
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
+public class Mapper implements Component{
+	
+	Entity output;
+	ArrayList<String> allowedheaders;
 	@Override
-	public boolean init(Entity config) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean init(Entity config,Entity input,Entity output) {
+		
+		this.output = output;
+		allowedheaders = (ArrayList<String>) this.output.getEntity().keySet();
+		return true;
 	}
 
 	@Override
 	public Entity process(Entity input) {
-		// TODO Auto-generated method stub
-		return null;
+		Entity out= new Entity();
+		HashMap<String, Object> in = input.getEntity();
+		for (Entry<String, Object> entry : in.entrySet()) {
+			if(allowedheaders.contains(entry.getKey())) {
+				out.addKeyValue(entry.getKey(), entry.getValue());
+			}
+		}
+            
+		return out;
 	}
 
 	@Override
@@ -26,4 +42,5 @@ public class Mapper implements Component{
 		return null;
 	}
 
+	
 }
