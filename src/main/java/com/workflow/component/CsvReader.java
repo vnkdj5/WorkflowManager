@@ -15,7 +15,7 @@ public class CsvReader implements Component{
 	int readCompleteFile;
 	
 	@Override
-	public boolean init(Entity config) {
+	public boolean init(Entity config,Entity input,Entity output) {
 		csvFilePath = (ArrayList<String>) config.getObjectByName("filePath"); 
 		totalFiles = csvFilePath.size();
 		readCompleteFile=0;
