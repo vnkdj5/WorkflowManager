@@ -42,7 +42,7 @@ public class FileUploadController {
 						new FileOutputStream(serverFile));
 				stream.write(bytes);
 				stream.close();
-				map.put("headers", helper.getHeaders(serverFile.getAbsolutePath()));
+				map.put("headers", helper.getHeaders(serverFile.getAbsolutePath()).toList());
 				map.put("message", "File Uploaded successfully");
 				map.put("path",serverFile.getAbsolutePath());
 				return new ResponseEntity<HashMap>(map,HttpStatus.OK);

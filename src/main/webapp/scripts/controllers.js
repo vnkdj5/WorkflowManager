@@ -1,26 +1,26 @@
 //for welcome page
 app.filter('beginning_data', function() {
-    return function(input, begin) {
-        if (input) {
-            begin = +begin;
-            return input.slice(begin);
-        }
-        return [];
-    }
+	return function(input, begin) {
+		if (input) {
+			begin = +begin;
+			return input.slice(begin);
+		}
+		return [];
+	}
 });
 
 app.controller('DiagramCtrl',['$scope', '$rootScope','fileUpload','graphService','componentService', '$q', 'notificationService','$timeout' , function($scope,$rootScope,fileUpload,graphService,componentService,$q,notify,$http,$location,$timeout) {
-  $scope.schema=null;
-  $scope.form=[];
-  $scope.model = {};
-  
-  
-$scope.workflow={};
-$scope.json=JSON.stringify($scope.workflow, undefined, 4);
-$scope.content=$scope.json;
-$scope.palleteModel=[];
-$scope.currentWorkflowName="";
-$scope.selectedComponent={};
+	$scope.schema=null;
+	$scope.form=[];
+	$scope.model = {};
+
+
+	$scope.workflow={};
+	$scope.json=JSON.stringify($scope.workflow, undefined, 4);
+	$scope.content=$scope.json;
+	$scope.palleteModel=[];
+	$scope.currentWorkflowName="";
+	$scope.selectedComponent={};
 
 
 	$scope.workflow={};
@@ -30,64 +30,64 @@ $scope.selectedComponent={};
 	$scope.currentWorkflowName="";
 	$scope.validGraphLinks=[];
 
-	
+
 	//for welcome page 
-graphService.getAllWorkflows().then(function success(response) {
-	console.log(response.data);
-    $scope.file = response.data;
-    $scope.data_limit = 10;
-    $scope.filter_data = $scope.file.length;
-    $scope.entire_user = $scope.file.length;
-    
-},function error(response){
-	
-});
+	graphService.getAllWorkflows().then(function success(response) {
+		console.log(response.data);
+		$scope.file = response.data;
+		$scope.data_limit = 10;
+		$scope.filter_data = $scope.file.length;
+		$scope.entire_user = $scope.file.length;
 
-$scope.filter = function() {
-    $timeout(function() {
-        $scope.filter_data = $scope.searched.length;
-    }, 20);
-};
-$scope.sort_with = function(base) {
-    $scope.base = base;
-    $scope.reverse = !$scope.reverse;
-};
+	},function error(response){
+
+	});
+
+	$scope.filter = function() {
+		$timeout(function() {
+			$scope.filter_data = $scope.searched.length;
+		}, 20);
+	};
+	$scope.sort_with = function(base) {
+		$scope.base = base;
+		$scope.reverse = !$scope.reverse;
+	};
 
 
-//for database connecion checking
+//	for database connecion checking
 
-$scope.testConn = function(form){
-	$scope.$broadcast('schemaFormValidate');
-	
-	if (form.$valid) {
-		graphService.checkDBConnection($scope.model).then(
-			function success(response){
-				notify.showSuccess("Success!", response.data.message);
-			},function error(response){
-				notify.showError("Error in Connection!",response.data.message);
-			}
-		);
+	$scope.testConn = function(form){
+		$scope.$broadcast('schemaFormValidate');
+
+		if (form.$valid) {
+			graphService.checkDBConnection($scope.model).then(
+					function success(response){
+						notify.showSuccess("Success!", response.data.message);
+					},function error(response){
+						notify.showError("Error in Connection!",response.data.message);
+					}
+			);
+		}
+
 	}
-	
-}
 
-//for request
+//	for request
 
-$scope.handlePreviousRequest = function(){
-	var url_string = window.location.href;
-	var url = new URL(url_string);
-	var create = url.searchParams.get("create");
-	var load = url.searchParams.get("load");
-	
-	if(load==1){
-		$scope.loadWf(url.searchParams.get("name"));
-	}else if(create==1){
-		console.log($scope.myDiagram.model.nodeDataArray.length>0 && $scope.myDiagram.model.linkDataArray.length>0);
-	    $("#newWorkflowModal").modal("show");
-	}
-	
-	
-};
+	$scope.handlePreviousRequest = function(){
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var create = url.searchParams.get("create");
+		var load = url.searchParams.get("load");
+
+		if(load==1){
+			$scope.loadWf(url.searchParams.get("name"));
+		}else if(create==1){
+			console.log($scope.myDiagram.model.nodeDataArray.length>0 && $scope.myDiagram.model.linkDataArray.length>0);
+			$("#newWorkflowModal").modal("show");
+		}
+
+
+	};
 
 
 	/*
@@ -106,9 +106,9 @@ $scope.handlePreviousRequest = function(){
 			console.log(JSON.stringify($scope.myDiagram.model.nodeDataArray));
 
 		}else if(form.$invalid)
-			{
+		{
 			$scope.myDiagram.model.nodeDataArray.find(component => component.category==$scope.selectedComponent.category).valid=false;
-			}
+		}
 		//Need to improve logic here
 		//$scope.myDiagram.model.nodeDataArray.find(component => component.category!=null && component.category!=undefined && component.category=="CsvReader" && component.config!=null).valid=true;
 
@@ -126,15 +126,15 @@ $scope.handlePreviousRequest = function(){
 		graphService.runWorkflow(name).then(
 				function success(response){
 					//console.log(response.data);
-			notify.showSuccess("Success!", "Workflow Execution Finished.");
+					notify.showSuccess("Success!", "Workflow Execution Finished.");
 
 				},
 				function error(response){
-				let errors=response.data.cause;
-				for(var i=0;i<errors.length;i++)
-				{
-					notify.showError("Error in Workflow!",errors[i]);
-}
+					let errors=response.data.cause;
+					for(var i=0;i<errors.length;i++)
+					{
+						notify.showError("Error in Workflow!",errors[i]);
+					}
 				}
 		);
 
@@ -142,7 +142,7 @@ $scope.handlePreviousRequest = function(){
 	//Event for fileupload //Generated by CsvReader
 	$rootScope.$on('uploadEvent', function(evt, data) {//Executed only for fileupload event
 		$scope.model.filePath.push(data.path);
-        //console.log("Current Component",$scope.selectedComponent);
+		//console.log("Current Component",$scope.selectedComponent);
 
 		let MD=$scope.myDiagram;
 		let nodeDataArr=MD.model.nodeDataArray;
@@ -208,7 +208,7 @@ $scope.handlePreviousRequest = function(){
 					//component= $scope.myDiagram.model.nodeDataArray.find(component => component.text!=null);
 					//console.log(component);
 					notify.showSuccess("Success!", "Workflow loaded Successsfully.");
-				    $("#welcomepage").modal("hide");
+					$("#welcomepage").modal("hide");
 
 				},
 				function error(response){
@@ -218,20 +218,20 @@ $scope.handlePreviousRequest = function(){
 		);
 
 	}
-	
+
 	//---- welcome page----
-	
+
 	// load workflow
 	$scope.loadWf=function(name) {
 
 		$scope.workflow.name=name;
 		$scope.loadWorkflow();
-		
+
 
 	}
-	
+
 	//delete workflow
-	
+
 	$scope.deleteWf = function(index,name)
 	{
 		graphService.deleteWorkflow(name).then(
@@ -244,8 +244,8 @@ $scope.handlePreviousRequest = function(){
 		);
 	}
 
-	
-	
+
+
 	$scope.loadComponents=function(){
 		this.result=[];
 		componentService.getAll().then(
@@ -256,7 +256,7 @@ $scope.handlePreviousRequest = function(){
 					this.result=response.data.pallete;
 
 					$scope.myPalette.model.nodeDataArray=this.result;
-					
+
 				},
 				function error(response){
 					notify.showError("Error!","Cannot Load Components!");
@@ -275,62 +275,63 @@ $scope.handlePreviousRequest = function(){
 
 	};
 	//Method for updating configuration of each component
-	$scope.loadForm=function(componentName){
-	$scope.model={};
-	if(componentName==="Mapper") //test method for mapper
-	{
-	//Version 1  ::> http://myjson.com/1dguwu   Version2: https://api.myjson.com/bins/o0652
-	//https://api.myjson.com/bins/x90e6
-	componentService.getFormData("https://api.myjson.com/bins/9yc9i").then(
-    				function success(response){
-    					$scope.schema=response.data.schema;
-    					$scope.form=response.data.form;
-    					component=($scope.getComponent(componentName));
-    					if(!(component.config==null ||$scope.getComponent(componentName).config==undefined))
-    					{
-    						$scope.model=component.config;
+	$scope.loadForm=function(componentName, componentKey){
+		$scope.model={};
+		if(componentName==="Mapper") //test method for mapper
+		{
+			//Version 1  ::> http://myjson.com/1dguwu   Version2: https://api.myjson.com/bins/o0652
+			//https://api.myjson.com/bins/x90e6
+			let previousKey=componentKey+1;
+			let nodeList=$scope.myDiagram.model.nodeDataArray;
+			let previousNode=null;
+			for(let i=0;i<nodeList.length;i++){
+				if(nodeList[i].key==previousKey){
+					previousNode=nodeList[i];
+					break;
+				}
+			}
+			console.log(previousNode.output);
+			componentService.getFormData("https://api.myjson.com/bins/mgvee").then(
+					function success(response){
+						$scope.schema=response.data.schema;
+						$scope.form=response.data.form;
+						component=($scope.getComponent(componentName));
+						if(!(component.config==null ||component.config==undefined))
+						{
+							$scope.model=component.config;
 
-    					}
-    					$scope.model.field = [{
-                            "check": true,
-                            "fieldName": "Width",
-                            "dataType": "int"
-                          },
-                          {
-                            "check": true,
-                            "fieldName": "Vaibhav",
-                            "dataType": "int"
-                          }];
-    					$('#myModal').modal('show');
-    				},
-    				function error(response){
-    					//Add notification show "Component not found"
-    					$scope.schema=null;
-    					$scope.form=null;
-    					notify.showError("Error!","Config is not available fot this component!");
+						}
+						$scope.model.field =previousNode.output;
+						$('#myModal').modal('show');
+					},
+					function error(response){
+						//Add notification show "Component not found"
+						$scope.schema=null;
+						$scope.form=null;
+						notify.showError("Error!","Config is not available fot this component!");
 
-    				});
-	}else
-				componentService.getFormData("/WorkflowManager/getConfig/"+componentName).then(
-				function success(response){
-					$scope.schema=response.data.schema;
-					$scope.form=response.data.form;
-					component=($scope.getComponent(componentName));
-					if(!(component.config==null ||$scope.getComponent(componentName).config==undefined))
-					{
-						$scope.model=component.config;
-					}
-					$('#myModal').modal('show');
-				},
-				function error(response){
-					//Add notification show "Component not found"
-					$scope.schema=null;
-					$scope.form=null;
-					notify.showError("Error!","Config is not available fot this component!");
+					});
+		}else
+			componentService.getFormData("/WorkflowManager/getConfig/"+componentName).then(
+					function success(response){
+						$scope.schema=response.data.schema;
+						$scope.form=response.data.form;
+						component=($scope.getComponent(componentName));
+						if(!(component.config==null ||$scope.getComponent(componentName).config==undefined))
+						{
+							$scope.model=component.config;
+						}
+						$('#myModal').modal('show');
+					},
+					function error(response){
+						//Add notification show "Component not found"
+						$scope.schema=null;
+						$scope.form=null;
+						notify.showError("Error!","Config is not available fot this component!");
 
-				});
+					});
 	}
-	
+
 	$scope.loadComponents(); //
 	// print the diagram by opening a new window holding SVG images of the diagram contents for each page
 	function printDiagram() {
@@ -351,7 +352,7 @@ $scope.handlePreviousRequest = function(){
 		}
 		setTimeout(function() { svgWindow.print(); }, 1);
 	}
-	
+
 
 
 	/*******************************************************************
@@ -429,7 +430,7 @@ $scope.handlePreviousRequest = function(){
 			document.getElementById("componentConfig").style.display = (obj !== null ? "block" : "none");
 			if(obj instanceof go.Node)
 			{
-			    //Setting selected component for further proceesing
+				//Setting selected component for further proceesing
 				$scope.selectedComponent.category=obj.data.category;
 				$scope.selectedComponent.key=obj.data.key;
 
@@ -458,9 +459,9 @@ $scope.handlePreviousRequest = function(){
 				let duplicateLink=linkDataArr.indexOf(linkDataArr.find(link => link.to==linkTo && link.from==linkFrom));
 				let inputLink=linkDataArr.find(link => link.to==linkTo).from;
 				let outputLink=linkDataArr.find(link => link.from==linkFrom).to;
-				
+
 				//console.log("i:"+inputLink+"o:"+outputLink+"d:"+duplicateLink);
-				
+
 				if(!validLink || inputLink!=linkFrom || outputLink!=linkTo || duplicateLink!=index){
 					MD.model.removeLinkData(e.newValue);
 					notify.showError("Error!","Invalid link");
@@ -491,7 +492,7 @@ $scope.handlePreviousRequest = function(){
 
 				$scope.selectedComponent.category=componentName;
 				$scope.selectedComponent.key=part.data.key;
-				$scope.loadForm(componentName);
+				$scope.loadForm(componentName, part.data.key);
 
 
 			}

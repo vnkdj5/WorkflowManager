@@ -107,8 +107,8 @@ public class Helper {
 		return true;
 	}
 
-	public HashMap<String,String> getHeaders(String filePath){
-		HashMap<String, String> headerInfo=new HashMap<>();
+	public JSONArray getHeaders(String filePath){
+		JSONArray headerInfo=new JSONArray();
 		String[] headers;
 		String[] entry;
 		FileReader fr=null;
@@ -127,14 +127,19 @@ public class Helper {
 			return null;
 		}
 		for(int i=0;i<headers.length;i++) {
+			JSONObject obj=new JSONObject();
+			obj.put("fieldName", headers[i]);
 			if(entry[i].toLowerCase().equals("true") || entry[i].toLowerCase().equals("false"))
-				headerInfo.put(headers[i], "boolean");
+				obj.put("dataType", "boolean");
 			else if(StringUtils.isNumeric(entry[i]))
-				headerInfo.put(headers[i], "int");
+				obj.put("dataType", "int");
 			else if(entry[i].matches("[0-9]([.][0-9])*[0-9]*"))
-				headerInfo.put(headers[i], "float");
-			else headerInfo.put(headers[i], "String");
+				obj.put("dataType", "float");
+			else obj.put("dataType", "String");
+			obj.put("check", false);
+			headerInfo.put(obj);
 		}
+		System.out.println(headerInfo.toString());
 		return headerInfo;
 	}
 }
