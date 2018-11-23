@@ -281,7 +281,7 @@ $scope.handlePreviousRequest = function(){
 	{
 	//Version 1  ::> http://myjson.com/1dguwu
 	//https://api.myjson.com/bins/x90e6
-	componentService.getFormData("https://api.myjson.com/bins/1adurq").then(
+	componentService.getFormData("https://api.myjson.com/bins/o0652").then(
     				function success(response){
     					$scope.schema=response.data.schema;
     					$scope.form=response.data.form;
