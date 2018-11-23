@@ -133,8 +133,8 @@ angular
 
 							});
 							var result = scope.form.post ? scope.form.post(response.data) : response.data;
-							$rootScope.$broadcast('uploadEvent', result.path);//scope.uploadedFiles
-							ngModel.$setViewValue(result.path); //response updated
+							$rootScope.$broadcast('uploadEvent', result);//scope.uploadedFiles
+							ngModel.$setViewValue(result); //response updated
 							ngModel.$commitViewValue();
 						}, function (response) {
 							if (response.status > 0) {

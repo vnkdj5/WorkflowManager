@@ -8,10 +8,8 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link href="css/schema-form-file.css" media="all" rel="stylesheet" />
 	<link href="css/angular-growl.min.css" rel="stylesheet" media="screen" />
-	<link rel="stylesheet"
-		  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-		  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-		  crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
 	<script type="text/javascript"
 			src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
 	<script type="text/javascript"
@@ -25,7 +23,7 @@
 	<script type="text/javascript" src="scripts/dist/tv4.js"></script>
 	<script type="text/javascript" src="scripts/dist/ObjectPath.js"></script>
 	<script type="text/javascript"
-			src="scripts/dist/angular-schema-form.min.js"></script>
+			src="scripts/dist/angular-schema-form.js"></script>
 	<script type="text/javascript"
 			src="scripts/dist/angular-schema-form-bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.8.29/go.js"></script>
@@ -131,9 +129,9 @@
 	<!--Config Modal Start-->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
-				<div class="modal-header">{{selectedComponent}}</div>
+				<div class="modal-header">{{selectedComponent.category}} Configuration</div>
 				<div class="modal-body" id="modalContent">
 					<div>
 						<div>
@@ -160,14 +158,8 @@
 
 	<!-- Modal End -->
 
-	<script
-			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-			integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-			crossorigin="anonymous"></script>
-	<script
-			src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-			integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-			crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </div>
 </body>
 </html>
