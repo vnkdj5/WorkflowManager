@@ -61,9 +61,4 @@ public class ComponentController {
 		return new ResponseEntity<String>("{\"pallete\":"+array.toString().replaceAll("\\\\","")+"}",HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/setHeaders", method=RequestMethod.POST, headers = "Accept=application/json")
-	public HashMap<String, String> getHeaders(@RequestBody JSONObject node){
-		return helper.getHeaders((String) node.get("file"));
-	}
-	
 }
