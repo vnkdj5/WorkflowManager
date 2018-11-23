@@ -279,9 +279,9 @@ $scope.handlePreviousRequest = function(){
 	$scope.model={};
 	if(componentName==="Mapper") //test method for mapper
 	{
-	//Version 1  ::> http://myjson.com/1dguwu
+	//Version 1  ::> http://myjson.com/1dguwu   Version2: https://api.myjson.com/bins/o0652
 	//https://api.myjson.com/bins/x90e6
-	componentService.getFormData("https://api.myjson.com/bins/o0652").then(
+	componentService.getFormData("https://api.myjson.com/bins/9yc9i").then(
     				function success(response){
     					$scope.schema=response.data.schema;
     					$scope.form=response.data.form;
