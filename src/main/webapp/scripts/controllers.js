@@ -96,18 +96,39 @@ app.controller('DiagramCtrl',['$scope', '$rootScope','fileUpload','graphService'
 	$scope.onSubmit = function(form) { 
 		// First we broadcast an event so all fields validate themselves
 		$scope.$broadcast('schemaFormValidate');
-
+let nodeDataArr=$scope.myDiagram.model.nodeDataArray;
 		// Then we check if the form is valid
 		if (form.$valid) {
-			$scope.myDiagram.model.nodeDataArray.find(component => component.category==$scope.selectedComponent.category).config=$scope.model;
-			$scope.myDiagram.model.nodeDataArray.find(component => component.category==$scope.selectedComponent.category).valid=true;
+let searchedComponent=nodeDataArr.find(component => component.category==$scope.selectedComponent.category);
+            if($scope.selectedComponent.category=="Mapper") //TODO: Add separate attribute for finding components having no Config
+            {
+            searchedComponent.config=$scope.model;
+            //Now update checked fields into output of mapper
+            searchedComponent.output=[];
+            for(let i=0;i<searchedComponent.config.field.length;i++)
+            {
+            if(searchedComponent.config.field[i].check){
+                searchedComponent.output.push(
+                {
+                "fieldName": searchedComponent.config.field[i].fieldName,
+                "dataType": searchedComponent.config.field[i].dataType
+                });
+            }
+            }
+            }
+            else
+            {
+			searchedComponent.config=$scope.model;
+
+			}
+			searchedComponent.valid=true;
 
 			$scope.selectedComponent={};
-			console.log(JSON.stringify($scope.myDiagram.model.nodeDataArray));
+			console.log(JSON.stringify(nodeDataArr));
 
 		}else if(form.$invalid)
 		{
-			$scope.myDiagram.model.nodeDataArray.find(component => component.category==$scope.selectedComponent.category).valid=false;
+			searchedComponent.valid=false;
 		}
 		//Need to improve logic here
 		//$scope.myDiagram.model.nodeDataArray.find(component => component.category!=null && component.category!=undefined && component.category=="CsvReader" && component.config!=null).valid=true;
@@ -296,12 +317,31 @@ app.controller('DiagramCtrl',['$scope', '$rootScope','fileUpload','graphService'
 						$scope.schema=response.data.schema;
 						$scope.form=response.data.form;
 						component=($scope.getComponent(componentName));
-						if(!(component.config==null ||component.config==undefined))
+
+						$scope.model.field=[];
+                        let obj=previousNode.output;
+						if(component.config)
 						{
 							$scope.model=component.config;
+							//alert("here");
 
 						}
-						$scope.model.field =previousNode.output;
+						else{
+						for(var key in obj)
+						{
+						    if(obj.hasOwnProperty(key)){
+						    let dataType=obj[key];
+
+						    $scope.model.field.push({
+						    "check":false,
+						    "fieldName": key,
+						    "dataType":dataType
+						    });
+						    }
+						}
+						}
+						//$scope.model.field =previousNode.output;
+						console.log($scope.model.field);
 						$('#myModal').modal('show');
 					},
 					function error(response){
