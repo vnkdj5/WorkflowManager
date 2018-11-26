@@ -320,6 +320,7 @@ let searchedComponent=nodeDataArr.find(component => component.category==$scope.s
 
 						$scope.model.field=[];
                         let obj=previousNode.output;
+                        console.log(obj);
 						if(component.config)
 						{
 							$scope.model=component.config;
@@ -334,8 +335,8 @@ let searchedComponent=nodeDataArr.find(component => component.category==$scope.s
 
 						    $scope.model.field.push({
 						    "check":false,
-						    "fieldName": key,
-						    "dataType":dataType
+						    "fieldName": dataType.fieldName,
+						    "dataType":dataType.dataType
 						    });
 						    }
 						}
