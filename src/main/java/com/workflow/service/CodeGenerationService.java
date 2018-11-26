@@ -26,13 +26,18 @@ public class CodeGenerationService {
 		Component csv = (Component) help.getObjectByClassName("CsvReader");
 		csv.init(graph.getNodes().get(0).getConfig(),null,null);
 		
+		//Mappper 
+		Component map = (Component) help.getObjectByClassName("Mapper");
+		map.init(graph.getNodes().get(1).getConfig(), null, graph.getNodes().get(1).getOutput());
+		
 		//MongoWriter mw = new MongoWriter();
 		Component mw = (Component) help.getObjectByClassName("MongoWriter");
-		mw.init(graph.getNodes().get(1).getConfig(),null,null);
+		mw.init(graph.getNodes().get(2).getConfig(),null,null);
 		
 		Entity out;
 		
 		while((out = csv.process(null))!=null) {
+			out = map.process(out);
 			mw.process(out);
 		}
 		

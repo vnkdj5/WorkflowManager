@@ -63,7 +63,14 @@ public class GraphService {
 				temp.setValid(nodeArray.getJSONObject(i).getBoolean("valid"));
 			}
 			//temp.setInput(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("input"))));
-			//temp.setOutput(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("output"))));
+			
+			//improve logic here
+			if(!nodeArray.getJSONObject(i).isNull("output")) {
+				Entity o = new Entity();
+				o.addKeyValue("allowed", nodeArray.getJSONObject(i).getJSONArray("output"));
+				temp.setOutput(o);
+			}
+			
 			int key=((nodeArray.getJSONObject(i))).getInt("key");
 			nds.put(key, temp);
 		}

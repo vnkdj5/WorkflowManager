@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Mapper implements Component{
 	
 	Entity output;
@@ -13,7 +16,14 @@ public class Mapper implements Component{
 	public boolean init(Entity config,Entity input,Entity output) {
 		
 		this.output = output;
-		allowedheaders = (ArrayList<String>) this.output.getEntity().keySet();
+		
+		allowedheaders = new ArrayList<>();
+		JSONArray temp = (JSONArray) this.output.getEntity().get("allowed");
+		
+		for(int i=0;i<temp.length();i++) {
+			String header = ((JSONObject)temp.get(i)).getString("fieldName");
+			allowedheaders.add(header);
+		}
 		return true;
 	}
 
