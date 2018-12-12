@@ -97,9 +97,14 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         // First we broadcast an event so all fields validate themselves
         $scope.$broadcast('schemaFormValidate');
         let nodeDataArr = $scope.myDiagram.model.nodeDataArray;
+        let searchedComponent = nodeDataArr.find(component => component.category == $scope.selectedComponent.category);
+        if (searchedComponent.config != $scope.model) {
+            searchedComponent.isModified = true;
+        }
+
+        searchedComponent.isModified = true;
         // Then we check if the form is valid
         if (form.$valid) {
-            let searchedComponent = nodeDataArr.find(component => component.category == $scope.selectedComponent.category);
             if ($scope.selectedComponent.category == "Mapper") //TODO: Add separate attribute for finding components having no Config
             {
                 searchedComponent.config = $scope.model;
@@ -124,7 +129,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             console.log(JSON.stringify(nodeDataArr));
 
         } else if (form.$invalid) {
+
             searchedComponent.valid = false;
+            notify.showError("Error!!", "Invalid config for " + $scope.selectedComponent.category);
         }
         //Need to improve logic here
         //$scope.myDiagram.model.nodeDataArray.find(component => component.category!=null && component.category!=undefined && component.category=="CsvReader" && component.config!=null).valid=true;
@@ -299,8 +306,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.model = {};
         if (componentName === "Mapper") //test method for mapper
         {
-            //Version 1  ::> http://myjson.com/1dguwu   Version2: https://api.myjson.com/bins/o0652
-            //https://api.myjson.com/bins/x90e6
+            //Finding previous node
             let previousKey = componentKey + 1;
             let nodeList = $scope.myDiagram.model.nodeDataArray;
             let previousNode = null;
@@ -320,9 +326,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     $scope.model.field = [];
                     let obj = previousNode.output;
                     console.log(obj);
-                    if (component.config) {
+
+                    if (component.config) {//previousNode.isModified==false&&
                         $scope.model = component.config;
-                        //alert("here");
+                        //notify.showInfo("Info","form config debug");
 
                     } else {
                         for (let key in obj) {
