@@ -59,7 +59,7 @@ public class CsvReader implements Component{
 			e.printStackTrace();
 			return null;
 		}
-		System.out.println("Reading from CSV " +  output);
+		//System.out.println("Reading from CSV " +  output);
 		return output;
 	}
 

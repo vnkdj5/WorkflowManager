@@ -54,7 +54,7 @@ public class GraphService {
 			temp.setConfig(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("config"))));
 			}
 			catch(JSONException e) {
-				errorList.add("Incomplete configuration at "+nodeArray.getJSONObject(i).getString("text"));
+				//errorList.add("Incomplete configuration at "+nodeArray.getJSONObject(i).getString("text"));
 			}
 			temp.setLabel(nodeArray.getJSONObject(i).getString("text"));
 			if(nodeArray.getJSONObject(i).isNull("valid")) {
@@ -74,6 +74,7 @@ public class GraphService {
 			int key=((nodeArray.getJSONObject(i))).getInt("key");
 			nds.put(key, temp);
 		}
+		System.out.println("nds="+nds.size());
 		ArrayList<Integer> from=new ArrayList<Integer>(linkArray.length());
 		ArrayList<Integer> to=new ArrayList<Integer>(linkArray.length());
 		for(int i=0;i<linkArray.length();i++) {
@@ -81,19 +82,19 @@ public class GraphService {
 			to.add(i, ((linkArray.getJSONObject(i)).getInt("to")));
 		}
 		int cur=-1;
-		for(int i=0;i<nodeArray.length();i++) {
+		/*for(int i=0;i<nodeArray.length();i++) {
 			if(((nodeArray.getJSONObject(i)).getString("text"))=="start") {
 				cur=Integer.parseInt(((nodeArray.getJSONObject(i)).get("key")).toString());
 				break;
 			}
-		}
+		}*/
 		errorList.addAll(validate(to,from,nds,cur));
 		if(!errorList.isEmpty()) {
 			ret.put("error",true );
 			ret.put("cause", errorList);
 			return ret;
 		}
-		
+		cur=-1;
 		while(true) {
 			int next;
 			try {
@@ -102,7 +103,7 @@ public class GraphService {
 			catch (Exception e) {
 				break;
 			}
-			if(next!=-2)
+			if(next!=nds.size()*(-1))
 				nodes.add(nds.get(next));
 			else {
 				break;
@@ -112,6 +113,7 @@ public class GraphService {
 		lgraph.setNodes(nodes);
 		ret.put("error",false );
 		ret.put("nodeList", lgraph);
+		System.out.println("logicGraphmap="+lgraph.toString());
 		return ret;
 	}
 	public void saveGraph(JsonGraph jsonGraph) {
