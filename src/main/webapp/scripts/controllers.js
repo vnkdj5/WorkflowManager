@@ -138,6 +138,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         $scope.selectedComponent = {};
         $scope.myDiagram.isModified = true;
+        let button = document.getElementById("SaveButton");
+        if (button) button.disabled = false;
         $("#myModal").modal("hide");
     };
 //	run the workflow method
@@ -215,6 +217,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             graph = $scope.myDiagram.model.toJson();//.toJson();
             graphService.saveGraph(graph, $scope.workflow.name).then(
                 function success(response) {
+
                     notify.showSuccess("Success!", response.data.message);
                 },
                 function error(response) {
@@ -316,7 +319,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     break;
                 }
             }
-            console.log(previousNode.output);
+            /* console.log(previousNode.output);*/
             componentService.getFormData("/WorkflowManager/getConfig/" + componentName).then(
                 function success(response) {
                     $scope.schema = response.data.schema;
@@ -327,23 +330,26 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     let obj = previousNode.output;
                     console.log(obj);
 
-                    if (component.config) {//previousNode.isModified==false&&
-                        $scope.model = component.config;
-                        //notify.showInfo("Info","form config debug");
 
-                    } else {
+                    //$scope.model = component.config;
+                    let index = 0;
                         for (let key in obj) {
                             if (obj.hasOwnProperty(key)) {
                                 let dataType = obj[key];
+                                var checkVal = false;
 
+                                if (index < obj.length && component.config.field[index].fieldName == dataType.fieldName) {
+                                    checkVal = component.config.field[index].check;
+                                }
                                 $scope.model.field.push({
-                                    "check": false,
+                                    "check": checkVal,
                                     "fieldName": dataType.fieldName,
                                     "dataType": dataType.dataType
                                 });
                             }
+                            index++;
                         }
-                    }
+
                     //$scope.model.field =previousNode.output;
                     console.log($scope.model.field);
                     $('#myModal').modal('show');
@@ -511,6 +517,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                         notify.showError("Error!", "Invalid link");
                     }
                 }
+            let button = document.getElementById("SaveButton");
+            if (button) button.disabled = !$scope.myDiagram.isModified;
             }
         );
 
