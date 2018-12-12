@@ -17,7 +17,7 @@ public class MongoWriter implements Component{
 	public Entity process(Entity input) {
 		Document document = new Document(input.getEntity());
 		collection.insertOne(document);
-		System.out.println("Writing to Mongo "+ document);
+		//System.out.println("Writing to Mongo "+ document);
 		return null;
 	}
 

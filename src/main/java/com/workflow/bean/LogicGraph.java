@@ -32,4 +32,9 @@ public class LogicGraph {
 	public Entity getConfig(int ind) {
 		return nodes.get(ind).getConfig();
 	}
+	@Override
+	public String toString() {
+		return "LogicGraph [id=" + id + ", nodes=" + nodes + "]";
+	}
+	
 }
