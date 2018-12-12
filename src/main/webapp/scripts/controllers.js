@@ -317,7 +317,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 }
             }
             console.log(previousNode.output);
-            componentService.getFormData("https://api.myjson.com/bins/mgvee").then(
+            componentService.getFormData("/WorkflowManager/getConfig/" + componentName).then(
                 function success(response) {
                     $scope.schema = response.data.schema;
                     $scope.form = response.data.form;
