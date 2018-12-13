@@ -169,7 +169,21 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         let MD = $scope.myDiagram;
         let nodeDataArr = MD.model.nodeDataArray;
-        nodeDataArr.find(component => component.key == $scope.selectedComponent.key).output = data.headers; //Assign CSV Headers for output field of component;
+        let curHeaders=nodeDataArr.find(component => component.key == $scope.selectedComponent.key).output;
+        if(curHeaders!=null){
+        	let newHeaders=data.headers;
+        	for(var i=0;i<curHeaders.length;i++){
+        		if(curHeaders[i]!=newHeaders[i]){
+        			//call delete controller and return error msg
+        		}
+        	}
+        	if(curHeaders.length!=newHeaders.length){
+        		//call delete controller and return error msg
+        	}
+        }
+        else{
+        	nodeDataArr.find(component => component.key == $scope.selectedComponent.key).output = data.headers; //Assign CSV Headers for output field of component;
+        }
     });
 
 
