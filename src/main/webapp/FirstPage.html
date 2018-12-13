@@ -25,12 +25,7 @@
 	background-color: RoyalBlue;
 }
 
-th.sortable {
-	cursor: pointer;
-}
-th.sortable:hover {
-	background: #EEE;
-}
+
 
 input[type=text] {
 	width: 100%;
@@ -103,8 +98,7 @@ input[type=text]:focus {
                     <th>Name&nbsp;
                         <i class="glyphicon glyphicon-sort"></i></th>
                    
-                    <th class="sortable" style="width: 20%"
-						>Last-Modified&nbsp;
+                    <th>Last-Modified&nbsp;
                         <i class="glyphicon glyphicon-sort"></i></th>
                    
                     <th>Options&nbsp;</th>
@@ -130,6 +124,8 @@ input[type=text]:focus {
                     </tr>
                     </tbody>
                 </table>
+                
+                 
             </div>
             <div class="col-md-12" ng-show="filter_data == 0">
                 <div class="col-md-12">
@@ -145,7 +141,10 @@ input[type=text]:focus {
 <script
         src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+        
+</script>
+
 
 </body>
 </html>

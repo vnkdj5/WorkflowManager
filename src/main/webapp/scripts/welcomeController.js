@@ -23,6 +23,11 @@ app.filter('beginning_data', function() {
 });
 app.controller('controller', function($scope, $http, $timeout,welcomeService) {
 
+	 $scope.curPage = 1,
+	  $scope.itemsPerPage = 3,
+	  $scope.maxSize = 5;
+	
+	
 	$scope.deleteWf = function(index,name)
 	{
 		welcomeService.deleteWorkflow(name).then(
@@ -63,7 +68,6 @@ app.controller('controller', function($scope, $http, $timeout,welcomeService) {
         }, 20);
     };
  
-    //sorting with date
     
   
 	
