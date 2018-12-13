@@ -38,8 +38,7 @@ public class FileUploadController {
 					serverFile.createNewFile();
 				}
 				System.out.println(serverFile);
-				BufferedOutputStream stream = new BufferedOutputStream(
-						new FileOutputStream(serverFile));
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 				stream.write(bytes);
 				stream.close();
 				map.put("headers", helper.getHeaders(serverFile.getAbsolutePath()).toList());
@@ -66,6 +65,7 @@ public class FileUploadController {
 	@RequestMapping(value="/deletefile", method=RequestMethod.POST)
 	public ResponseEntity<String> deleteFile(@RequestParam("file") String path){
 		File file=new File(path);
+		System.out.println("del path:"+path);
 		if(file.delete()) {
 			return new ResponseEntity<String>("{\"message\":\"File deleted\"}",HttpStatus.OK);
 		}
