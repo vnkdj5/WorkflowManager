@@ -31,7 +31,7 @@ public class App {
 //		}
 //		
 		Helper help = new Helper();
-		System.out.println(help.checkMongoConnection("","akshay", "akshay".toCharArray(), "akshay"));
+		//System.out.println(help.checkMongoConnection("","akshay", "akshay".toCharArray(), "akshay"));
 		System.out.println("finished");
 	}
 }
