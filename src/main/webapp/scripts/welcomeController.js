@@ -66,8 +66,7 @@ app.controller('controller', function($scope, $http, $timeout,welcomeService) {
         }, 20);
     };
  
-    //sorting with date
-    $scope.createWorkflowPopup();
+    
   
 	
 
