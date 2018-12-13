@@ -62,9 +62,16 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         if (form.$valid) {
             graphService.checkDBConnection($scope.model).then(
                 function success(response) {
-                    notify.showSuccess("Success!", response.data.message);
+                	
+                	notify.showSuccess("Success!", response.data[0]);
+                	if(response.data[1]==="Collection exists"){
+                		notify.showWarning("Warning!", response.data[1]);
+                	}else{
+                		notify.showSuccess("Success!", response.data[1]);
+                	}
+                    
                 }, function error(response) {
-                    notify.showError("Error in Connection!", response.data.message);
+                    notify.showError("Error in Connection!", response.data);
                 }
             );
         }
