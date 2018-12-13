@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,9 +65,9 @@ public class FileUploadController {
 	}
 
 	@RequestMapping(value="/deletefile", method=RequestMethod.POST)
-	public ResponseEntity<String> deleteFile(@RequestParam("file") String path){
-		File file=new File(path);
-		System.out.println("del path:"+path);
+	public ResponseEntity<String> deleteFile(@RequestBody HashMap data){
+		File file=new File(data.get("file").toString());
+		System.out.println("del path:"+data.get("file").toString());
 		if(file.delete()) {
 			return new ResponseEntity<String>("{\"message\":\"File deleted\"}",HttpStatus.OK);
 		}

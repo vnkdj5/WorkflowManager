@@ -185,7 +185,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         		console.log("cur:"+curHeaders[i].fieldName+", new: "+newHeaders[i].fieldName);
         		if(curHeaders[i].fieldName!=(newHeaders[i].fieldName)){
         			//call delete controller and return error msg
-        			/*fileUpload.deleteFile(data.path).then(
+        			fileUpload.deleteFile(data.path).then(
         		            function success(response) {
         		                notify.showSuccess("Deleted", "File deleted.");
         		            },
@@ -193,14 +193,14 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         		            	notify.showError("Error!", "Cannot delete file");
         		            }
         		        );
-        			*/
+        			
         			notify.showError("Error!", "Incompatible headers");
         			return;
         		}
         	}
         	if(curHeaders.length!=newHeaders.length){
         		//call delete controller and return error msg
-        		/*fileUpload.deleteFile(data.path).then(
+        		fileUpload.deleteFile(data.path).then(
         				function success(response) {
     		                notify.showSuccess("Deleted", "File deleted.");
     		            },
@@ -208,7 +208,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     		            	notify.showError("Error!", "Cannot delete file");
     		            }
         	        );
-        	        */
+        	        
         		notify.showError("Error!", "Incompatible headers");
         		return;
         	}
