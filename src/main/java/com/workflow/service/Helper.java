@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -17,11 +18,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientException;
 import com.mongodb.MongoCredential;
 import com.mongodb.MongoTimeoutException;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
 import com.opencsv.CSVReader;
 import com.workflow.component.*;
 
@@ -63,9 +68,7 @@ public class Helper {
 
 			if(value instanceof JSONArray) {
 				value = toList((JSONArray) value);
-			}
-
-			else if(value instanceof JSONObject) {
+			}else if(value instanceof JSONObject) {
 				value = toMap((JSONObject) value);
 			}
 			map.put(key, value);
@@ -88,23 +91,42 @@ public class Helper {
 		return list;
 	}
 
-	public Boolean checkMongoConnection(String url, String userName, char[] password, String database) {
+	@SuppressWarnings("deprecation")
+	public HashMap<String,Boolean> checkMongoConnection(String url, String userName, char[] password, String database, String collection) {
+		HashMap<String,Boolean> checkResult = new HashMap<>();
 		try {
-			MongoCredential credential = MongoCredential.createCredential(userName, database, password);
-			MongoClient mongoClient = new MongoClient(new ServerAddress(url), Arrays.asList(credential));
+			MongoCredential credential = MongoCredential.createCredential("", database, "".toCharArray());
+			MongoClient mongoClient = new MongoClient();
 			System.out.println(mongoClient.getAddress());
+			
+			
+			checkResult.put("Connection", true);
+			MongoDatabase db = mongoClient.getDatabase(database);
+			for(String name : db.listCollectionNames()){
+				System.out.println(name);
+				if(name.equals(collection)) {
+					checkResult.put("Collection", true);
+					
+					break;
+				}
+			}
+			if(!checkResult.containsKey("Collection")){
+				checkResult.put("Collection", false);
+
+			}
+			
 		}catch (MongoTimeoutException e) {
 			// TODO: handle exception
 			e.printStackTrace();
-
-			return false;
+			checkResult.put("Connection", false);
+			return checkResult;
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-
-			return false;
+			checkResult.put("Connection", false);
+			return checkResult;
 		}
-		return true;
+		return checkResult;
 	}
 
 	public JSONArray getHeaders(String filePath){
