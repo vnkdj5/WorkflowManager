@@ -74,7 +74,7 @@ public class CsvReader implements Component{
 				+ "\"filePath\":{\"title\":\"File Paths\",\"type\":\"array\",\"items\":{\"type\":\"string\"}}},"
 				+ "\"required\":[\"file\"]},"
 				+ "\"form\":[{\"key\":\"file\",\"type\":\"nwpFileUpload\",\"endpoint\":\"/WorkflowManager/uploadfile\",\"onChange\":\"updated(model,form)\"}"
-				+ ",{\"title\":\"Uploaded Path\",\"key\":\"filePath\",\"type\":\"array\"},"
+                + ",{\"title\":\"Uploaded Path\",\"key\":\"filePath\",\"type\":\"array\",\"startEmpty\":true},"
 				+ "{\"type\":\"submit\",\"title\":\"Save\"}]}";
 	}
 
