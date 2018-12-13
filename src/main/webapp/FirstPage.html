@@ -24,6 +24,14 @@
 .welcomebtn:hover {
 	background-color: RoyalBlue;
 }
+
+th.sortable {
+	cursor: pointer;
+}
+th.sortable:hover {
+	background: #EEE;
+}
+
 input[type=text] {
 	width: 100%;
 	padding: 12px 20px;
@@ -45,6 +53,9 @@ input[type=text]:focus {
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    
     <script src="scripts/welcomeController.js"></script>
 
 </head>
@@ -84,15 +95,20 @@ input[type=text]:focus {
         <br />
         <div class="row">
             <div class="col-md-12" ng-show="filter_data > 0">
-                <table class="table table-striped table-bordered">
+                <table datatable="ng" class="table table-striped table-bordered">
                     <thead>
-                    <th>SrNo&nbsp;<a><ng-click="sort_with('number');">
-                        <i class="glyphicon glyphicon-sort"></a></i></th>
-                    <th>Name&nbsp;<a><ng-click="sort_with('name');">
-                        <i class="glyphicon glyphicon-sort"></a></i></th>
-                    <th>Last-Modified&nbsp;<a><ng-click="sort_with('time');">
-                        <i class="glyphicon glyphicon-sort"></a></i></th>
+                    <th>SrNo&nbsp;
+                        <i class="glyphicon glyphicon-sort"></i></th>
+                   
+                    <th>Name&nbsp;
+                        <i class="glyphicon glyphicon-sort"></i></th>
+                   
+                    <th class="sortable" style="width: 20%"
+						>Last-Modified&nbsp;
+                        <i class="glyphicon glyphicon-sort"></i></th>
+                   
                     <th>Options&nbsp;</th>
+                   
                     </thead>
                     <tbody>
                     <tr
@@ -104,10 +120,10 @@ input[type=text]:focus {
                         <td>
                             <button class="welcomebtn"
                                     ng-click="deleteWf($index,data.name)">
-                                <i class="fa fa-trash"></i> delete
+                                <i class="fa fa-trash"></i> 
                             </button>
                             <button class="welcomebtn" ng-click="loadWorkflow(data.name)">
-                                <i class="fa fa-play"></i> load
+                                <i class="fa fa-play"></i> 
                             </button>
                         </td>
 

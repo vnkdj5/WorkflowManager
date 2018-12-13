@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import org.json.simple.JSONArray;
@@ -103,7 +105,9 @@ public class GraphController {
 	
 	@RequestMapping(value="/getAll", method=RequestMethod.GET, headers = "Accept=application/json")
 	public List getAllWF(){
-		return graphService.getWF();
+		ArrayList<JsonGraph> graphs = (ArrayList<JsonGraph>) graphService.getWF();
+		Collections.reverse(graphs);
+		return	graphs;
 	}
 	
 	@RequestMapping(value="/getValidLinks", method=RequestMethod.GET, headers = "Accept=application/json")

@@ -44,12 +44,14 @@ app.controller('controller', function($scope, $http, $timeout,welcomeService) {
 		console.log("workflow creaate");
 		window.location.href = "/WorkflowManager/index.html?load=1&name="+name;
 	};
+	
     $http.get('/WorkflowManager/getAll').then(function(user_data) {
         $scope.file = user_data.data;
         $scope.data_limit = 10;
         $scope.filter_data = $scope.file.length;
         $scope.entire_user = $scope.file.length;
     }
+    
     	,function error(response){
 			notify.showError("Error while deleting workflow!");
 		}
@@ -60,8 +62,10 @@ app.controller('controller', function($scope, $http, $timeout,welcomeService) {
             $scope.filter_data = $scope.searched.length;
         }, 20);
     };
-    $scope.sort_with = function(base) {
-        $scope.base = base;
-        $scope.reverse = !$scope.reverse;
-    };
+ 
+    //sorting with date
+    
+  
+	
+
 });

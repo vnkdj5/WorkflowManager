@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="jsonGraph")
-public class JsonGraph {
+public class JsonGraph implements Comparable<JsonGraph> {
 
 	@Id
 	private String name;
@@ -31,5 +31,12 @@ public class JsonGraph {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
+	@Override
+	public int compareTo(JsonGraph o) {
+		return this.timestamp.compareTo(o.timestamp);
+		
+		
+        }
+	
 	
 }
