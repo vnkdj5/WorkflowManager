@@ -266,12 +266,21 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 function success(response) {
 
                     notify.showSuccess("Success!", response.data.message);
+                    $scope.myDiagram.isModified = false;
+                    let button = document.getElementById("SaveButton");
+                    if (button) button.disabled = !$scope.myDiagram.isModified;
+                    let idx = document.title.indexOf("*");
+                    if ($scope.myDiagram.isModified) {
+                        if (idx < 0) document.title += "*";
+                    } else {
+                        if (idx >= 0) document.title = document.title.substr(0, idx);
+                    }
                 },
                 function error(response) {
                     notify.showError("Error!!", response.statusCode + " : " + response.status);
                 }
             );
-            $scope.myDiagram.isModified = false;
+
         }
 
     };

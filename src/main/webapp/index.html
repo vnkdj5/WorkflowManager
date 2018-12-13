@@ -47,6 +47,8 @@
 
 <body ng-app="WorkflowManager" ng-controller="DiagramCtrl"
       ng-init="init();">
+<div class="wrapper">
+    <header>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <!-- Brand -->
@@ -72,8 +74,10 @@
         </ul>
     </div>
 </nav>
+    </header>
 <div growl></div>
 <!--  Main Container code start -->
+    <main>
 <div class="container-fluid">
     <div class="row">
 
@@ -106,11 +110,13 @@
         </div>
     </div>
 </div>
+    </main>
 <footer class="footer bg-dark" style="margin-top: 0px;">
     <div class="container">
         <span class="text-muted text-center font-weight-bold">@Workflow Manager, All rights reserved.</span>
     </div>
 </footer>
+</div>
 <!-- Main container code ends here -->
 <div ng-include="'files/newWorkflowModal.html'"></div>
 <div ng-include="'files/loadWorkflowModal.html'"></div>
