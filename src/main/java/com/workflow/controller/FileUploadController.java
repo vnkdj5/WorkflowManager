@@ -63,5 +63,13 @@ public class FileUploadController {
 		//return new ResponseEntity<String>("{\"message\":\"File Uploaded successfully\"}",HttpStatus.OK);
 	}
 
+	@RequestMapping(value="/deletefile", method=RequestMethod.POST)
+	public ResponseEntity<String> deleteFile(@RequestParam("file") String path){
+		File file=new File(path);
+		if(file.delete()) {
+			return new ResponseEntity<String>("{\"message\":\"File deleted\"}",HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("{\"message\":\"Cannot delete file\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 }
