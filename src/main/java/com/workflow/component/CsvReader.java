@@ -74,7 +74,7 @@ public class CsvReader implements Component{
 				+ "\"filePath\":{\"title\":\"File Paths\",\"type\":\"array\",\"items\":{\"type\":\"string\"}}},"
 				+ "\"required\":[\"file\"]},"
 				+ "\"form\":[{\"key\":\"file\",\"type\":\"nwpFileUpload\",\"endpoint\":\"/WorkflowManager/uploadfile\",\"onChange\":\"updated(model,form)\"}"
-                + ",{\"title\":\"Uploaded Path\",\"key\":\"filePath\",\"type\":\"array\",\"startEmpty\":true},"
+                + ",{\"title\":\"Uploaded Path\",\"key\":\"filePath\",\"type\":\"array\",\"startEmpty\":true,\"add\":null},"
 				+ "{\"type\":\"submit\",\"title\":\"Save\"}]}";
 	}
 
@@ -83,5 +83,5 @@ public class CsvReader implements Component{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 }
