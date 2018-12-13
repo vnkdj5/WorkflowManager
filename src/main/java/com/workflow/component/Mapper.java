@@ -59,11 +59,11 @@ public class Mapper implements Component{
                 "            },\n" +
                 "            \"fieldName\": {\n" +
                 "              \"type\": \"string\",\n" +
-                "              \"readonly\": false\n" +
+                "              \"readonly\": true\n" +
                 "            },\n" +
                 "            \"dataType\": {\n" +
                 "              \"type\": \"string\",\n" +
-                "              \"readonly\": false\n" +
+                "              \"readonly\": true\n" +
                 "            }\n" +
                 "          }\n" +
                 "        }\n" +
