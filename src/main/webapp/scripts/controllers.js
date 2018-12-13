@@ -394,7 +394,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                                 let dataType = obj[key];
                                 var checkVal = false;
 
-                                if (index < obj.length && component.config.field[index] && component.config.field[index].fieldName == dataType.fieldName) {
+                                if (index < obj.length && component.config && component.config.field[index] && component.config.field[index].fieldName == dataType.fieldName) {
                                     checkVal = component.config.field[index].check;
                                 }
                                 $scope.model.field.push({
