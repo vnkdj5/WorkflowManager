@@ -163,6 +163,20 @@ app.service('fileUpload', ['$q', '$http', function ($q, $http) {
     this.getResponse = function () {
         return responseData;
     }
+    this.deleteFile=function(fileUrl){
+    	let data={
+    		"file":fileUrl	
+    	};
+    	return $http({
+            method: "POST",
+            url: "deletefile",
+            data: angular.toJson(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+
+        });
+    }
 }]);
 
 

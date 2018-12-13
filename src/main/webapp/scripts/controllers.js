@@ -177,10 +177,31 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         	for(var i=0;i<curHeaders.length;i++){
         		if(curHeaders[i]!=newHeaders[i]){
         			//call delete controller and return error msg
+        			fileUpload.deleteFile(data.path).then(
+        		            function success(response) {
+        		                notify.showSuccess("Deleted", "File deleted.");
+        		            },
+        		            function error(response) {
+        		            	notify.showError("Error!", "Cannot delete file");
+        		            }
+        		        );
         		}
         	}
         	if(curHeaders.length!=newHeaders.length){
         		//call delete controller and return error msg
+        		fileUpload.deleteFile(data.path).then(
+        	            function success(response) {
+        	                //console.log(response.data);
+        	                notify.showSuccess("Success!", "Workflow Execution Finished.");
+
+        	            },
+        	            function error(response) {
+        	                let errors = response.data.cause;
+        	                for (let i = 0; i < errors.length; i++) {
+        	                    notify.showError("Error in Workflow!", errors[i]);
+        	                }
+        	            }
+        	        );
         	}
         }
         else{
@@ -352,7 +373,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                                 let dataType = obj[key];
                                 var checkVal = false;
 
-                                if (index < obj.length && component.config.field[index].fieldName == dataType.fieldName) {
+                                if (index < obj.length && component.config.field[index] && component.config.field[index].fieldName == dataType.fieldName) {
                                     checkVal = component.config.field[index].check;
                                 }
                                 $scope.model.field.push({
