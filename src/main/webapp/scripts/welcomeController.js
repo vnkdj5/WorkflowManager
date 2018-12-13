@@ -22,7 +22,7 @@ app.filter('beginning_data', function() {
     }
 });
 app.controller('controller', function($scope, $http, $timeout,welcomeService) {
-
+	$scope.workflow={};
 	$scope.deleteWf = function(index,name)
 	{
 		welcomeService.deleteWorkflow(name).then(
@@ -34,10 +34,13 @@ app.controller('controller', function($scope, $http, $timeout,welcomeService) {
 				}
 		);
 	}
-
 	$scope.createWorkflow = function(){
+		window.location.href = "/WorkflowManager/index.html?load=1&name="+$scope.workflow.name;
+	};
+	$scope.createWorkflowPopup = function(){
 		console.log("workflow creaate");
-		window.location.href = "/WorkflowManager/index.html?create=1"
+		$("#newWorkflowModal").modal("show");
+		
 	};
 
 	$scope.loadWorkflow = function(name){
@@ -64,7 +67,7 @@ app.controller('controller', function($scope, $http, $timeout,welcomeService) {
     };
  
     //sorting with date
-    
+    $scope.createWorkflowPopup();
   
 	
 

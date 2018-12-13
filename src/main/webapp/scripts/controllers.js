@@ -286,8 +286,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
             },
             function error(response) {
-                notify.showError("Error!", "Workflow not found!!");
-
+                //notify.showError("Error!", "Workflow not found!!");
+                $scope.createWorkflow();
             }
         );
 
