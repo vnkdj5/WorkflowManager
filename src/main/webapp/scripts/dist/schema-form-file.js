@@ -150,20 +150,26 @@ angular
 				}
 
 				scope.validateField = function () {
-					if (scope.uploadForm.file && scope.uploadForm.file.$valid && scope.picFile && !scope.picFile.$error) {
-						console.log('singlefile-form is invalid');
-					} else if (scope.uploadForm.files && scope.uploadForm.files.$valid && scope.picFiles && !scope.picFiles.$error) {
-						console.log('multifile-form is  invalid');
-					} else {
-						console.log('single- and multifile-form are valid');
+					if(scope.uploadForm!=undefined && scope.uploadForm!=null){
+						if (scope.uploadForm.file && scope.uploadForm.file.$valid && scope.picFile && !scope.picFile.$error) {
+							console.log('singlefile-form is invalid');
+						} else if (scope.uploadForm.files && scope.uploadForm.files.$valid && scope.picFiles && !scope.picFiles.$error) {
+							console.log('multifile-form is  invalid');
+						} else {
+							console.log('single- and multifile-form are valid');
+						}
 					}
+					
 				};
 				scope.submit        = function () {
-					if (scope.uploadForm.file && scope.uploadForm.file.$valid && scope.picFile && !scope.picFile.$error) {
-						scope.uploadFile(scope.picFile);
-					} else if (scope.uploadForm.files && scope.uploadForm.files.$valid && scope.picFiles && !scope.picFiles.$error) {
-						scope.uploadFiles(scope.picFiles);
+					if(scope.uploadForm!=undefined && scope.uploadForm!=null){
+						if (scope.uploadForm.file && scope.uploadForm.file.$valid && scope.picFile && !scope.picFile.$error) {
+							scope.uploadFile(scope.picFile);
+						} else if (scope.uploadForm.files && scope.uploadForm.files.$valid && scope.picFiles && !scope.picFiles.$error) {
+							scope.uploadFiles(scope.picFiles);
+						}
 					}
+					
 				};
 				scope.$on('schemaFormValidate', scope.validateField);
 				scope.$on('schemaFormFileUploadSubmit', scope.submit);
