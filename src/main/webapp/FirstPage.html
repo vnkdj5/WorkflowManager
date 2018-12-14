@@ -48,6 +48,7 @@ input[type=text]:focus {
     <script type="text/javascript"
             src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
     <script src="http://l-lin.github.io/angular-datatables/archives/dist/angular-datatables.min.js"></script>
+    <script src="http://l-lin.github.io/angular-datatables/archives/vendor/datatables-buttons/js/dataTables.buttons.js"></script>
     <script src="http://l-lin.github.io/angular-datatables/archives/dist/plugins/buttons/angular-datatables.buttons.min.js"></script>
 
 
@@ -80,21 +81,22 @@ input[type=text]:focus {
 <div >
     <div class="container">
         <br />
+        <!--
 
-        <div class="row">
-            <div class="col-sm-3 ">
-                <button class="welcomebtn"
-                        ng-click="createWorkflowPopup()">
-                    <i class="fa fa-play"></i> Create workflow
-                </button>
+         <div class="row">
+             <div class="col-sm-3 ">
+                 <button class="welcomebtn"
+                         ng-click="createWorkflowPopup()">
+                     <i class="fa fa-play"></i> Create workflow
+                 </button>
 
-            </div>
-            <!--<div class="col-sm-6 ">
-                <input type="text" ng-model="search" ng-change="filter()"
-                       placeholder="Search..." class="form-control"/>
-            </div>-->
-        </div>
-        <br />
+             </div>
+             &lt;!&ndash;<div class="col-sm-6 ">
+                 <input type="text" ng-model="search" ng-change="filter()"
+                        placeholder="Search..." class="form-control"/>
+             </div>&ndash;&gt;
+         </div>
+         <br />-->
 
         <table datatable="ng" dt-options="dtOptions" class="table table-hover">
             <thead>

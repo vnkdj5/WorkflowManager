@@ -30,7 +30,7 @@ app.controller('controller', function ($scope, $http, $timeout, welcomeService, 
             text: 'Create Workflow',
             key: '1',
             action: function (e, dt, node, config) {
-                alert('Button activated');
+                $scope.createWorkflowPopup()
             }
         }]);
 	$scope.deleteWf = function(index,name)
