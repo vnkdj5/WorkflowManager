@@ -1,4 +1,4 @@
-var app = angular.module('myApp',[]);
+var app = angular.module('myApp', ['datatables', 'datatables.buttons']);
 app.service("welcomeService", function($http){
 
 this.deleteWorkflow = function(name){
@@ -21,8 +21,18 @@ app.filter('beginning_data', function() {
         return [];
     }
 });
-app.controller('controller', function($scope, $http, $timeout,welcomeService) {
+app.controller('controller', function ($scope, $http, $timeout, welcomeService, DTOptionsBuilder) {
 	$scope.workflow={};
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDisplayLength(5)
+        .withOption('bLengthChange', false)
+        .withButtons([{
+            text: 'Create Workflow',
+            key: '1',
+            action: function (e, dt, node, config) {
+                alert('Button activated');
+            }
+        }]);
 	$scope.deleteWf = function(index,name)
 	{
 		welcomeService.deleteWorkflow(name).then(
@@ -47,8 +57,8 @@ app.controller('controller', function($scope, $http, $timeout,welcomeService) {
 		console.log("workflow creaate");
 		window.location.href = "/WorkflowManager/index.html?load=1&name="+name;
 	};
-	
-    $http.get('/WorkflowManager/getAll').then(function(user_data) {
+    //TODO: Refactoring needed below
+    $http.get('/WorkflowManager/getAll').then(function success(user_data) {
         $scope.file = user_data.data;
         $scope.data_limit = 10;
         $scope.filter_data = $scope.file.length;
