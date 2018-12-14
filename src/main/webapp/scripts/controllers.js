@@ -58,8 +58,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     $scope.testConn = function (form) {
         $scope.$broadcast('schemaFormValidate');
-
+        var testBtn = document.querySelector('.testConBtn');
         if (form.$valid) {
+            testBtn.innerHTML = "Checking Connection";
+            testBtn.classList.add('spinning');
+
             graphService.checkDBConnection($scope.model).then(
                 function success(response) {
                 	
@@ -69,9 +72,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 	}else{
                 		notify.showSuccess("Success!", response.data[1]);
                 	}
-                    
+                    testBtn.classList.remove('spinning');
+                    testBtn.innerHTML = "Test";
                 }, function error(response) {
                     notify.showError("Error in Connection!", response.data);
+                    testBtn.classList.remove('spinning');
+                    testBtn.innerHTML = "Test";
                 }
             );
         }
