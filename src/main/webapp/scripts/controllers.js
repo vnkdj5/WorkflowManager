@@ -58,8 +58,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     $scope.testConn = function (form) {
         $scope.$broadcast('schemaFormValidate');
-
+        var testBtn = document.querySelector('.testConBtn');
         if (form.$valid) {
+            testBtn.innerHTML = "Checking Connection";
+            testBtn.classList.add('spinning');
+
             graphService.checkDBConnection($scope.model).then(
                 function success(response) {
                 	
@@ -69,9 +72,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 	}else{
                 		notify.showSuccess("Success!", response.data[1]);
                 	}
-                    
+                    testBtn.classList.remove('spinning');
+                    testBtn.innerHTML = "Test";
                 }, function error(response) {
                     notify.showError("Error in Connection!", response.data);
+                    testBtn.classList.remove('spinning');
+                    testBtn.innerHTML = "Test";
                 }
             );
         }
@@ -108,7 +114,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         if (searchedComponent.config != $scope.model) {
             searchedComponent.isModified = true;
         }
-
+        
         searchedComponent.isModified = true;
         // Then we check if the form is valid
         if (form.$valid) {
@@ -178,8 +184,15 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         let MD = $scope.myDiagram;
         let nodeDataArr = MD.model.nodeDataArray;
+        let fileList=nodeDataArr.find(component => component.key == $scope.selectedComponent.key).config;
+        if(fileList){
+        	fileList=fileList.filePath;
+        	if(fileList.length==0){
+        		nodeDataArr.find(component => component.key == $scope.selectedComponent.key).output=[];
+        	}
+        }
         let curHeaders=nodeDataArr.find(component => component.key == $scope.selectedComponent.key).output;
-        if(curHeaders){
+        if(curHeaders && curHeaders.length!=0){
         	let newHeaders=data.headers;
         	for(var i=0;i<curHeaders.length;i++){
         		console.log("cur:"+curHeaders[i].fieldName+", new: "+newHeaders[i].fieldName);
@@ -385,6 +398,15 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     previousNode = nodeList[i];
                     break;
                 }
+            }
+            let prevOutput=nodeList.find(component => component.key == previousKey).config;
+            if(prevOutput){
+            	prevOutput=prevOutput.filePath;
+            	if(prevOutput && prevOutput.length==0){
+            		nodeList.find(component => component.key == previousKey).output=[];
+            		notify.showError("Warning!", "Previous component configuration incomplete");
+                	return;
+            	}
             }
             /* console.log(previousNode.output);*/
             componentService.getFormData("/WorkflowManager/getConfig/" + componentName).then(
