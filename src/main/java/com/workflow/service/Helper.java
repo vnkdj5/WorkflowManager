@@ -96,7 +96,7 @@ public class Helper {
 		HashMap<String,Boolean> checkResult = new HashMap<>();
 		try {
 			MongoCredential credential = MongoCredential.createCredential("", database, "".toCharArray());
-			MongoClient mongoClient = new MongoClient();
+			MongoClient mongoClient = new MongoClient(url);
 			System.out.println(mongoClient.getAddress());
 			
 			
