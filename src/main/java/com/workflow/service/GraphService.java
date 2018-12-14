@@ -145,16 +145,11 @@ public class GraphService {
 
 			jgraph.setName(name);
 			try {
-				JSONObject object = (JSONObject)(parser.parse(new FileReader("dagInit.json")));
+                String defaultgraph = "{\\n\\t\\\"class\\\": \\\"go.GraphLinksModel\\\",\\n\\t\\\"linkFromPortIdProperty\\\": \\\"fromPort\\\",\\n\\t\\\"linkToPortIdProperty\\\": \\\"toPort\\\",\\n\\t\\\"name\\\": \\\"\\\",\\n\\t\\\"nodeDataArray\\\": [\\n\\t\\t{\\n\\t\\t\\t\\\"key\\\": -1,\\n\\t\\t\\t\\\"category\\\": \\\"Start\\\",\\n\\t\\t\\t\\\"loc\\\": \\\"175 0\\\",\\n\\t\\t\\t\\\"text\\\": \\\"Start\\\",\\n\\t\\t\\t\\\"config\\\": {\\n\\t\\t\\t\\t\\\"className\\\": \\\"Main\\\",\\n\\t\\t\\t\\t\\\"name\\\": \\\"Start\\\",\\n\\t\\t\\t\\t\\\"file\\\": null\\n\\t\\t\\t},\\n\\t\\t\\t\\\"input\\\": {\\n\\t\\t\\t\\t\\\"url\\\": \\\"https://api.myjson.com/bins/lbzsc\\\"\\n\\t\\t\\t},\\n\\t\\t\\t\\\"output\\\": []\\n\\t\\t},\\n\\t\\t{\\n\\t\\t\\t\\\"key\\\": -2,\\n\\t\\t\\t\\\"category\\\": \\\"End\\\",\\n\\t\\t\\t\\\"loc\\\": \\\"175 407\\\",\\n\\t\\t\\t\\\"text\\\": \\\"Stop!\\\",\\n\\t\\t\\t\\\"config\\\": {\\n\\t\\t\\t\\t\\\"className\\\": \\\"Main\\\",\\n\\t\\t\\t\\t\\\"name\\\": \\\"End\\\",\\n\\t\\t\\t\\t\\\"file\\\": null\\n\\t\\t\\t},\\n\\t\\t\\t\\\"input\\\": {\\n\\t\\t\\t\\t\\\"url\\\": \\\"https://api.myjson.com/bins/lbzsc\\\"\\n\\t\\t\\t},\\n\\t\\t\\t\\\"output\\\": []\\n\\t\\t}\\n\\t],\\n\\t\\\"linkDataArray\\\": []\\n}";
+                JSONObject object = (JSONObject) (parser.parse(defaultgraph));
 				object.put("name", name);
 				jgraph.setJgraph(object);
 				jgraph.setTimestamp(new Date());
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
