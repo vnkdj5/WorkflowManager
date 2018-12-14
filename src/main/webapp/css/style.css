@@ -94,7 +94,7 @@ html, body {
 
 footer {
     padding: 5px 0;
-    position: relative;
+    position: fixed;
     background: #f5f5f5;
     width: 100%;
     color: #fff;
@@ -119,4 +119,11 @@ footer {
 .inner {
     height: 100%;
     overflow: auto;
+}
+
+
+.fill-height {
+    min-height: 100%;
+    height:auto !important; /* cross-browser */
+    height: 100%; /* cross-browser */
 }
