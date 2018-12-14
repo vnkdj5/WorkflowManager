@@ -365,10 +365,21 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.model = {};
         if (componentName === "Mapper") //test method for mapper
         {
-            //Finding previous node
-            let previousKey = componentKey + 1;
+        	//Finding previous node
+            let previousKey = 0;
             let nodeList = $scope.myDiagram.model.nodeDataArray;
             let previousNode = null;
+            let linkList=$scope.myDiagram.model.linkDataArray;
+            for (let i = 0; i < linkList.length; i++) {
+                if (linkList[i].to == componentKey) {
+                	previousKey = linkList[i].from;
+                    break;
+                }
+            }
+            if(previousKey==0){
+            	notify.showError("Error!", "No input component");
+            	return;
+            }
             for (let i = 0; i < nodeList.length; i++) {
                 if (nodeList[i].key == previousKey) {
                     previousNode = nodeList[i];
@@ -384,6 +395,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
                     $scope.model.field = [];
                     let obj = previousNode.output;
+                    if(!obj){
+                    	notify.showError("Warning!", "Previous component configuration incomplete");
+                    	return;
+                    }
                     console.log(obj);
 
 
@@ -478,7 +493,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 diagram.commandHandler.deleteSelection();
                 break;
             case "componentConfig":
-                $scope.loadForm($scope.selectedComponent.category);
+                $scope.loadForm($scope.selectedComponent.category,$scope.selectedComponent.key);
                 break;
             /*case "color": {
                   var color = window.getComputedStyle(document.elementFromPoint(event.clientX, event.clientY).parentElement)['background-color'];
