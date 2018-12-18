@@ -12,17 +12,21 @@ public class Mapper implements Component{
 	
 	Entity output;
 	ArrayList<String> allowedheaders;
+	ArrayList<String> allowedHeadersDatatypes;
 	@Override
 	public boolean init(Entity config,Entity input,Entity output) {
 		
 		this.output = output;
 		
 		allowedheaders = new ArrayList<>();
+		allowedHeadersDatatypes = new ArrayList<>();
 		JSONArray temp = (JSONArray) this.output.getEntity().get("allowed");
 		
 		for(int i=0;i<temp.length();i++) {
 			String header = ((JSONObject)temp.get(i)).getString("fieldName");
+			String datatype = ((JSONObject)temp.get(i)).getString("dataType");
 			allowedheaders.add(header);
+			allowedHeadersDatatypes.add(datatype);
 		}
 		return true;
 	}
@@ -33,7 +37,19 @@ public class Mapper implements Component{
 		HashMap<String, Object> in = input.getEntity();
 		for (Entry<String, Object> entry : in.entrySet()) {
 			if(allowedheaders.contains(entry.getKey())) {
-				out.addKeyValue(entry.getKey(), entry.getValue());
+				//improve logic here
+				String datatype = allowedHeadersDatatypes.get(allowedheaders.indexOf(entry.getKey()));
+				if(datatype.equals("boolean")) {
+					out.addKeyValue(entry.getKey(), Boolean.parseBoolean((String) entry.getValue()));
+				}else if(datatype.equals("int")) {
+					out.addKeyValue(entry.getKey(), Integer.parseInt((String) entry.getValue()));
+				}else if(datatype.equals("float")) {
+					out.addKeyValue(entry.getKey(), Float.parseFloat((String) entry.getValue()));
+				}else {
+					out.addKeyValue(entry.getKey(), entry.getValue());
+				}
+				
+				
 			}
 		}
             

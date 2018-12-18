@@ -64,6 +64,7 @@ public class GraphService {
 			}
 			//temp.setInput(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("input"))));
 			
+			
 			//improve logic here
 			if(!nodeArray.getJSONObject(i).isNull("output")) {
 				Entity o = new Entity();
@@ -103,7 +104,8 @@ public class GraphService {
 			catch (Exception e) {
 				break;
 			}
-			if(next!=nds.size()*(-1))
+			//stopping is -2
+			if(next!=-2)//nds.size()*(-1))
 				nodes.add(nds.get(next));
 			else {
 				break;
@@ -114,6 +116,7 @@ public class GraphService {
 		ret.put("error",false );
 		ret.put("nodeList", lgraph);
 		System.out.println("logicGraphmap="+lgraph.toString());
+		System.out.println("length="+nodes.size());
 		return ret;
 	}
 	public void saveGraph(JsonGraph jsonGraph) {
