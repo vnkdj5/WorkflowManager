@@ -309,7 +309,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 //component= $scope.myDiagram.model.nodeDataArray.find(component => component.text!=null);
                 //console.log(component);
                 notify.showSuccess("Success!", "Workflow loaded Successfully.");
-                $("#welcomepage").modal("hide");
+                
 
             },
             function error(response) {
