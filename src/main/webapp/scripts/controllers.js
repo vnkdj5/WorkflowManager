@@ -860,20 +860,29 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         //$scope.loadWorkflow();  // load an initial diagram from some JSON text
 
+        // Make sure the pipes are ordered by their key in the palette inventory
+        function keyCompare(a, b) {
+            var at = a.data.key;
+            var bt = b.data.key;
+            if (at < bt) return 1;
+            if (at > bt) return -1;
+            return 0;
+        }
         // initialize the Palette that is on the left side of the page
         $scope.myPalette =
             GO(go.Palette, "myPaletteDiv",  // must name or refer to the DIV HTML element
                 {
                     scrollsPageOnFocus: false,
-                    nodeTemplateMap: $scope.myDiagram.nodeTemplateMap  // share the templates used by $scope.myDiagram
-
+                    contentAlignment: go.Spot.Top,
+                    nodeTemplateMap: $scope.myDiagram.nodeTemplateMap,  // share the templates used by $scope.myDiagram
+                    layout: GO(go.GridLayout,
+                        {
+                            cellSize: new go.Size(1, 1),
+                            wrappingColumn: 1, comparer: keyCompare
+                        }),
 
                 });
 
-        // $scope.myPalette.model.nodeDataArray=$scope.loadComponents();
-        // console.log($scope.loadComponents());
-        console.log("load main welcome dialogue");
-        //$("#welcomepage").modal("show");
         $scope.handlePreviousRequest();
 
     }; // end init
