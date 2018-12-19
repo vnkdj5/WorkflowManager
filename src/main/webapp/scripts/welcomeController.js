@@ -21,6 +21,16 @@ app.filter('beginning_data', function() {
         return [];
     }
 });
+app.filter('prettyDate', function () {
+    return function (input) {
+        if (input) {
+            var date = new Date(input);
+
+            return date.toLocaleString();
+        }
+        return [];
+    }
+});
 app.controller('controller', function ($scope, $http, $timeout, welcomeService, DTOptionsBuilder) {
 	$scope.workflow={};
     $scope.dtOptions = DTOptionsBuilder.newOptions()

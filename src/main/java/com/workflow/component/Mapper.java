@@ -36,22 +36,26 @@ public class Mapper implements Component{
 		Entity out= new Entity();
 		HashMap<String, Object> in = input.getEntity();
 		for (Entry<String, Object> entry : in.entrySet()) {
-			if(allowedheaders.contains(entry.getKey())) {
-				//improve logic here
-				String datatype = allowedHeadersDatatypes.get(allowedheaders.indexOf(entry.getKey()));
-				if(datatype.equals("boolean")) {
-					out.addKeyValue(entry.getKey(), Boolean.parseBoolean((String) entry.getValue()));
-				}else if(datatype.equals("int")) {
-					out.addKeyValue(entry.getKey(), Integer.parseInt((String) entry.getValue()));
-				}else if(datatype.equals("float")) {
-					out.addKeyValue(entry.getKey(), Float.parseFloat((String) entry.getValue()));
-				}else {
-					out.addKeyValue(entry.getKey(), entry.getValue());
+            try {
+                if (allowedheaders.contains(entry.getKey())) {
+                    //improve logic here
+                    String datatype = allowedHeadersDatatypes.get(allowedheaders.indexOf(entry.getKey()));
+                    if (datatype.equals("boolean")) {
+                        out.addKeyValue(entry.getKey(), Boolean.parseBoolean((String) entry.getValue()));
+                    } else if (datatype.equals("int")) {
+                        out.addKeyValue(entry.getKey(), Integer.parseInt((String) entry.getValue()));
+                    } else if (datatype.equals("float")) {
+                        out.addKeyValue(entry.getKey(), Float.parseFloat((String) entry.getValue()));
+                    } else {
+                        out.addKeyValue(entry.getKey(), entry.getValue());
+                    }
+                }
+            } catch (NumberFormatException e) {
+                out.addKeyValue(entry.getKey(), 0);
 				}
-				
-				
-			}
-		}
+
+
+        }
             
 		return out;
 	}
