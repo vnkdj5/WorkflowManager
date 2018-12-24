@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.opencsv.CSVReader;
+import com.workflow.component.Entity;
 import com.workflow.service.Helper;
 
 @RestController
@@ -29,11 +30,14 @@ public class ComponentController {
 	@RequestMapping(value="/getConfig/{component_name}", method= RequestMethod.GET)
 	public ResponseEntity<String> getConfig(@PathVariable("component_name") String componentName){
 		
-		String config = helper.getConfig(componentName);
+		Entity config = helper.getConfig(componentName);
+		
+		
+		//add config model to the response and send back the entity.
 		if(config==null) {
-			return new ResponseEntity<String>(config,HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("",HttpStatus.INTERNAL_SERVER_ERROR);
 		}else {
-			return new ResponseEntity<String>(config,HttpStatus.OK);
+			return new ResponseEntity<String>(config.getObjectByName("FORM").toString(),HttpStatus.OK);
 		}
 		
 		

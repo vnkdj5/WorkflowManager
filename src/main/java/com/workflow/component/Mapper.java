@@ -10,7 +10,9 @@ import org.json.JSONObject;
 
 public class Mapper implements Component{
 	
+	Entity input;
 	Entity output;
+	
 	ArrayList<String> allowedheaders;
 	ArrayList<String> allowedHeadersDatatypes;
 	@Override
@@ -52,7 +54,7 @@ public class Mapper implements Component{
                 }
             } catch (NumberFormatException e) {
                 out.addKeyValue(entry.getKey(), 0);
-				}
+			}
 
 
         }
@@ -61,9 +63,9 @@ public class Mapper implements Component{
 	}
 
 	@Override
-	public String getConfig() {
+	public Entity getConfig() {
 		// TODO Auto-generated method stub
-        return "{\n" +
+		String Configform =  "{\n" +
                 "  \"schema\": {\n" +
                 "    \"type\": \"object\",\n" +
                 "    \"title\": \"\",\n" +
@@ -154,12 +156,40 @@ public class Mapper implements Component{
                 "    }\n" +
                 "  ]\n" +
                 "}";
+		
+		Entity config = new Entity();
+		config.addKeyValue("FORM", Configform);
+		return config;
 	}
 
 	@Override
 	public Entity getOutput() {
 		// TODO Auto-generated method stub
-		return null;
+		return input;
+	}
+
+	@Override
+	public Entity getInput() {
+		// TODO Auto-generated method stub
+		return output;
+	}
+
+	@Override
+	public void setInput(Entity input) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOutput(Entity output) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setConfig(Entity config) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

@@ -52,7 +52,7 @@ public class Helper {
 		return (Component)object;
 	}
 
-	public String getConfig(String componentName) {
+	public Entity getConfig(String componentName) {
 		return getObjectByClassName(componentName).getConfig();
 
 	}

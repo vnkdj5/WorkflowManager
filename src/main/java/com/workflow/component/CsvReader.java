@@ -8,6 +8,9 @@ import com.opencsv.*;
 
 public class CsvReader implements Component{
 
+	Entity output;
+	Entity input;
+	
 	ArrayList<String> csvFilePath;
 	CSVReader reader;
 	String[] headers;
@@ -16,6 +19,8 @@ public class CsvReader implements Component{
 	
 	@Override
 	public boolean init(Entity config,Entity input,Entity output) {
+		this.input = input;
+		this.output = output;
 		csvFilePath = (ArrayList<String>) config.getObjectByName("filePath"); 
 		totalFiles = csvFilePath.size();
 		readCompleteFile=0;
@@ -64,9 +69,9 @@ public class CsvReader implements Component{
 	}
 
 	@Override
-	public String getConfig() {
+	public Entity getConfig() {
 		// TODO Auto-generated method stub
-		return "{\"schema\":"
+		String Configform =  "{\"schema\":"
 				+ "{"
 				+ "\"type\":\"object\","
 				+ "\"title\":\"Upload CSV File\""
@@ -119,12 +124,39 @@ public class CsvReader implements Component{
 				+ "}"
 				+ "]"
 				+ "}";
+		Entity config = new Entity();
+		config.addKeyValue("FORM", Configform);
+		return config;
 	}
 
 	@Override
 	public Entity getOutput() {
 		// TODO Auto-generated method stub
+		return output;
+	}
+
+	@Override
+	public Entity getInput() {
+		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setInput(Entity input) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOutput(Entity output) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setConfig(Entity config) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
