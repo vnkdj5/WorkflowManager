@@ -353,7 +353,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 $scope.palleteModel = response.data.pallete;
                 //alert(JSON.stringify($scope.palleteModel));
                 this.result = response.data.pallete;
-
+                for (i in result) {
+                    if (!(result[i].category == "Start" || result[i].category == "End")) {
+                        $scope.addNodeToPallete(result[i].category);
+                        console.log("Pallete cNode", result[i]);
+                    }
+                }
                 $scope.myPalette.model.nodeDataArray = this.result;
 
             },
@@ -578,6 +583,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
              */
             document.getElementById("delete").style.display = cmd.canDeleteSelection() ? "block" : "none";
             document.getElementById("componentConfig").style.display = (obj !== null ? "block" : "none");
+            document.getElementById("componentInput").style.display = (obj !== null ? "block" : "none");
+            document.getElementById("componentOutput").style.display = (obj !== null ? "block" : "none");
             if (obj instanceof go.Node) {
                 //Setting selected component for further processing
                 $scope.selectedComponent.category = obj.data.category;
@@ -710,79 +717,32 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         // define the Node templates for regular nodes
 
-        $scope.myDiagram.nodeTemplateMap.add("CsvReader",  // the default category
-            GO(go.Node, "Table", nodeStyle(),
-                // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-                GO(go.Panel, "Auto",
-                    GO(go.Shape, "Rectangle",
-                        {fill: "#00A9C9", strokeWidth: 0},
-                        new go.Binding("figure", "figure")),
-                    GO(go.TextBlock, textStyle(),
-                        {
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: false
-                        },
-                        new go.Binding("text", "key").makeTwoWay())
-                ),
-                {contextMenu: myContextMenu},
-                // four named ports, one on each side:
-                makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
-                makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
-                makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
-                makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
-            ));
+        $scope.addNodeToPallete = function (nodeName) {
 
-        $scope.myDiagram.nodeTemplateMap.add("MongoWriter",  // the default category
-            GO(go.Node, "Table", nodeStyle(),
-                // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-                GO(go.Panel, "Auto",
-                    GO(go.Shape, "Rectangle",
-                        {fill: "#00A9C9", strokeWidth: 0},
-                        new go.Binding("figure", "figure")),
-                    GO(go.TextBlock, textStyle(),
-                        {
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: false
-                        },
-                        new go.Binding("text", "key").makeTwoWay())
-                ),
-                {contextMenu: myContextMenu},
-                // four named ports, one on each side:
-                makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
-                makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
-                makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
-                makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
-            ));
-
-        $scope.myDiagram.nodeTemplateMap.add("Mapper",  // the default category
-            GO(go.Node, "Table", nodeStyle(),
-                // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
-                GO(go.Panel, "Auto",
-                    GO(go.Shape, "Rectangle",
-                        {fill: "#00A9C9", strokeWidth: 0},
-                        new go.Binding("figure", "figure")),
-                    GO(go.TextBlock, textStyle(),
-                        {
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: false
-                        },
-                        new go.Binding("text", "key").makeTwoWay())
-                ),
-                {contextMenu: myContextMenu},
-                // four named ports, one on each side:
-                makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
-                makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
-                makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
-                makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
-            ));
-
-
+            $scope.myDiagram.nodeTemplateMap.add(nodeName,  // the default category
+                GO(go.Node, "Table", nodeStyle(),
+                    // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+                    GO(go.Panel, "Auto",
+                        GO(go.Shape, "Rectangle",
+                            {fill: "#00A9C9", strokeWidth: 0},
+                            new go.Binding("figure", "figure")),
+                        GO(go.TextBlock, textStyle(),
+                            {
+                                margin: 8,
+                                maxSize: new go.Size(160, NaN),
+                                wrap: go.TextBlock.WrapFit,
+                                editable: false
+                            },
+                            new go.Binding("text", "key").makeTwoWay())
+                    ),
+                    {contextMenu: myContextMenu},
+                    // four named ports, one on each side:
+                    makePort("T", go.Spot.Top, go.Spot.TopSide, false, true),
+                    makePort("L", go.Spot.Left, go.Spot.LeftSide, true, true),
+                    makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
+                    makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
+                ));
+        }
         $scope.myDiagram.nodeTemplateMap.add("Start",
             GO(go.Node, "Table", nodeStyle(),
                 GO(go.Panel, "Auto",
@@ -870,7 +830,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         function keyCompare(a, b) {
             var at = a.data.key;
             var bt = b.data.key;
-            if (at < bt) return 1;
+            //update logic when categorizing components
+            if (at < bt) return -1;
             if (at > bt) return -1;
             return 0;
         }
@@ -893,31 +854,4 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     }; // end init
 
-}]);
-
-
-//prettify filter for displaying json on screen #Unused Code
-app.filter('prettify', function () {
-
-    function syntaxHighlight(json) {
-        //console.log(json);
-        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-            let cls = 'number';
-            if (/^"/.test(match)) {
-                if (/:$/.test(match)) {
-                    cls = 'key';
-                } else {
-                    cls = 'string';
-                }
-            } else if (/true|false/.test(match)) {
-                cls = 'boolean';
-            } else if (/null/.test(match)) {
-                cls = 'null';
-            }
-            return '<span class="' + cls + '">' + match + '</span>';
-        });
-    }
-
-    return syntaxHighlight;
-});
+}]);  //controller end
