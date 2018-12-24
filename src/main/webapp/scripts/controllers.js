@@ -517,10 +517,16 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             case "componentConfig":
                 $scope.loadForm($scope.selectedComponent.category,$scope.selectedComponent.key);
                 break;
+            case "componentOutput":
+                $scope.loadForm($scope.selectedComponent.category, $scope.selectedComponent.key);
+                break;
+            case "componentInput":
+                $scope.loadForm($scope.selectedComponent.category, $scope.selectedComponent.key);
+                break;
             /*case "color": {
-                  var color = window.getComputedStyle(document.elementFromPoint(event.clientX, event.clientY).parentElement)['background-color'];
-                  changeColor(diagram, color); break;
-              }*/
+              var color = window.getComputedStyle(document.elementFromPoint(event.clientX, event.clientY).parentElement)['background-color'];
+              changeColor(diagram, color); break;
+          }*/
         }
         diagram.currentTool.stopTool();
     };
@@ -718,7 +724,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                             wrap: go.TextBlock.WrapFit,
                             editable: false
                         },
-                        new go.Binding("text").makeTwoWay())
+                        new go.Binding("text", "key").makeTwoWay())
                 ),
                 {contextMenu: myContextMenu},
                 // four named ports, one on each side:
@@ -742,7 +748,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                             wrap: go.TextBlock.WrapFit,
                             editable: false
                         },
-                        new go.Binding("text").makeTwoWay())
+                        new go.Binding("text", "key").makeTwoWay())
                 ),
                 {contextMenu: myContextMenu},
                 // four named ports, one on each side:
@@ -766,7 +772,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                             wrap: go.TextBlock.WrapFit,
                             editable: false
                         },
-                        new go.Binding("text").makeTwoWay())
+                        new go.Binding("text", "key").makeTwoWay())
                 ),
                 {contextMenu: myContextMenu},
                 // four named ports, one on each side:
@@ -783,7 +789,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     GO(go.Shape, "Circle",
                         {minSize: new go.Size(40, 40), fill: "#79C900", strokeWidth: 0}),
                     GO(go.TextBlock, "Start", textStyle(),
-                        new go.Binding("text"))
+                        new go.Binding("text", "key"))
                 ),
                 // three named ports, one on each side except the top, all output only:
                 makePort("L", go.Spot.Left, go.Spot.Left, true, false),
@@ -797,7 +803,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     GO(go.Shape, "Circle",
                         {minSize: new go.Size(40, 40), fill: "#DC3C00", strokeWidth: 0}),
                     GO(go.TextBlock, "End", textStyle(),
-                        new go.Binding("text"))
+                        new go.Binding("text", "key"))
                 ),
                 // three named ports, one on each side except the bottom, all input only:
                 makePort("T", go.Spot.Top, go.Spot.Top, false, true),
@@ -843,7 +849,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                             stroke: "#333333",
                             editable: true
                         },
-                        new go.Binding("text").makeTwoWay())
+                        new go.Binding("text", "text" + "key").makeTwoWay())
                 )
             );
 
@@ -890,7 +896,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 }]);
 
 
-//prettify filter for displaying json on screen
+//prettify filter for displaying json on screen #Unused Code
 app.filter('prettify', function () {
 
     function syntaxHighlight(json) {
