@@ -57,7 +57,7 @@ public class ComponentController {
 			JSONObject obj = new JSONObject();
 			obj.put("category", c);
 			obj.put("text", c);
-			
+            obj.put("key", c);
 			array.add(obj);
 		}
 		//"{\"pallets\":"+array.toString()+"}"
