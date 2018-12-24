@@ -7,6 +7,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class Entity {
 	private HashMap<String, Object> entity;
 	

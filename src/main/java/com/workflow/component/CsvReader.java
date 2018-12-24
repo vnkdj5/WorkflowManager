@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.opencsv.*;
+import com.workflow.annotation.wfComponent;
 
+@wfComponent(complete=true)
 public class CsvReader implements Component{
 
 	Entity output;

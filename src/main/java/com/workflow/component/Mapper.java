@@ -8,6 +8,9 @@ import java.util.Map.Entry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.workflow.annotation.wfComponent;
+
+@wfComponent(complete=true)
 public class Mapper implements Component{
 	
 	Entity input;

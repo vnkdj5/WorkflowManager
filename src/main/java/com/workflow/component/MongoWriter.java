@@ -6,7 +6,9 @@ import org.json.JSONObject;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.*;
+import com.workflow.annotation.wfComponent;
 
+@wfComponent(complete=true)
 public class MongoWriter implements Component{
 
 	Entity input;

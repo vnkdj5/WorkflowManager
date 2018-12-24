@@ -46,7 +46,7 @@ public class GraphService {
 		org.json.JSONArray nodeArray=jgraph.getJSONArray("nodeDataArray");
 		org.json.JSONArray linkArray=jgraph.getJSONArray("linkDataArray");
 		HashMap<String,Object> ret=new HashMap<String,Object>();
-		HashMap<Integer,Node> nds=new HashMap<Integer,Node>();
+		HashMap<String,Node> nds=new HashMap<String,Node>();
 		ArrayList<String> errorList=new ArrayList<>();
 		for(int i=0;i<nodeArray.length();i++) {
 			Node temp=new Node();
@@ -72,17 +72,17 @@ public class GraphService {
 				temp.setOutput(o);
 			}
 			
-			int key=((nodeArray.getJSONObject(i))).getInt("key");
+			String key=((nodeArray.getJSONObject(i))).getString("key");
 			nds.put(key, temp);
 		}
 		System.out.println("nds="+nds.size());
-		ArrayList<Integer> from=new ArrayList<Integer>(linkArray.length());
-		ArrayList<Integer> to=new ArrayList<Integer>(linkArray.length());
+		ArrayList<String> from=new ArrayList<String>(linkArray.length());
+		ArrayList<String> to=new ArrayList<String>(linkArray.length());
 		for(int i=0;i<linkArray.length();i++) {
-			from.add(i,((linkArray.getJSONObject(i)).getInt("from")));
-			to.add(i, ((linkArray.getJSONObject(i)).getInt("to")));
+			from.add(i,((linkArray.getJSONObject(i)).getString("from")));
+			to.add(i, ((linkArray.getJSONObject(i)).getString("to")));
 		}
-		int cur=-1;
+		String cur="Start";
 		/*for(int i=0;i<nodeArray.length();i++) {
 			if(((nodeArray.getJSONObject(i)).getString("text"))=="start") {
 				cur=Integer.parseInt(((nodeArray.getJSONObject(i)).get("key")).toString());
@@ -95,9 +95,9 @@ public class GraphService {
 			ret.put("cause", errorList);
 			return ret;
 		}
-		cur=-1;
+		cur="Start";
 		while(true) {
-			int next;
+			String next;
 			try {
 				next=to.get(from.indexOf(cur));
 			}
@@ -105,7 +105,7 @@ public class GraphService {
 				break;
 			}
 			//stopping is -2
-			if(next!=-2)//nds.size()*(-1))
+			if(!next.equals("End"))//nds.size()*(-1))
 				nodes.add(nds.get(next));
 			else {
 				break;
@@ -183,14 +183,14 @@ public class GraphService {
 		return map;
 	}
 
-	public ArrayList<String> validate(ArrayList<Integer> to, ArrayList<Integer> from, HashMap<Integer,Node> nds,int start) {
+	public ArrayList<String> validate(ArrayList<String> to, ArrayList<String> from, HashMap<String,Node> nds,String start) {
 		ArrayList<String> errorList=new ArrayList<>();
-		for(Map.Entry<Integer, Node> node : nds.entrySet()) {
+		for(Map.Entry<String, Node> node : nds.entrySet()) {
 			if(!node.getValue().isValid() && !node.getValue().getLabel().equals("Start") && !node.getValue().getLabel().equals("Stop"))
 				errorList.add("Incomplete configuration at "+node.getValue().getLabel());
 		}
 
-		int cur=start;
+		String cur=start;
 		int count=0;
 		System.out.println(nds.size());
 		while(count<nds.size()-1) {
