@@ -3,7 +3,12 @@ package com.workflow.component;
 public interface Component {
 	public boolean init(Entity config,Entity input,Entity output);
 	public Entity process(Entity input);
-	public String getConfig();
+	
 	//input output getters
+	public Entity getConfig();
 	public Entity getOutput();
+	public Entity getInput();
+	public void setInput(Entity input);
+	public void setOutput(Entity output);
+	public void setConfig(Entity config);
 }

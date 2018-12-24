@@ -9,6 +9,9 @@ import com.mongodb.client.*;
 
 public class MongoWriter implements Component{
 
+	Entity input;
+	Entity output;
+	
 	MongoClient mongo;
 	MongoDatabase db;
 	MongoCollection<Document> collection;
@@ -30,15 +33,42 @@ public class MongoWriter implements Component{
 	}
 
 	@Override
-	public String getConfig() {
+	public Entity getConfig() {
 		// TODO Auto-generated method stub
-        return "{\"schema\":{\"type\":\"object\",\"title\":\"Comment\",\"properties\":{\"name\":{\"title\":\"Username\",\"type\":\"string\",\"required\":true},\"password\":{\"title\":\"Password\",\"type\":\"string\",\"required\":true},\"collection\":{\"title\":\"collection_name\",\"type\":\"string\",\"required\":true},\"database\":{\"title\":\"database_name\",\"type\":\"string\",\"required\":true},\"url\":{\"title\":\"Url\",\"type\":\"string\",\"required\":true}},\"required\":[\"name\",\"password\",\"collection\",\"database\",\"url\"]},\"form\":[\"name\",\"password\",\"collection\",\"database\",\"url\",{\"type\":\"submit\",\"style\":\"btn-info\",\"title\":\"OK\"},{\"type\":\"button\",\"style\":\"btn-info testConBtn\",\"title\":\"Test\",\"onClick\":\"testConn(myForm)\"}]}";
+		String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"Comment\",\"properties\":{\"name\":{\"title\":\"Username\",\"type\":\"string\",\"required\":true},\"password\":{\"title\":\"Password\",\"type\":\"string\",\"required\":true},\"collection\":{\"title\":\"collection_name\",\"type\":\"string\",\"required\":true},\"database\":{\"title\":\"database_name\",\"type\":\"string\",\"required\":true},\"url\":{\"title\":\"Url\",\"type\":\"string\",\"required\":true}},\"required\":[\"name\",\"password\",\"collection\",\"database\",\"url\"]},\"form\":[\"name\",\"password\",\"collection\",\"database\",\"url\",{\"type\":\"submit\",\"style\":\"btn-info\",\"title\":\"OK\"},{\"type\":\"button\",\"style\":\"btn-info testConBtn\",\"title\":\"Test\",\"onClick\":\"testConn(myForm)\"}]}";
+		Entity config = new Entity();
+		config.addKeyValue("FORM", Configform);
+		return config;
 	}
 
 	@Override
 	public Entity getOutput() {
 		// TODO Auto-generated method stub
-		return null;
+		return output;
+	}
+
+	@Override
+	public Entity getInput() {
+		// TODO Auto-generated method stub
+		return input;
+	}
+
+	@Override
+	public void setInput(Entity input) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOutput(Entity output) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setConfig(Entity config) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
