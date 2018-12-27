@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.opencsv.CSVReader;
 import com.workflow.annotation.wfComponent;
+import com.workflow.bean.ComponentRepository;
 import com.workflow.component.Entity;
 import com.workflow.service.Helper;
 
@@ -55,7 +56,7 @@ public class ComponentController {
 	public ResponseEntity<String> getAllComponents() throws ParseException{
 		
 		ArrayList<String> components = new ArrayList<>();
-		components.add("Start");
+		/*components.add("Start");
 		components.add("End");
 		
 		//addition of @component annotation and reading all component classes
@@ -76,7 +77,9 @@ public class ComponentController {
 				e.printStackTrace();
 			}
 			
-		}
+		}*/
+		ComponentRepository repo = ComponentRepository.getInstance();
+		components = repo.components;
 		    
 		
 		JSONArray array = new JSONArray();
