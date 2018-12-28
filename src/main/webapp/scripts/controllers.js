@@ -523,10 +523,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 $scope.loadForm($scope.selectedComponent.category,$scope.selectedComponent.key);
                 break;
             case "componentOutput":
-                $scope.loadForm($scope.selectedComponent.category, $scope.selectedComponent.key);
+                $scope.loadInputOutput($scope.selectedComponent.category, $scope.selectedComponent.key, false);
+
                 break;
             case "componentInput":
-                $scope.loadForm($scope.selectedComponent.category, $scope.selectedComponent.key);
+                $scope.loadInputOutput($scope.selectedComponent.category, $scope.selectedComponent.key, true);
                 break;
             /*case "color": {
               var color = window.getComputedStyle(document.elementFromPoint(event.clientX, event.clientY).parentElement)['background-color'];
@@ -854,4 +855,70 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     }; // end init
 
+
+    $scope.loadInputOutput = function (componentName, componentKey, isInput) {
+        let component = ($scope.getComponent(componentName));
+        // EXTRACT VALUE FOR HTML HEADER. 
+        // ('Book ID', 'Book Name', 'Category' and 'Price')
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+
+        let jsonData = [];
+        if (isInput) {
+            jsonData = component.input; //replace this part with api services
+        } else {
+            jsonData = component.output;
+        }
+        if (!jsonData) {
+            if (isInput) {
+                divContainer.innerHTML = "No Input available for this component.";
+            } else {
+                divContainer.innerHTML = "No Output available for this component.";
+            }
+            $('#inputModal').modal('show');
+            return;
+        }
+        var col = [];
+        for (var i = 0; i < jsonData.length; i++) {
+            for (var key in jsonData[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        // CREATE DYNAMIC TABLE.
+        let table = document.createElement("table");
+        table.setAttribute("class", "table  table-hover");
+
+        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+        let header = table.createTHead();
+        header.setAttribute("class", "thead-light");
+        let tr = header.insertRow(-1);                   // TABLE ROW.
+
+        for (let i = 0; i < col.length; i++) {
+            let th = document.createElement("th");      // TABLE HEADER.
+            th.innerHTML = col[i];
+            header.appendChild(th);
+        }
+
+        // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (let i = 0; i < jsonData.length; i++) {
+
+            tr = table.insertRow(-1);
+
+            for (let j = 0; j < col.length; j++) {
+                let tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = jsonData[i][col[j]];
+            }
+        }
+
+        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+
+        divContainer.appendChild(table);
+
+        $('#inputModal').modal('show');
+    }
+
+    
 }]);  //controller end
