@@ -13,20 +13,19 @@ import com.workflow.component.Entity;
 
 @Document(collection = "WFGraph")
 public class WFGraph {
-    @Id
-    private Id id;
-    private String WFName;
-    private Date timestamp;
-    private List<GraphNode> nodes = new ArrayList<GraphNode>();
-    private List<GraphLink> links = new ArrayList<GraphLink>();
-
-    public String getId() {
-        return id.toString();
-    }
-
-    public String getWFName() {
-        return WFName;
-    }
+	@Id
+	private String id;
+	private String WFName;
+	private Date timestamp;
+	private List<GraphNode> nodes= new ArrayList<GraphNode>();
+	private List<GraphLink> links= new ArrayList<GraphLink>();
+	public String getId() {
+		return id;
+	}
+	
+	public String getWFName() {
+		return WFName;
+	}
 
     public void setWFName(String wFName) {
         WFName = wFName;
@@ -48,17 +47,16 @@ public class WFGraph {
         this.nodes = nodes;
     }
 
+	@Override
+	public String toString() {
+		return "LogicGraph [name=" + WFName + ", timestamp=" + timestamp + "]";
+	}
     public List<GraphLink> getLinks() {
         return links;
     }
 
     public void setLinks(List<GraphLink> links) {
         this.links = links;
-    }
-
-    @Override
-    public String toString() {
-        return "LogicGraph [id=" + id + ", nodes=" + nodes + "]";
     }
 
 }

@@ -112,14 +112,14 @@ input[type=text]:focus {
                     ng-repeat="data in searched = (file | filter:search | orderBy : base :reverse)|
 									beginning_data:(current_grid-1)*data_limit| limitTo:data_limit">
                 <td>{{$index+1}}</td>
-                <td>{{data.name}}</td>
+                <td>{{data.wfname}}</td>
                 <td>{{data.timestamp | prettyDate}}</td>
                 <td>
                     <button class="welcomebtn"
-                            ng-click="deleteWf($index,data.name)">
+                            ng-click="deleteWf($index,data.wfname)">
                         <i class="fa fa-trash"></i>
                     </button>
-                    <button class="welcomebtn" ng-click="loadWorkflow(data.name)">
+                    <button class="welcomebtn" ng-click="loadWorkflow(data.wfname)">
                         <i class="fa fa-play"></i>
                     </button>
                 </td>
