@@ -393,7 +393,16 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             }
         }
         // $scope.model1=$scope.model;
-    }
+    };
+
+    $scope.mapperAddAllHandler = function () {
+        let fieldArray = $scope.model.field;
+        $scope.model.outputFields = []; // initialize outputFields as empty
+        for (let i in fieldArray) {
+            fieldArray[i].check = true;
+            $scope.model.outputFields.push(fieldArray[i]);
+        }
+    };
     //Method for updating configuration of each component
     $scope.loadForm = function (componentName, componentKey) {
         $scope.model = {};
@@ -876,6 +885,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     }; // end init
 
 
+    // Start Dynamic Table generation for INPUT/OUTPUT Fields
     $scope.loadInputOutput = function (componentName, componentKey, isInput) {
         let component = ($scope.getComponent(componentName));
         // EXTRACT VALUE FOR HTML HEADER. 
@@ -939,6 +949,17 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         $('#inputModal').modal('show');
     }
+//End of Dynamic Table  generation for Input/Output of components
 
-    
+    //Watch for checking internet connection
+    $scope.$watch('online', function (newStatus) {
+
+        if (newStatus)
+            notify.showSuccess("Connected!", "You are online.");
+        else
+            notify.showError("Not connected!", "You are offline.");
+    });
+
+
+
 }]);  //controller end

@@ -2,7 +2,6 @@ package com.workflow.component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
@@ -22,7 +21,9 @@ public class Mapper implements Component{
 	public boolean init(Entity config,Entity input,Entity output) {
 		
 		this.output = output;
-		
+        this.input = input;
+
+
 		allowedheaders = new ArrayList<>();
 		allowedHeadersDatatypes = new ArrayList<>();
 		JSONArray temp = (JSONArray) this.output.getEntity().get("allowed");
@@ -67,6 +68,7 @@ public class Mapper implements Component{
 
 	@Override
 	public Entity getConfig() {
+
 		// TODO Auto-generated method stub
 		String Configform =  "{\n" +
                 "\t\"schema\": {\n" +
@@ -121,10 +123,17 @@ public class Mapper implements Component{
                 "\t\"form\": [" +
                 "\t\t{\n" +
                 "\t\t\t\"type\": \"button\",\n" +
-                "\t\t\t\"title\": \"==>\",\n" +
+                "\t\t\t\"title\": \"Add >\",\n" +
                 "\t\t\t\"style\": \"btn-info float-btn\",\n" +
                 "\t\t\t\"htmlClass\": \"text-center\",\n" +
                 "\t\t\t\"onClick\": \"mapperHandler()\"\n" +
+                "\t\t},\n" +
+                "\t\t{\n" +
+                "\t\t\t\"type\": \"button\",\n" +
+                "\t\t\t\"title\": \"Add All\",\n" +
+                "\t\t\t\"style\": \"btn-info float-btn2\",\n" +
+                "\t\t\t\"htmlClass\": \"text-center\",\n" +
+                "\t\t\t\"onClick\": \"mapperAddAllHandler()\"\n" +
                 "\t\t},\n" +
                 "{\n" +
                 "\t\t\t\"type\": \"section\",\n" +
@@ -179,6 +188,7 @@ public class Mapper implements Component{
                 "\t\t\t\t\t\t\"htmlClass\": \"\",\n" +
                 "\t\t\t\t\t\t\"notitle\": false ,\n" +
                 "\t\t\t\t\t\t\"add\": null,\n" +
+                "\t\t\t\t\t\t\"remove\": null,\n" +
                 "\t\t\t\t\t\t\"startEmpty\": true,\n" +
                 "\n" +
                 "\t\t\t\t\t\t\"items\": [{\n" +
@@ -219,7 +229,9 @@ public class Mapper implements Component{
 		
 		Entity config = new Entity();
 		config.addKeyValue("FORM", Configform);
-		return config;
+
+
+        return config;
 	}
 
 	@Override
@@ -229,7 +241,7 @@ public class Mapper implements Component{
 	}
 
 	@Override
-	public Entity getInput() {
+    public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
 		return output;
 	}

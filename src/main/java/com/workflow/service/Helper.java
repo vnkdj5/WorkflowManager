@@ -37,8 +37,8 @@ import com.workflow.component.*;
 
 @Service("helper")
 public class Helper {
-	@Autowired
-	MongoTemplate mongoTemplate;
+    @Autowired
+    MongoTemplate mongoTemplate;
 	
 	public Component getObjectByClassName(String classname) {
 		Object object = null;
@@ -171,11 +171,12 @@ public class Helper {
 		System.out.println(headerInfo.toString());
 		return headerInfo;
 	}
-	public boolean isValidLink(GraphLink link) {
-		List<GraphLink> validLinks= mongoTemplate.findAll(GraphLink.class,"validList");
-		if(validLinks.contains(link)) {
-			return true;
-		}
-		return false;
-	}
+
+    public boolean isValidLink(GraphLink link) {
+        List<GraphLink> validLinks = mongoTemplate.findAll(GraphLink.class, "validList");
+        if (validLinks.contains(link)) {
+            return true;
+        }
+        return false;
+    }
 }

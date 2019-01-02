@@ -39,7 +39,7 @@ public class GraphService {
 	@Autowired
 	Helper help;
 
-	final String COLLECTION="WFGraph";
+    final String COLLECTION = "WFGraph";
 	public HashMap extract(String name) {
 		Query query=new Query();
 		query.addCriteria(Criteria.where("name").is(name));
@@ -56,7 +56,7 @@ public class GraphService {
 		for(int i=0;i<nodeArray.length();i++) {
 			Node temp=new Node();
 			try {
-				temp.setConfig(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("config"))));
+                temp.setConfig(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("config"))));
 			}
 			catch(JSONException e) {
 				//errorList.add("Incomplete configuration at "+nodeArray.getJSONObject(i).getString("text"));
@@ -70,7 +70,7 @@ public class GraphService {
 			//temp.setInput(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("input"))));
 
 
-			//improve logic here
+            //improve logic here
 			if(!nodeArray.getJSONObject(i).isNull("output")) {
 				Entity o = new Entity();
 				o.addKeyValue("allowed", nodeArray.getJSONObject(i).getJSONArray("output"));
@@ -124,133 +124,154 @@ public class GraphService {
 		System.out.println("length="+nodes.size());
 		return ret;
 	}
-	public String saveGraph(String WFId,JSONObject update) {
-		Query query=new Query();
-		query.addCriteria(Criteria.where("id").is(WFId));
-		WFGraph graph=(WFGraph) mongoTemplate.find(query,WFGraph.class,COLLECTION);
-		switch((String)update.get("type")){
-		case "nodeAdd":{
-			String componentId=(String)update.get("CId");
-			String componentName=(String)update.get("name");
-			String componentCategory=(String)update.get("category");
-			double x=(double)update.get("x");
-			double y=(double)update.get("y");
-			Component newNode=help.getObjectByClassName(componentCategory);
-			GraphNode graphNode=new GraphNode(componentId, newNode, componentCategory,x,y);
-			
-			int flag=0;
-			List<GraphNode> nodes=graph.getNodes();
-			for(int i=0;i<nodes.size();i++) {
-				if(nodes.get(i).getName().equals(componentName) || nodes.get(i).getCId().equals(componentId)) {
-					flag=1;
-					break;
-				}
-			}
-			if(flag==0) {
-				nodes.add(graphNode);
-				graph.setNodes(nodes);
-				graph.setTimestamp(new Date());
-				mongoTemplate.save(graph, COLLECTION);
-				return "Success";
-			}
-			else return "Component name already exist";
-		}
-		case "nodeDelete":{
-			String componentId=(String)update.get("CId");
-			List<GraphNode> nodes=graph.getNodes();
-			List<GraphLink> links=graph.getLinks();
-			for(int i=0;i<nodes.size();i++) {
-				if(nodes.get(i).getCId().equals(componentId)) {
-					nodes.remove(i);
-					break;
-				}
-			}
-			for(int i=0;i<links.size();i++) {
-				if(links.get(i).getFrom().equals(componentId) || links.get(i).getTo().equals(componentId)) {
-					links.remove(i);
-				}
-			}
-			graph.setNodes(nodes);
-			graph.setLinks(links);
-			graph.setTimestamp(new Date());
-			mongoTemplate.save(graph, COLLECTION);
-			return "Success";
-			
 
-		}case "linkAdd":{
-			String from=(String)update.get("from");
-			String to=(String)update.get("to");
-			GraphNode fromNode=null;
-			GraphNode toNode=null;
-			int flag=0;
-			List<GraphNode> nodes=graph.getNodes();
-			for(int i=0;i<nodes.size() && flag<2;i++) {
-				if(nodes.get(i).getCId().equals(from)) {
-					fromNode=nodes.get(i);
-					flag++;
-				}
-				if(nodes.get(i).getCId().equals(to)) {
-					toNode=nodes.get(i);
-					flag++;
-				}
-			}
-			if(flag==2) {
-				GraphLink checkLink=new GraphLink(fromNode.getCategory(),toNode.getCategory());
-				if(help.isValidLink(checkLink)) {
-					List<GraphLink> links=graph.getLinks();
-					GraphLink newlink=new GraphLink(from,to);
-					if(!links.contains(newlink))
-						links.add(newlink);
-					graph.setLinks(links);
-					graph.setTimestamp(new Date());
-					mongoTemplate.save(graph, COLLECTION);
-					return "Success";
-				}
-				else return "Invalid link";
-			}
-			else return "Error";			
+    public String saveGraph(String WFId, JSONObject update) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(WFId));
+        WFGraph graph = (WFGraph) mongoTemplate.find(query, WFGraph.class, COLLECTION);
+        switch ((String) update.get("type")) {
+            case "nodeAdd": {
+                String componentId = (String) update.get("CId");
+                String componentName = (String) update.get("name");
+                String componentCategory = (String) update.get("category");
+                double x = (double) update.get("x");
+                double y = (double) update.get("y");
+                Component newNode = help.getObjectByClassName(componentCategory);
+                GraphNode graphNode = new GraphNode(componentId, newNode, componentCategory, x, y);
 
-		}case "linkDelete":{
-			String from=(String)update.get("from");
-			String to=(String)update.get("to");
-			List<GraphLink> links=graph.getLinks();
-			GraphLink deletelink=new GraphLink(from,to);
-			if(links.contains(deletelink)) {
-				links.remove(deletelink);
-				graph.setLinks(links);
-				graph.setTimestamp(new Date());
-				mongoTemplate.save(graph, COLLECTION);
-			}
-			return "Success";
-		}default: return "Error";
-		}
-		
-		//jsonGraph.setTimestamp(new Date());
-		//mongoTemplate.save(jsonGraph, COLLECTION);
-	}
+                int flag = 0;
+                List<GraphNode> nodes = graph.getNodes();
+                for (int i = 0; i < nodes.size(); i++) {
+                    if (nodes.get(i).getName().equals(componentName) || nodes.get(i).getCId().equals(componentId)) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag == 0) {
+                    nodes.add(graphNode);
+                    graph.setNodes(nodes);
+                    graph.setTimestamp(new Date());
+                    mongoTemplate.save(graph, COLLECTION);
+                    return "Success";
+                } else return "Component name already exist";
+            }
+            case "nodeDelete": {
+                String componentId = (String) update.get("CId");
+                List<GraphNode> nodes = graph.getNodes();
+                List<GraphLink> links = graph.getLinks();
+                for (int i = 0; i < nodes.size(); i++) {
+                    if (nodes.get(i).getCId().equals(componentId)) {
+                        nodes.remove(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < links.size(); i++) {
+                    if (links.get(i).getFrom().equals(componentId) || links.get(i).getTo().equals(componentId)) {
+                        links.remove(i);
+                    }
+                }
+                graph.setNodes(nodes);
+                graph.setLinks(links);
+                graph.setTimestamp(new Date());
+                mongoTemplate.save(graph, COLLECTION);
+                return "Success";
+
+
+            }
+            case "linkAdd": {
+                String from = (String) update.get("from");
+                String to = (String) update.get("to");
+                GraphNode fromNode = null;
+                GraphNode toNode = null;
+                int flag = 0;
+                List<GraphNode> nodes = graph.getNodes();
+                for (int i = 0; i < nodes.size() && flag < 2; i++) {
+                    if (nodes.get(i).getCId().equals(from)) {
+                        fromNode = nodes.get(i);
+                        flag++;
+                    }
+                    if (nodes.get(i).getCId().equals(to)) {
+                        toNode = nodes.get(i);
+                        flag++;
+                    }
+                }
+                if (flag == 2) {
+                    GraphLink checkLink = new GraphLink(fromNode.getCategory(), toNode.getCategory());
+                    if (help.isValidLink(checkLink)) {
+                        List<GraphLink> links = graph.getLinks();
+                        GraphLink newlink = new GraphLink(from, to);
+                        if (!links.contains(newlink))
+                            links.add(newlink);
+                        graph.setLinks(links);
+                        graph.setTimestamp(new Date());
+                        mongoTemplate.save(graph, COLLECTION);
+                        return "Success";
+                    } else return "Invalid link";
+                } else return "Error";
+
+            }
+            case "linkDelete": {
+                String from = (String) update.get("from");
+                String to = (String) update.get("to");
+                List<GraphLink> links = graph.getLinks();
+                GraphLink deletelink = new GraphLink(from, to);
+                if (links.contains(deletelink)) {
+                    links.remove(deletelink);
+                    graph.setLinks(links);
+                    graph.setTimestamp(new Date());
+                    mongoTemplate.save(graph, COLLECTION);
+                }
+                return "Success";
+            }
+            default:
+                return "Error";
+        }
+
+        //jsonGraph.setTimestamp(new Date());
+        //mongoTemplate.save(jsonGraph, COLLECTION);
+    }
 
 	public void deleteGraph(String name) {
 		Query query=new Query();
-		query.addCriteria(Criteria.where("WFName").is(name));
-		mongoTemplate.remove(query,WFGraph.class,COLLECTION);
-	}
+        query.addCriteria(Criteria.where("WFName").is(name));
+        mongoTemplate.remove(query, WFGraph.class, COLLECTION);
+    }
 
 	public HashMap newWorkflow(String name) {
 		HashMap<String,Object> map =new HashMap<>();
 		Query query=new Query();
-		query.addCriteria(Criteria.where("WFName").is(name));
-		WFGraph graph=new WFGraph();
-		if((graph=mongoTemplate.findOne(query,WFGraph.class,COLLECTION))!=null) {
+        query.addCriteria(Criteria.where("WFName").is(name));
+        WFGraph graph = new WFGraph();
+        if ((graph = mongoTemplate.findOne(query, WFGraph.class, COLLECTION)) != null) {
 			map.put("Found", true);
 			map.put("Graph", graph);
 			return map;
 		}
 		else {
+<<<<<<< HEAD
 			WFGraph wfGraph=new WFGraph();
 			wfGraph.setWFName(name);
 			wfGraph.setTimestamp(new Date());
 			mongoTemplate.insert(wfGraph, COLLECTION);
 			graph=mongoTemplate.findOne(query,WFGraph.class,COLLECTION);
+=======
+			JsonGraph jgraph=new JsonGraph();
+			JSONParser parser=new JSONParser();
+
+			jgraph.setName(name);
+			try {
+                String defaultgraph = "{\"class\": \"go.GraphLinksModel\",\"linkFromPortIdProperty\": \"fromPort\",\"linkToPortIdProperty\": \"toPort\",\"name\": \"\",\"nodeDataArray\": [{\"key\": -1,\"category\": \"Start\",\"loc\": \"175 0\",\"text\": \"Start\",\"config\":{ \"className\": \"Main\",\"name\": \"Start\",\"file\": null},\"input\": {\"url\": \"https://api.myjson.com/bins/lbzsc\"},\"output\": []},{\"key\": -2,\"category\": \"End\",\"loc\": \"175 407\",\"text\": \"Stop!\",\"config\": {\"className\": \"Main\",\"name\": \"End\",\"file\": null},\"input\": {\"url\": \"https://api.myjson.com/bins/lbzsc\"},\"output\": []}],\"linkDataArray\": []}";
+                JSONObject object = (JSONObject) (parser.parse(defaultgraph));
+				object.put("name", name);
+				jgraph.setJgraph(object);
+				jgraph.setTimestamp(new Date());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			mongoTemplate.insert(jgraph, COLLECTION);
+
+>>>>>>> branch 'master' of https://github.com/vnkdj5/WorkflowManager.git
 			map.put("Found", false);
 			map.put("Graph", graph);
 			return map;
@@ -299,7 +320,7 @@ public class GraphService {
 		return errorList;
 	}
 
-	public List getWF(){
+    public List getWF(){
 		Map<String,Date> WFList=new HashMap<>();
 		Query query=new Query();
 		query.addCriteria(Criteria.where("WFName").regex("^"));
@@ -309,7 +330,7 @@ public class GraphService {
 		return graphlist;
 	}
 
-	public JSONArray validLinks(){
+    public JSONArray validLinks(){
 		Query query=new Query();
 		query.addCriteria(Criteria.where("from").regex("^"));
 		JSONArray graphlist = new JSONArray();

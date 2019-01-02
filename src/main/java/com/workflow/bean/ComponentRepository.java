@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.mongodb.annotations.Beta;
 import com.workflow.annotation.wfComponent;
 
-@Component
 public class ComponentRepository {
 	private static ComponentRepository mComponentRepository=null;
 	
@@ -47,8 +46,6 @@ public class ComponentRepository {
 	}
 	
 	//initilization or contextaware
-	
-	@PostConstruct
 	public static ComponentRepository getInstance(){
 		if(mComponentRepository==null) {
 			

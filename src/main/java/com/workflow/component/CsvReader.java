@@ -138,9 +138,9 @@ public class CsvReader implements Component{
 	}
 
 	@Override
-	public Entity getInput() {
+    public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
-		return null;
+        return new Entity();
 	}
 
 	@Override

@@ -11,8 +11,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.workflow.bean.Node;
 import com.workflow.component.Entity;
 
-@Document(collection="WFGraph")
+@Document(collection = "WFGraph")
 public class WFGraph {
+<<<<<<< HEAD
 	@Id
 	private String id;
 	private String WFName;
@@ -26,39 +27,62 @@ public class WFGraph {
 	public String getWFName() {
 		return WFName;
 	}
+=======
+    @Id
+    private Id id;
+    private String WFName;
+    private Date timestamp;
+    private List<GraphNode> nodes = new ArrayList<GraphNode>();
+    private List<GraphLink> links = new ArrayList<GraphLink>();
+>>>>>>> branch 'master' of https://github.com/vnkdj5/WorkflowManager.git
 
-	public void setWFName(String wFName) {
-		WFName = wFName;
-	}
+    public String getId() {
+        return id.toString();
+    }
 
-	public Date getTimestamp() {
-		return timestamp;
-	}
+    public String getWFName() {
+        return WFName;
+    }
 
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
+    public void setWFName(String wFName) {
+        WFName = wFName;
+    }
 
-	public List<GraphNode> getNodes() {
-		return nodes;
-	}
+    public Date getTimestamp() {
+        return timestamp;
+    }
 
-	public void setNodes(List<GraphNode> nodes) {
-		this.nodes = nodes;
-	}
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
-	public List<GraphLink> getLinks() {
-		return links;
-	}
+    public List<GraphNode> getNodes() {
+        return nodes;
+    }
 
-	public void setLinks(List<GraphLink> links) {
-		this.links = links;
-	}
+    public void setNodes(List<GraphNode> nodes) {
+        this.nodes = nodes;
+    }
 
+<<<<<<< HEAD
 	@Override
 	public String toString() {
 		return "LogicGraph [name=" + WFName + ", timestamp=" + timestamp + "]";
 	}
+=======
+    public List<GraphLink> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<GraphLink> links) {
+        this.links = links;
+    }
+
+    @Override
+    public String toString() {
+        return "LogicGraph [id=" + id + ", nodes=" + nodes + "]";
+    }
+>>>>>>> branch 'master' of https://github.com/vnkdj5/WorkflowManager.git
 
 }
 

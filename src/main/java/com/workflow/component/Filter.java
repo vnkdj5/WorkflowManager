@@ -30,7 +30,7 @@ public class Filter implements Component {
 	}
 
 	@Override
-	public Entity getInput() {
+    public Entity getInput(Component conponent) {
 		// TODO Auto-generated method stub
 		return null;
 	}
