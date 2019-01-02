@@ -378,6 +378,22 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             });
 
     };
+    /*
+    Function for handling mapper component (called from JSON Schema Form)
+     */
+    $scope.mapperHandler = function () {
+
+        let fieldArray = $scope.model.field;
+
+        $scope.model.outputFields = [];
+
+        for (let i in fieldArray) {
+            if (fieldArray[i].check === true) {
+                $scope.model.outputFields.push(fieldArray[i]);
+            }
+        }
+        // $scope.model1=$scope.model;
+    }
     //Method for updating configuration of each component
     $scope.loadForm = function (componentName, componentKey) {
         $scope.model = {};
@@ -421,6 +437,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     let component = ($scope.getComponent(componentName));
 
                     $scope.model.field = [];
+                    $scope.model.outputFields = [];
+
                     let obj = previousNode.output;
                     if(!obj){
                     	notify.showError("Warning!", "Previous component configuration incomplete");
@@ -439,17 +457,19 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                                 if (index < obj.length && component.config && component.config.field[index] && component.config.field[index].fieldName == dataType.fieldName) {
                                     checkVal = component.config.field[index].check;
                                 }
-                                $scope.model.field.push({
+                                let currentObject = {
                                     "check": checkVal,
                                     "fieldName": dataType.fieldName,
                                     "dataType": dataType.dataType
-                                });
+                                };
+                                $scope.model.field.push(currentObject);
+                                if (checkVal == true)
+                                    $scope.model.outputFields.push(currentObject);
                             }
                             index++;
                         }
 
                     //$scope.model.field =previousNode.output;
-                    console.log($scope.model.field);
                     $('#myModal').modal('show');
                 },
                 function error(response) {
