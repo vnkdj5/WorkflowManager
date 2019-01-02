@@ -43,91 +43,101 @@
     <script type="text/javascript" src="scripts/controllers.js"></script>
     <script type="text/javascript"
             src="scripts/controllers/formController.js"></script>
+    <style>
+
+        .float-btn {
+            position: absolute;
+            margin-top: 5%;
+            z-index: 10;
+            margin-left: -4%;
+        }
+    </style>
 </head>
 
 <body ng-app="WorkflowManager" ng-controller="DiagramCtrl"
       ng-init="init();">
 <div class="wrapper">
     <header>
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
-    <a class="navbar-brand" href="FirstPage.html">Workflow Manager</a>
-	
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <!-- Brand -->
+            <a class="navbar-brand" href="FirstPage.html">Workflow Manager</a>
 
-    <!-- Navbar links -->
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-        </ul>
-        <li>
-        <li class="nav-item">
-            <button id="SaveButton" ng-click="save()" class="btn btn-info"><b>Save</b></button>
-        </li>
-        <li class="nav-item">
-            <button ng-click="runWorkflow()" class="btn btn-info"><b>Run</b></button>
-        </li>
-        </ul>
-    </div>
-</nav>
-    </header>
-<div growl></div>
-<!--  Main Container code start -->
-    <main>
-<div class="container-fluid full-height">
-    <div class="row">
+            <!-- Toggler/collapsibe Button -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div id="myPaletteDiv" class="col-sm-2"
-             style="background-color: whitesmoke; border: solid 1px black"></div>
-        <div
-                style="position: relative; padding-left: 0px; padding-right: 0px;"
-                class="col-sm-10">
-            <div id="myDiagramDiv" class="col-sm-12"
-                	style="flex-grow: 1; height: 85vh; border: solid 1px black"></div>
-            <div id="contextMenu">
-                <ul>
-                    <!-- <li id="cut" ng-click="cxcommand($event)">
-                    <a href="#" target="_self">Cut</a>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                </ul>
+                <li>
+                <li class="nav-item">
+                    <button id="SaveButton" ng-click="save()" class="btn btn-info"><b>Save</b></button>
                 </li>
-                <li id="copy" ng-click="cxcommand($event)">
-                    <a href="#" target="_self">Copy</a>
+                <li class="nav-item">
+                    <button ng-click="runWorkflow()" class="btn btn-info"><b>Run</b></button>
                 </li>
-                <li id="paste" ng-click="cxcommand($event)">
-                    <a href="#" target="_self">Paste</a>
-                </li> -->
-
-                    <li id="componentConfig" ng-click="cxcommand($event)">
-                        <a href="#" target="_self">Config</a>
-                    </li>
-                    <li id="componentInput" ng-click="cxcommand($event)">
-                        <a href="#" target="_self">Input</a>
-                    </li>
-                    <li id="componentOutput" ng-click="cxcommans($event)">
-                        <a href="#" target="_self">Output</a>
-                    </li>
-                    <li id="delete" ng-click="cxcommand($event)">
-                        <a href="#" target="_self">Delete</a>
-                    </li>
                 </ul>
             </div>
+        </nav>
+    </header>
+    <div growl></div>
+    <!--  Main Container code start -->
+    <main>
+        <div class="container-fluid full-height">
+            <div class="row">
+
+                <div id="myPaletteDiv" class="col-sm-2"
+                     style="background-color: whitesmoke; border: solid 1px black"></div>
+                <div
+                        style="position: relative; padding-left: 0px; padding-right: 0px;"
+                        class="col-sm-10">
+                    <div id="myDiagramDiv" class="col-sm-12"
+                         style="flex-grow: 1; height: 85vh; border: solid 1px black"></div>
+                    <div id="contextMenu">
+                        <ul>
+                            <!-- <li id="cut" ng-click="cxcommand($event)">
+                            <a href="#" target="_self">Cut</a>
+                        </li>
+                        <li id="copy" ng-click="cxcommand($event)">
+                            <a href="#" target="_self">Copy</a>
+                        </li>
+                        <li id="paste" ng-click="cxcommand($event)">
+                            <a href="#" target="_self">Paste</a>
+                        </li> -->
+
+                            <li id="componentConfig" ng-click="cxcommand($event)">
+                                <a href="#" target="_self">Config</a>
+                            </li>
+                            <li id="componentInput" ng-click="cxcommand($event)">
+                                <a href="#" target="_self">Input</a>
+                            </li>
+                            <li id="componentOutput" ng-click="cxcommand($event)">
+                                <a href="#" target="_self">Output</a>
+                            </li>
+                            <li id="delete" ng-click="cxcommand($event)">
+                                <a href="#" target="_self">Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
     </main>
-<footer class="footer bg-dark" style="margin-top: 0px;">
-    <div class="container">
-        <span class="text-muted text-center font-weight-bold">@Workflow Manager, All rights reserved.</span>
-    </div>
-</footer>
+    <footer class="footer bg-dark" style="margin-top: 0px;">
+        <div class="container">
+            <span class="text-muted text-center font-weight-bold">@Workflow Manager, All rights reserved.</span>
+        </div>
+    </footer>
 </div>
 <!-- Main container code ends here -->
 <div ng-include="'files/newWorkflowModal.html'"></div>
 <div ng-include="'files/loadWorkflowModal.html'"></div>
 <div ng-include="'files/welcomePage.html'"></div>
+<div ng-include="'files/inputModal.html'"></div>
 
 
 <!--Config Modal Start-->
@@ -135,28 +145,22 @@
      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">{{selectedComponent.category}} Configuration</div>
-            <div class="modal-body" id="modalContent">
-                <div>
-                    <div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="container-fluid">
-                                    <!-- Dynamic Form Generation -->
-                                    <form name="myForm" sf-schema="schema" sf-form="form"
-                                          sf-model="model" ng-submit="onSubmit(myForm)"></form>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                </div>
-
+            <div class="modal-header">
+                <h4 class="modal-title">{{selectedComponent.category}} Configuration</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
+            <div class="modal-body" id="modalContent">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="container-fluid">
+                            <!-- Dynamic Form Generation -->
+                            <form name="myForm" sf-schema="schema" sf-form="form"
+                                  sf-model="model" ng-submit="onSubmit(myForm)"></form>
+                        </div>
 
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

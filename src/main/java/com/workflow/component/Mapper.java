@@ -69,95 +69,152 @@ public class Mapper implements Component{
 	public Entity getConfig() {
 		// TODO Auto-generated method stub
 		String Configform =  "{\n" +
-                "  \"schema\": {\n" +
-                "    \"type\": \"object\",\n" +
-                "    \"title\": \"\",\n" +
-                "    \"properties\": {\n" +
-                "      \"field\": {\n" +
-                "        \"type\": \"array\",\n" +
-                "        \"items\": {\n" +
-                "          \"type\": \"object\",\n" +
-                "          \"properties\": {\n" +
-                "            \"check\": {\n" +
-                "              \"title\": \"\",\n" +
-                "              \"type\": \"boolean\"\n" +
-                "            },\n" +
-                "            \"fieldName\": {\n" +
-                "              \"type\": \"string\",\n" +
-                "              \"readonly\": true\n" +
-                "            },\n" +
-                "            \"dataType\": {\n" +
-                "              \"type\": \"string\",\n" +
-                "              \"readonly\": true\n" +
-                "            }\n" +
-                "          }\n" +
-                "        }\n" +
-                "      }\n" +
-                "    },\n" +
-                "    \"required\": [\n" +
-                "      \"field\"\n" +
-                "    ]\n" +
-                "  },\n" +
-                "  \"form\": [\n" +
-                "    {\n" +
-                "      \"type\": \"section\",\n" +
-                "      \"htmlClass\": \"\",\n" +
-                "      \"items\": [\n" +
-                "        {\n" +
-                "          \"key\": \"field\",\n" +
-                "          \"htmlClass\": \"\",\n" +
-                "          \"notitle\": true,\n" +
-                "          \"add\": null,\n" +
-                "          \"remove\": null,\n" +
-                "          \"items\": [\n" +
-                "            {\n" +
-                "              \"type\": \"section\",\n" +
-                "              \"htmlClass\": \"form-row redb\",\n" +
-                "              \"items\": [\n" +
-                "                {\n" +
-                "                  \"type\": \"section\",\n" +
-                "                  \"htmlClass\": \"col-md-2\",\n" +
-                "                  \"items\": [\n" +
-                "                    {\n" +
-                "                      \"key\": \"['field'][].['check']\",\n" +
-                "                      \"type\": \"checkbox\",\n" +
-                "                      \"title\": \"\",\n" +
-                "                      \"notitle\": true\n" +
-                "                    }\n" +
-                "                  ]\n" +
-                "                },\n" +
-                "                {\n" +
-                "                  \"type\": \"section\",\n" +
-                "                  \"htmlClass\": \"form-md-4\",\n" +
-                "                  \"items\": [\n" +
-                "                    {\n" +
-                "                      \"key\": \"['field'][].['fieldName']\",\n" +
-                "                      \"notitle\": true\n" +
-                "                    }\n" +
-                "                  ]\n" +
-                "                },\n" +
-                "                {\n" +
-                "                  \"type\": \"section\",\n" +
-                "                  \"htmlClass\": \"col-md-4\",\n" +
-                "                  \"items\": [\n" +
-                "                    {\n" +
-                "                      \"key\": \"['field'][].['dataType']\",\n" +
-                "                      \"notitle\": true\n" +
-                "                    }\n" +
-                "                  ]\n" +
-                "                }\n" +
-                "              ]\n" +
-                "            }\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"type\": \"submit\",\n" +
-                "      \"style\": \"btn-info\",\n" +
-                "      \"title\": \"OK\"\n" +
-                "    }\n" +
-                "  ]\n" +
+                "\t\"schema\": {\n" +
+                "\t\t\"type\": \"object\",\n" +
+                "\t\t\"title\": \"\",\n" +
+                "\t\t\"properties\": {\n" +
+                "\t\t\t\"field\": {\n" +
+                "\t\t\t\t\"type\": \"array\",\n" +
+                "\t\t\t\t\"items\": {\n" +
+                "\t\t\t\t\t\"type\": \"object\",\n" +
+                "\t\t\t\t\t\"properties\": {\n" +
+                "\t\t\t\t\t\t\"check\": {\n" +
+                "\t\t\t\t\t\t\t\"title\": \"\",\n" +
+                "\t\t\t\t\t\t\t\"type\": \"boolean\"\n" +
+                "\t\t\t\t\t\t},\n" +
+                "\t\t\t\t\t\t\"fieldName\": {\n" +
+                "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
+                "\t\t\t\t\t\t\t\"readonly\": false\n" +
+                "\t\t\t\t\t\t},\n" +
+                "\t\t\t\t\t\t\"dataType\": {\n" +
+                "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
+                "\t\t\t\t\t\t\t\"readonly\": false\n" +
+                "\t\t\t\t\t\t}\n" +
+                "\t\t\t\t\t}\n" +
+                "\t\t\t\t}\n" +
+                "\t\t\t},\n" +
+                "\t\t\t\"outputFields\": {\n" +
+                "\t\t\t\t\"type\": \"array\",\n" +
+                "\t\t\t\t\"items\": {\n" +
+                "\t\t\t\t\t\"type\": \"object\",\n" +
+                "\t\t\t\t\t\"properties\": {\n" +
+                "\t\t\t\t\t\t\"check\": {\n" +
+                "\t\t\t\t\t\t\t\"title\": \"\",\n" +
+                "\t\t\t\t\t\t\t\"type\": \"boolean\"\n" +
+                "\t\t\t\t\t\t},\n" +
+                "\t\t\t\t\t\t\"fieldName\": {\n" +
+                "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
+                "\t\t\t\t\t\t\t\"readonly\": false\n" +
+                "\t\t\t\t\t\t},\n" +
+                "\t\t\t\t\t\t\"dataType\": {\n" +
+                "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
+                "\t\t\t\t\t\t\t\"readonly\": false\n" +
+                "\t\t\t\t\t\t}\n" +
+                "\t\t\t\t\t}\n" +
+                "\t\t\t\t}\n" +
+                "\t\t\t}\n" +
+                "\t\t},\n" +
+                "\t\t\"required\": [\n" +
+                "\t\t\t\"field\"\n" +
+                "\t\t]\n" +
+                "\t},\n" +
+                "\t\"form\": [" +
+                "\t\t{\n" +
+                "\t\t\t\"type\": \"button\",\n" +
+                "\t\t\t\"title\": \"==>\",\n" +
+                "\t\t\t\"style\": \"btn-info float-btn\",\n" +
+                "\t\t\t\"htmlClass\": \"text-center\",\n" +
+                "\t\t\t\"onClick\": \"mapperHandler()\"\n" +
+                "\t\t},\n" +
+                "{\n" +
+                "\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\"htmlClass\": \"row\",\n" +
+                "\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\"htmlClass\": \"col-md-6\",\n" +
+                "\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\"key\": \"field\",\n" +
+                "\t\t\t\t\t\t\"htmlClass\": \"\",\n" +
+                "\t\t\t\t\t\t\"notitle\": false,\n" +
+                "\t\t\t\t\t\t\"add\": null,\n" +
+                "\t\t\t\t\t\t\"remove\": null,\n" +
+                "\t\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\t\t\"htmlClass\": \"form-row\",\n" +
+                "\t\t\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-2\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['field'][].['check']\",\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"type\": \"checkbox\",\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"title\": \"\",\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
+                "\t\t\t\t\t\t\t\t\t}]\n" +
+                "\t\t\t\t\t\t\t\t},\n" +
+                "\t\t\t\t\t\t\t\t{\n" +
+                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-4\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['field'][].['fieldName']\",\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
+                "\t\t\t\t\t\t\t\t\t}]\n" +
+                "\t\t\t\t\t\t\t\t},\n" +
+                "\t\t\t\t\t\t\t\t{\n" +
+                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-4\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['field'][].['dataType']\",\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
+                "\t\t\t\t\t\t\t\t\t}]\n" +
+                "\t\t\t\t\t\t\t\t}\n" +
+                "\t\t\t\t\t\t\t]\n" +
+                "\t\t\t\t\t\t}]\n" +
+                "\t\t\t\t\t}]\n" +
+                "\t\t\t\t},\n" +
+                "\t\t\t\t{\n" +
+                "\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\"htmlClass\": \"col-md-6\",\n" +
+                "\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\"key\": \"outputFields\",\n" +
+                "\t\t\t\t\t\t\"htmlClass\": \"\",\n" +
+                "\t\t\t\t\t\t\"notitle\": false ,\n" +
+                "\t\t\t\t\t\t\"add\": null,\n" +
+                "\t\t\t\t\t\t\"startEmpty\": true,\n" +
+                "\n" +
+                "\t\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\t\t\"htmlClass\": \"form-row\",\n" +
+                "\t\t\t\t\t\t\t\"items\": [\n" +
+                "\n" +
+                "\t\t\t\t\t\t\t\t{\n" +
+                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-5\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['outputFields'][].['fieldName']\",\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
+                "\t\t\t\t\t\t\t\t\t}]\n" +
+                "\t\t\t\t\t\t\t\t},\n" +
+                "\t\t\t\t\t\t\t\t{\n" +
+                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-5\",\n" +
+                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['outputFields'][].['dataType']\",\n" +
+                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
+                "\t\t\t\t\t\t\t\t\t}]\n" +
+                "\t\t\t\t\t\t\t\t}\n" +
+                "\t\t\t\t\t\t\t]\n" +
+                "\t\t\t\t\t\t}]\n" +
+                "\t\t\t\t\t}]\n" +
+                "\t\t\t\t}\n" +
+                "\t\t\t]\n" +
+                "\t\t},\n" +
+                "\t\t{\n" +
+                "\t\t\t\"type\": \"submit\",\n" +
+                "\t\t\t\"style\": \"btn-info btn\",\n" +
+                "\t\t\t\"htmlClass\": \"text-center\",\n" +
+                "\t\t\t\"title\": \"Save\"\n" +
+                "\t\t}\n" +
+                "\t]\n" +
                 "}";
 		
 		Entity config = new Entity();
@@ -191,7 +248,7 @@ public class Mapper implements Component{
 
 	@Override
 	public void setConfig(Entity config) {
-		// TODO Auto-generated method stub
+        // TODO method updation
 		
 	}
 
