@@ -183,6 +183,7 @@ public class Mapper implements Component{
                 "\t\t\t\t\t\t\"htmlClass\": \"\",\n" +
                 "\t\t\t\t\t\t\"notitle\": false ,\n" +
                 "\t\t\t\t\t\t\"add\": null,\n" +
+				"\t\t\t\t\t\t\"remove\": null,\n" +
                 "\t\t\t\t\t\t\"startEmpty\": true,\n" +
                 "\n" +
                 "\t\t\t\t\t\t\"items\": [{\n" +
@@ -235,7 +236,7 @@ public class Mapper implements Component{
 	}
 
 	@Override
-	public Entity getInput() {
+	public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
 		return output;
 	}
