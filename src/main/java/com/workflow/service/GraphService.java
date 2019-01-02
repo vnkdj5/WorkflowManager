@@ -246,24 +246,13 @@ public class GraphService {
 			return map;
 		}
 		else {
-			JsonGraph jgraph=new JsonGraph();
-			JSONParser parser=new JSONParser();
-
-			jgraph.setName(name);
-			try {
-				String defaultgraph = "{\"class\": \"go.GraphLinksModel\",\"linkFromPortIdProperty\": \"fromPort\",\"linkToPortIdProperty\": \"toPort\",\"name\": \"\",\"nodeDataArray\": [{\"key\": -1,\"category\": \"Start\",\"loc\": \"175 0\",\"text\": \"Start\",\"config\":{ \"className\": \"Main\",\"name\": \"Start\",\"file\": null},\"input\": {\"url\": \"https://api.myjson.com/bins/lbzsc\"},\"output\": []},{\"key\": -2,\"category\": \"End\",\"loc\": \"175 407\",\"text\": \"Stop!\",\"config\": {\"className\": \"Main\",\"name\": \"End\",\"file\": null},\"input\": {\"url\": \"https://api.myjson.com/bins/lbzsc\"},\"output\": []}],\"linkDataArray\": []}";
-				JSONObject object = (JSONObject) (parser.parse(defaultgraph));
-				object.put("name", name);
-				jgraph.setJgraph(object);
-				jgraph.setTimestamp(new Date());
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			mongoTemplate.insert(jgraph, COLLECTION);
-
+			WFGraph wfGraph=new WFGraph();
+			wfGraph.setWFName(name);
+			wfGraph.setTimestamp(new Date());
+			mongoTemplate.insert(wfGraph, COLLECTION);
+			graph=mongoTemplate.findOne(query,WFGraph.class,COLLECTION);
 			map.put("Found", false);
-			map.put("Graph", jgraph);
+			map.put("Graph", graph);
 			return map;
 		}
 	}
@@ -271,12 +260,12 @@ public class GraphService {
 	public HashMap getWorkflow(String name) {
 		HashMap<String,Object> map=new HashMap<>();
 		Query query=new Query();
-		query.addCriteria(Criteria.where("name").is(name));
-		JsonGraph jgraph = new JsonGraph();
-		jgraph= mongoTemplate.findOne(query,JsonGraph.class,COLLECTION);
-		if(jgraph!=null) {
+		query.addCriteria(Criteria.where("WFName").is(name));
+		WFGraph WFgraph = new WFGraph();
+		WFgraph= mongoTemplate.findOne(query,WFGraph.class,COLLECTION);
+		if(WFgraph!=null) {
 			map.put("Found", true);
-			map.put("Graph",jgraph);
+			map.put("Graph",WFgraph);
 			System.out.println("found");
 
 		}else {
@@ -313,12 +302,9 @@ public class GraphService {
 	public List getWF(){
 		Map<String,Date> WFList=new HashMap<>();
 		Query query=new Query();
-		query.addCriteria(Criteria.where("name").regex("^"));
-		List<JsonGraph> graphlist = new ArrayList<JsonGraph>();
-		graphlist.addAll(mongoTemplate.find(query,JsonGraph.class,COLLECTION));
-		for(int i=0;i<graphlist.size();i++) {
-			WFList.put(graphlist.get(i).getName(), graphlist.get(i).getTimestamp());
-		}
+		query.addCriteria(Criteria.where("WFName").regex("^"));
+		List<WFGraph> graphlist = new ArrayList<WFGraph>();
+		graphlist.addAll(mongoTemplate.find(query,WFGraph.class,COLLECTION));
 		System.out.println(graphlist.toString());
 		return graphlist;
 	}
