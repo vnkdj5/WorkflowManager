@@ -2,7 +2,6 @@ package com.workflow.component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
@@ -13,8 +12,10 @@ import com.workflow.annotation.wfComponent;
 @wfComponent(complete=true)
 public class Mapper implements Component{
 	
+	
 	Entity input;
 	Entity output;
+
 	
 	ArrayList<String> allowedheaders;
 	ArrayList<String> allowedHeadersDatatypes;
@@ -22,6 +23,8 @@ public class Mapper implements Component{
 	public boolean init(Entity config,Entity input,Entity output) {
 		
 		this.output = output;
+		this.input = input;
+
 		
 		allowedheaders = new ArrayList<>();
 		allowedHeadersDatatypes = new ArrayList<>();
@@ -67,6 +70,7 @@ public class Mapper implements Component{
 
 	@Override
 	public Entity getConfig() {
+		
 		// TODO Auto-generated method stub
 		String Configform =  "{\n" +
                 "  \"schema\": {\n" +
@@ -162,6 +166,8 @@ public class Mapper implements Component{
 		
 		Entity config = new Entity();
 		config.addKeyValue("FORM", Configform);
+
+
 		return config;
 	}
 
