@@ -2,6 +2,7 @@ package com.workflow.controller;
 
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -31,23 +32,14 @@ public class GraphController {
 
 	@Autowired
 	GraphService graphService;
-	
-	@RequestMapping(value="/save", method=RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> saveWorkflow(@RequestBody JsonGraph updatedGraph) {
+
+    @RequestMapping(value = "/save/{WFId}", method = RequestMethod.POST, headers = "Accept=application/json")
+    public ResponseEntity<String> saveWorkflow(@RequestBody JSONArray updateList, @PathVariable("WFId") String WFId) {
 		try {
-			JSONParser parser=new JSONParser();
-			JSONObject graph=null;
-			//try {
-				graph=updatedGraph.getJgraph();
-				String name = updatedGraph.getName();
-			//} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
-			//}
-				System.out.println("SAVEEEEEEEEE:");
-				System.out.println(name);
-				System.out.println(graph);
-			graphService.saveGraph(updatedGraph);
+            Iterator it = updateList.iterator();
+            while (it.hasNext()) {
+                graphService.saveGraph(WFId, (JSONObject) it.next());
+            }
 		}catch(Exception e) {
 			return new ResponseEntity<String>("{\"message\":\"Workflow Save Error! Try Again\"}",HttpStatus.INTERNAL_SERVER_ERROR);
 		}

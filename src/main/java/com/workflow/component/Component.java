@@ -7,7 +7,8 @@ public interface Component {
 	//input output getters
 	public Entity getConfig();
 	public Entity getOutput();
-	public Entity getInput();
+
+    public Entity getInput(Component component);
 	public void setInput(Entity input);
 	public void setOutput(Entity output);
 	public void setConfig(Entity config);

@@ -16,6 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.DB;
@@ -28,11 +32,14 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import com.opencsv.CSVReader;
+import com.workflow.bean.GraphLink;
 import com.workflow.component.*;
 
 @Service("helper")
 public class Helper {
-
+    @Autowired
+    MongoTemplate mongoTemplate;
+	
 	public Component getObjectByClassName(String classname) {
 		Object object = null;
 		try {
@@ -164,4 +171,12 @@ public class Helper {
 		System.out.println(headerInfo.toString());
 		return headerInfo;
 	}
+
+    public boolean isValidLink(GraphLink link) {
+        List<GraphLink> validLinks = mongoTemplate.findAll(GraphLink.class, "validList");
+        if (validLinks.contains(link)) {
+            return true;
+        }
+        return false;
+    }
 }
