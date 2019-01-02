@@ -248,30 +248,11 @@ public class GraphService {
 			return map;
 		}
 		else {
-<<<<<<< HEAD
 			WFGraph wfGraph=new WFGraph();
 			wfGraph.setWFName(name);
 			wfGraph.setTimestamp(new Date());
 			mongoTemplate.insert(wfGraph, COLLECTION);
 			graph=mongoTemplate.findOne(query,WFGraph.class,COLLECTION);
-=======
-			JsonGraph jgraph=new JsonGraph();
-			JSONParser parser=new JSONParser();
-
-			jgraph.setName(name);
-			try {
-                String defaultgraph = "{\"class\": \"go.GraphLinksModel\",\"linkFromPortIdProperty\": \"fromPort\",\"linkToPortIdProperty\": \"toPort\",\"name\": \"\",\"nodeDataArray\": [{\"key\": -1,\"category\": \"Start\",\"loc\": \"175 0\",\"text\": \"Start\",\"config\":{ \"className\": \"Main\",\"name\": \"Start\",\"file\": null},\"input\": {\"url\": \"https://api.myjson.com/bins/lbzsc\"},\"output\": []},{\"key\": -2,\"category\": \"End\",\"loc\": \"175 407\",\"text\": \"Stop!\",\"config\": {\"className\": \"Main\",\"name\": \"End\",\"file\": null},\"input\": {\"url\": \"https://api.myjson.com/bins/lbzsc\"},\"output\": []}],\"linkDataArray\": []}";
-                JSONObject object = (JSONObject) (parser.parse(defaultgraph));
-				object.put("name", name);
-				jgraph.setJgraph(object);
-				jgraph.setTimestamp(new Date());
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			mongoTemplate.insert(jgraph, COLLECTION);
-
->>>>>>> branch 'master' of https://github.com/vnkdj5/WorkflowManager.git
 			map.put("Found", false);
 			map.put("Graph", graph);
 			return map;
