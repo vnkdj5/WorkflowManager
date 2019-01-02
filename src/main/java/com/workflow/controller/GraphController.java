@@ -97,8 +97,8 @@ public class GraphController {
 	
 	@RequestMapping(value="/getAll", method=RequestMethod.GET, headers = "Accept=application/json")
 	public List getAllWF(){
-		ArrayList<JsonGraph> graphs = (ArrayList<JsonGraph>) graphService.getWF();
-		Collections.sort(graphs,Collections.reverseOrder());
+		ArrayList<JSONObject> graphs = (ArrayList<JSONObject>) graphService.getWF();
+		//Collections.sort(graphs,Collections.reverseOrder());
 		return	graphs;
 	}
 	

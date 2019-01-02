@@ -226,9 +226,6 @@ public class GraphService {
             default:
                 return "Error";
         }
-
-        //jsonGraph.setTimestamp(new Date());
-        //mongoTemplate.save(jsonGraph, COLLECTION);
     }
 
 	public void deleteGraph(String name) {
@@ -307,8 +304,16 @@ public class GraphService {
 		query.addCriteria(Criteria.where("WFName").regex("^"));
 		List<WFGraph> graphlist = new ArrayList<WFGraph>();
 		graphlist.addAll(mongoTemplate.find(query,WFGraph.class,COLLECTION));
+		List<JSONObject> wflist=new ArrayList<>();
+		for(int i=0;i<graphlist.size();i++) {
+			JSONObject temp=new JSONObject();
+			temp.put("wfname", graphlist.get(i).getWFName());
+			temp.put("timestamp", graphlist.get(i).getTimestamp());
+			System.out.println("obj:"+temp.toString());
+			wflist.add(temp);
+		}
 		System.out.println(graphlist.toString());
-		return graphlist;
+		return wflist;
 	}
 
     public JSONArray validLinks(){
