@@ -141,11 +141,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         if (load == 1) {
             $scope.loadWf(url.searchParams.get("name"));
-        } else if (create == 1) {
-            console.log($scope.myDiagram.model.nodeDataArray.length > 0 && $scope.myDiagram.model.linkDataArray.length > 0);
-            $("#newWorkflowModal").modal("show");
         }
-
 
     };
 
@@ -293,13 +289,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             function success(response) {
                 //alert(response.data)
                 notify.showSuccess("Success!", "Workflow created Successfully.");
-                graph = response.data.Graph.jgraph;
+                graph = response.data.Graph;
 
-                if ($scope.myDiagram.model.nodeDataArray.length > 0 || $scope.myDiagram.model.linkDataArray.length > 0) {
-                    $scope.save();
-                } else {
-                    $scope.myDiagram.model = go.Model.fromJson(graph);
-                }
+
+                $scope.myDiagram.model = go.Model.fromJson($scope.converter(graph));
+
 
 
                 $scope.currentWorkflowName = response.data.Graph.name;
@@ -346,7 +340,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     };
     $scope.loadWorkflow = function () {
 
-        //alert($scope.workflow.name);
+        alert($scope.workflow.name);
 
         graphService.loadGraph($scope.workflow.name).then(
             function success(response) {

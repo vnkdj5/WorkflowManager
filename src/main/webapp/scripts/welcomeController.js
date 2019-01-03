@@ -1,6 +1,19 @@
 var app = angular.module('myApp', ['datatables', 'datatables.buttons']);
 app.service("welcomeService", function($http){
+	this.newGraph = function (name) {
+		data = {
+			"name": name
+		};
+		return $http({
+			method: "POST",
+			url: "create",
+			data: angular.toJson(data),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
 
+	};
 this.deleteWorkflow = function(name){
 
 		return $http({
@@ -55,7 +68,16 @@ app.controller('controller', function ($scope, $http, $timeout, welcomeService, 
 		);
 	}
 	$scope.createWorkflow = function(){
-		window.location.href = "/WorkflowManager/index.html?load=1&name="+$scope.workflow.name;
+
+		welcomeService.newGraph($scope.workflow.name).then(
+			function success(response){
+				console.log(response.data);
+				window.location.href = "/WorkflowManager/index.html?load=1&name="+response.data.Graph.id;
+			}, function error(response){
+				alert("Workflow exists with the name");
+			}
+		);
+
 	};
 	$scope.createWorkflowPopup = function(){
 		console.log("workflow creaate");
