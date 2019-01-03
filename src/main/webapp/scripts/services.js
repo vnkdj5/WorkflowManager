@@ -37,7 +37,7 @@ app.service("graphService", function ($http) {
 
     this.loadGraph = function (name) {
         data = {
-            "name": name
+            "WFId": name
         };
 
         console.log(data);

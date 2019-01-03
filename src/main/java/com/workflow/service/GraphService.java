@@ -184,6 +184,14 @@ public class GraphService {
                 GraphNode fromNode = null;
                 GraphNode toNode = null;
                 int flag = 0;
+                if(from.equals("Start")) {
+                	fromNode=new GraphNode("Start", null, "Start", 0, 0);
+                	flag++;
+                }
+                if(from.equals("End")) {
+                	toNode=new GraphNode("End", null, "End", 0, 0);
+                	flag++;
+                }
                 List<GraphNode> nodes = graph.getNodes();
                 for (int i = 0; i < nodes.size() && flag < 2; i++) {
                     if (nodes.get(i).getCId().equals(from)) {
@@ -228,9 +236,9 @@ public class GraphService {
         }
     }
 
-	public void deleteGraph(String name) {
+	public void deleteGraph(String id) {
 		Query query=new Query();
-        query.addCriteria(Criteria.where("WFName").is(name));
+        query.addCriteria(Criteria.where("id").is(id));
         mongoTemplate.remove(query, WFGraph.class, COLLECTION);
     }
 
@@ -256,10 +264,10 @@ public class GraphService {
 		}
 	}
 
-	public HashMap getWorkflow(String name) {
+	public HashMap getWorkflow(String WFId) {
 		HashMap<String,Object> map=new HashMap<>();
 		Query query=new Query();
-		query.addCriteria(Criteria.where("WFName").is(name));
+		query.addCriteria(Criteria.where("id").is(WFId));
 		WFGraph WFgraph = new WFGraph();
 		WFgraph= mongoTemplate.findOne(query,WFGraph.class,COLLECTION);
 		if(WFgraph!=null) {
@@ -307,6 +315,7 @@ public class GraphService {
 		List<JSONObject> wflist=new ArrayList<>();
 		for(int i=0;i<graphlist.size();i++) {
 			JSONObject temp=new JSONObject();
+			temp.put("id", graphlist.get(i).getId());
 			temp.put("wfname", graphlist.get(i).getWFName());
 			temp.put("timestamp", graphlist.get(i).getTimestamp());
 			System.out.println("obj:"+temp.toString());

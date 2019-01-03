@@ -67,16 +67,16 @@ public class GraphController {
 	}
 	
 	@RequestMapping(value="/open", method=RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<HashMap> getWorkflow(@RequestBody String name) {
+	public ResponseEntity<HashMap> getWorkflow(@RequestBody String WFId) {
 		JSONParser parser=new JSONParser();
 		
 		try {
-			name=(String)((JSONObject)(parser.parse(name))).get("name");
+			WFId=(String)((JSONObject)(parser.parse(WFId))).get("WFId");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		HashMap<String,Object> map = graphService.getWorkflow(name);
+		HashMap<String,Object> map = graphService.getWorkflow(WFId);
 		if((Boolean)map.get("Found")) {
 			return new ResponseEntity<HashMap>(map,HttpStatus.OK);
 		}else {
@@ -84,10 +84,10 @@ public class GraphController {
 		}
 	}
 	
-	@RequestMapping(value="/delete/{name}", method=RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<String> deleteWorkflow(@PathVariable("name")String name) {
+	@RequestMapping(value="/delete/{WFId}", method=RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<String> deleteWorkflow(@PathVariable("WFId")String id) {
 		try {
-			graphService.deleteGraph(name);
+			graphService.deleteGraph(id);
 		}catch(Exception e) {
 			return new ResponseEntity<String>("{\"message\":\"Workflow Deletion Error! Try Again\"}",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
