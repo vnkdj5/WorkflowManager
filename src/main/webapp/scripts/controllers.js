@@ -56,8 +56,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         };
 
 
-        graphJson.name = graph.wfname;
-        graphJson.id = graph.id;
+        graphJson.name = graph.id;
+        graphJson.wfid = graph.id;
 
         for (var i = 0; i < graph.nodes.length; i++) {
             var comp = {};
@@ -138,8 +138,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         var create = url.searchParams.get("create");
         var load = url.searchParams.get("load");
 
+        $scope.currentWorkflowName = url.searchParams.get("name");
+
         if (load == 1) {
             $scope.loadWf(url.searchParams.get("name"));
+
         }
 
     };
@@ -293,11 +296,6 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
                 $scope.myDiagram.model = go.Model.fromJson($scope.converter(graph));
 
-
-
-                $scope.currentWorkflowName = response.data.Graph.name;
-
-
                 //alert(graph)
                 $("#newWorkflowModal").modal("hide");
 
@@ -315,7 +313,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             $("#newWorkflowModal").modal("show");
         } else {
             graph = $scope.myDiagram.model.toJson();//.toJson();
-            graphService.saveGraph(graph, $scope.workflow.name).then(
+            graphService.saveGraph(graph, $scope.currentWorkflowName).then(
                 function success(response) {
 
                     notify.showSuccess("Success!", response.data.message);
@@ -346,7 +344,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 var graph = response.data.Graph;
 
                 graph = $scope.converter(graph);
+                console.log(JSON.stringify(graph));
                 $scope.myDiagram.model = go.Model.fromJson(graph);
+
                 //console.log($scope.myDiagram.model.toJson());  //Check graph configuration
                 //component= $scope.myDiagram.model.nodeDataArray.find(component => component.text!=null);
                 //console.log(component);
@@ -698,7 +698,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.myDiagram.addModelChangedListener(function (e) {
                 // var cmdhandler= MD.commandHandler;
             // console.log("E",e);
-            let WFName = $scope.myDiagram.model.name;
+            let WFName = $scope.currentWorkflowName;
             $scope.undoLink(e); //method to remove invalid links
 
 
@@ -707,9 +707,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 if (e.modelChange == "nodeDataArray") {
 
                     reqData[0].type = "nodeAdd";
-                    reqData[0].Cid = e.newValue.key;
-                    reqData[0].name = e.newValue.key;
-                    reqData[0].category = e.newValue.key;
+                    reqData[0].CId = e.newValue.key;
+                    reqData[0].name = e.newValue.text;
+                    reqData[0].category = e.newValue.category;
 
                 } else if (e.modelChange == "linkDataArray") {
                     reqData[0].type = "linkAdd";

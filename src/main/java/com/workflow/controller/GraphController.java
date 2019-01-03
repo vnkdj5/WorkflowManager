@@ -34,13 +34,14 @@ public class GraphController {
 	GraphService graphService;
 
     @RequestMapping(value = "/save/{WFId}", method = RequestMethod.POST, headers = "Accept=application/json")
-    public ResponseEntity<String> saveWorkflow(@RequestBody JSONArray updateList, @PathVariable("WFId") String WFId) {
+    public ResponseEntity<String> saveWorkflow(@RequestBody List<JSONObject> updateList, @PathVariable("WFId") String WFId) {
 		try {
             Iterator it = updateList.iterator();
             while (it.hasNext()) {
                 graphService.saveGraph(WFId, (JSONObject) it.next());
             }
 		}catch(Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<String>("{\"message\":\"Workflow Save Error! Try Again\"}",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		

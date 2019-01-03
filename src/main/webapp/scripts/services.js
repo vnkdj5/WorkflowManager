@@ -16,11 +16,11 @@ app.service("graphService", function ($http) {
     };
 
     //graph save service
-    this.saveGraph = function (ngraph, name) {
+    this.saveGraph = function (name, ngraph) {
         data = {
             name: name,
             jgraph: JSON.parse(ngraph)
-        }
+        };
         return $http({
             method: "POST",
             url: "save",
@@ -31,6 +31,7 @@ app.service("graphService", function ($http) {
         });
     };
     this.save = function (WFname, updatedData) {
+
         return $http({
             method: "POST",
             url: "save/" + WFname,

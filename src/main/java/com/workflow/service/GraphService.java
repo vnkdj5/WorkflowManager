@@ -128,14 +128,14 @@ public class GraphService {
     public String saveGraph(String WFId, JSONObject update) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(WFId));
-        WFGraph graph = (WFGraph) mongoTemplate.find(query, WFGraph.class, COLLECTION);
+        WFGraph graph = (WFGraph) mongoTemplate.findOne(query, WFGraph.class, COLLECTION);
         switch ((String) update.get("type")) {
             case "nodeAdd": {
                 String componentId = (String) update.get("CId");
                 String componentName = (String) update.get("name");
                 String componentCategory = (String) update.get("category");
-                double x = (double) update.get("x");
-                double y = (double) update.get("y");
+                double x = Double.parseDouble(update.get("x").toString());
+                double y = Double.parseDouble(update.get("y").toString());
                 Component newNode = help.getObjectByClassName(componentCategory);
                 GraphNode graphNode = new GraphNode(componentId, newNode, componentCategory, x, y);
 
