@@ -116,10 +116,10 @@ input[type=text]:focus {
                 <td>{{data.timestamp | prettyDate}}</td>
                 <td>
                     <button class="welcomebtn"
-                            ng-click="deleteWf($index,data.wfname)">
+                            ng-click="deleteWf($index,data.id)">
                         <i class="fa fa-trash"></i>
                     </button>
-                    <button class="welcomebtn" ng-click="loadWorkflow(data.wfname)">
+                    <button class="welcomebtn" ng-click="loadWorkflow(data.id)">
                         <i class="fa fa-play"></i>
                     </button>
                 </td>
