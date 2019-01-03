@@ -30,7 +30,17 @@ app.service("graphService", function ($http) {
             }
         });
     };
+    this.save = function (WFname, updatedData) {
+        return $http({
+            method: "POST",
+            url: "save/" + WFname,
+            data: angular.toJson(updatedData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
+    }
     this.getAll = function () {
         return $http.get("/WorkflowManager/components");
     };

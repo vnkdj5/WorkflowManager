@@ -631,32 +631,74 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         }
 
 //		--		  Context  Menu Initialization End -----------------------------
+        $scope.undoLink = function (e) {
+            if (e.modelChange == "linkDataArray" && e.newValue != null) {
+                let MD = $scope.myDiagram, linkDataArr = MD.model.linkDataArray;
+                let linkFrom = e.newValue.from;
+                let linkTo = e.newValue.to;
+                let componentFrom = MD.model.nodeDataArray.find(component => component.key == linkFrom).category;
+                let componentTo = MD.model.nodeDataArray.find(component => component.key == linkTo).category;
+                let validLink = $scope.validGraphLinks.find(link => link.from == componentFrom && link.to == componentTo);
+                let index = linkDataArr.length - 1;
+                let duplicateLink = linkDataArr.indexOf(linkDataArr.find(link => link.to == linkTo && link.from == linkFrom));
+                let inputLink = linkDataArr.find(link => link.to == linkTo).from;
+                let outputLink = linkDataArr.find(link => link.from == linkFrom).to;
 
+                //console.log("i:"+inputLink+"o:"+outputLink+"d:"+duplicateLink);
+
+                if (!validLink || inputLink != linkFrom || outputLink != linkTo || duplicateLink != index) {
+                    MD.model.removeLinkData(e.newValue);
+                    notify.showError("Error!", "Invalid link");
+                }
+            }
+        }
+        var reqData = [{}];
         $scope.myDiagram.addModelChangedListener(function (e) {
                 // var cmdhandler= MD.commandHandler;
-                if (e.modelChange == "linkDataArray" && e.newValue != null) {
-                    let MD = $scope.myDiagram, linkDataArr = MD.model.linkDataArray;
-                    let linkFrom = e.newValue.from;
-                    let linkTo = e.newValue.to;
-                    let componentFrom = MD.model.nodeDataArray.find(component => component.key == linkFrom).category;
-                    let componentTo = MD.model.nodeDataArray.find(component => component.key == linkTo).category;
-                    let validLink = $scope.validGraphLinks.find(link => link.from == componentFrom && link.to == componentTo);
-                    let index = linkDataArr.length - 1;
-                    let duplicateLink = linkDataArr.indexOf(linkDataArr.find(link => link.to == linkTo && link.from == linkFrom));
-                    let inputLink = linkDataArr.find(link => link.to == linkTo).from;
-                    let outputLink = linkDataArr.find(link => link.from == linkFrom).to;
+            // console.log("E",e);
+            let WFName = $scope.myDiagram.model.name;
+            $scope.undoLink(e); //method to remove invalid links
 
-                    //console.log("i:"+inputLink+"o:"+outputLink+"d:"+duplicateLink);
 
-                    if (!validLink || inputLink != linkFrom || outputLink != linkTo || duplicateLink != index) {
-                        MD.model.removeLinkData(e.newValue);
-                        notify.showError("Error!", "Invalid link");
+            if (e.change === go.ChangedEvent.Insert) //TODO: Change here //ADD WFID returned from mongo
+            {
+                if (e.modelChange == "nodeDataArray") {
+
+                    reqData[0].type = "nodeAdd";
+                    reqData[0].Cid = e.newValue.key;
+                    reqData[0].name = e.newValue.key;
+                    reqData[0].category = e.newValue.key;
+
+                } else if (e.modelChange == "linkDataArray") {
+                    reqData[0].type = "linkAdd";
+                    reqData[0].to = e.newValue.to;
+                    reqData[0].from = e.newValue.from;
+
+
                     }
-                }
+                } else if (e.change === go.ChangedEvent.Remove) {
+                // console.log("REMOVE",e);
+            }
+
+
+            if (e.propertyName == "loc") {
+                let coordinates = e.newValue.split(" ");
+                reqData[0].x = coordinates[0];
+                reqData[0].y = coordinates[1];
+            }
+
+            if (e.change == go.ChangedEvent.Transaction && e.propertyName == "CommittedTransaction") {
+                console.log("reqData", JSON.stringify(reqData));
+                graphService.save(WFName, reqData);
+                reqData[0] = {};
+            }
+            // console.log("CHange", e.propertyName+" ==>"+JSON.stringify(e.newValue)+ " event ==>" +e.change);
+
             let button = document.getElementById("SaveButton");
             if (button) button.disabled = !$scope.myDiagram.isModified;
             }
         );
+
 
         // when the document is modified, add a "*" to the title and enable the "Save" button
         $scope.myDiagram.addDiagramListener("Modified", function (e) {
@@ -669,12 +711,14 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 if (idx >= 0) document.title = document.title.substr(0, idx);
             }
             //alert(JSON.stringify($scope.myDiagram.model.nodeDataArray[1].config));
+
         });
 
         //Listener when diagram component is changed
         $scope.myDiagram.addDiagramListener("ObjectDoubleClicked", function (e) {
                 let part = e.subject.part;
-                let componentName;
+
+            let componentName;
                 if (!(part instanceof go.Link) && !(part.data.category === "Start" || part.data.category == "End")) {
                     // console.log(JSON.stringify(part.data.formData));
                     componentName = part.data.text;
