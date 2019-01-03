@@ -231,6 +231,22 @@ public class GraphService {
                 }
                 return "Success";
             }
+            case "coordinateUpdate":{
+            	double x = (double) update.get("x");
+                double y = (double) update.get("y");
+                String componentId = (String) update.get("CId");
+                List<GraphNode> nodes = graph.getNodes();
+                for (int i = 0; i < nodes.size(); i++) {
+                    if (nodes.get(i).getCId().equals(componentId)) {
+                        nodes.get(i).setXY(x, y);;
+                        break;
+                    }
+                }
+                graph.setNodes(nodes);
+                graph.setTimestamp(new Date());
+                mongoTemplate.save(graph, COLLECTION);
+                return "Success";
+            }
             default:
                 return "Error";
         }
