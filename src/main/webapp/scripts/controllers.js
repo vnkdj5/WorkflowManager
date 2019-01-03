@@ -31,6 +31,53 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     $scope.validGraphLinks = [];
 
 
+    //converter for graph to gojs graph
+    $scope.converter = function(graph){
+        var graphJson = {
+            "class": "go.GraphLinksModel",
+            "linkFromPortIdProperty": "fromPort",
+            "linkToPortIdProperty": "toPort",
+            "name": "",
+            "nodeDataArray": [
+                {
+                    "key": "Start",
+                    "category": "Start",
+                    "loc": "175 0",
+                    "text": "Start"
+                },
+                {
+                    "key": "End",
+                    "category": "End",
+                    "loc": "175 407",
+                    "text": "Stop!"
+                }
+            ],
+            "linkDataArray": []
+        };
+
+
+        graphJson.name = graph.wfname;
+        graphJson.id = graph.id;
+
+        for(var i=0;i<graph.nodes.length;i++){
+            var comp = {};
+            comp.text = graph.nodes[i].name;
+            comp.key = graph.nodes[i].cid;
+            comp.category = graph.nodes[i].category;
+            comp.loc = ""+graph.nodes[i].x+" "+graph.nodes[i].y+"";
+
+
+            graphJson.nodeDataArray.concat(comp);
+
+        }
+        graphJson.linkDataArray = graph.links;
+
+
+
+        console.log(graphJson);
+        return graphJson;
+    };
+
     //for welcome page
     graphService.getAllWorkflows().then(function success(response) {
         console.log(response.data);
@@ -87,10 +134,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 //	for request
 
     $scope.handlePreviousRequest = function () {
-        let url_string = window.location.href;
-        let url = new URL(url_string);
-        let create = url.searchParams.get("create");
-        let load = url.searchParams.get("load");
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var create = url.searchParams.get("create");
+        var load = url.searchParams.get("load");
 
         if (load == 1) {
             $scope.loadWf(url.searchParams.get("name"));
@@ -109,8 +156,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     $scope.onSubmit = function (form) {
         // First we broadcast an event so all fields validate themselves
         $scope.$broadcast('schemaFormValidate');
-        let nodeDataArr = $scope.myDiagram.model.nodeDataArray;
-        let searchedComponent = nodeDataArr.find(component => component.category == $scope.selectedComponent.category);
+        var nodeDataArr = $scope.myDiagram.model.nodeDataArray;
+        var searchedComponent = nodeDataArr.find(component => component.category == $scope.selectedComponent.category);
         if (searchedComponent.config != $scope.model) {
             searchedComponent.isModified = true;
         }
@@ -123,7 +170,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 searchedComponent.config = $scope.model;
                 //Now update checked fields into output of mapper
                 searchedComponent.output = [];
-                for (let i = 0; i < searchedComponent.config.field.length; i++) {
+                for (var i = 0; i < searchedComponent.config.field.length; i++) {
                     if (searchedComponent.config.field[i].check) {
                         searchedComponent.output.push(
                             {
@@ -151,13 +198,13 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         $scope.selectedComponent = {};
         $scope.myDiagram.isModified = true;
-        let button = document.getElementById("SaveButton");
+        var button = document.getElementById("SaveButton");
         if (button) button.disabled = false;
         $("#myModal").modal("hide");
     };
 //	run the workflow method
     $scope.runWorkflow = function () {
-        let name = $scope.workflow.name;
+        var name = $scope.workflow.name;
         //console.log("name   "+ name);
         notify.showInfo("Info:" + name, "Workflow checking and execution started.");
 
@@ -169,8 +216,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
             },
             function error(response) {
-                let errors = response.data.cause;
-                for (let i = 0; i < errors.length; i++) {
+                var errors = response.data.cause;
+                for (var i = 0; i < errors.length; i++) {
                     notify.showError("Error in Workflow!", errors[i]);
                 }
             }
@@ -182,18 +229,18 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         
         //console.log("Current Component",$scope.selectedComponent);
 
-        let MD = $scope.myDiagram;
-        let nodeDataArr = MD.model.nodeDataArray;
-        let fileList=nodeDataArr.find(component => component.key == $scope.selectedComponent.key).config;
+        var MD = $scope.myDiagram;
+        var nodeDataArr = MD.model.nodeDataArray;
+        var fileList=nodeDataArr.find(component => component.key == $scope.selectedComponent.key).config;
         if(fileList){
         	fileList=fileList.filePath;
         	if(fileList.length==0){
         		nodeDataArr.find(component => component.key == $scope.selectedComponent.key).output=[];
         	}
         }
-        let curHeaders=nodeDataArr.find(component => component.key == $scope.selectedComponent.key).output;
+        var curHeaders=nodeDataArr.find(component => component.key == $scope.selectedComponent.key).output;
         if(curHeaders && curHeaders.length!=0){
-        	let newHeaders=data.headers;
+        	var newHeaders=data.headers;
         	for(var i=0;i<curHeaders.length;i++){
         		console.log("cur:"+curHeaders[i].fieldName+", new: "+newHeaders[i].fieldName);
         		if(curHeaders[i].fieldName!=(newHeaders[i].fieldName)){
@@ -280,9 +327,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
                     notify.showSuccess("Success!", response.data.message);
                     $scope.myDiagram.isModified = false;
-                    let button = document.getElementById("SaveButton");
+                    var button = document.getElementById("SaveButton");
                     if (button) button.disabled = !$scope.myDiagram.isModified;
-                    let idx = document.title.indexOf("*");
+                    var idx = document.title.indexOf("*");
                     if ($scope.myDiagram.isModified) {
                         if (idx < 0) document.title += "*";
                     } else {
@@ -303,7 +350,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         graphService.loadGraph($scope.workflow.name).then(
             function success(response) {
-                let graph = response.data.Graph.jgraph;
+                var graph = response.data.Graph;
+
+                graph = $scope.converter(graph);
                 $scope.myDiagram.model = go.Model.fromJson(graph);
                 //console.log($scope.myDiagram.model.toJson());  //Check graph configuration
                 //component= $scope.myDiagram.model.nodeDataArray.find(component => component.text!=null);
@@ -331,7 +380,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     };
 
-    //delete workflow
+    //devare workflow
 
     $scope.deleteWf = function (index, name) {
         graphService.deleteWorkflow(name).then(
@@ -383,7 +432,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
      */
     $scope.mapperHandler = function () {
 
-        let fieldArray = $scope.model.field;
+        var fieldArray = $scope.model.field;
 
         $scope.model.outputFields = [];
 
@@ -396,9 +445,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     };
 
     $scope.mapperAddAllHandler = function () {
-        let fieldArray = $scope.model.field;
+        var fieldArray = $scope.model.field;
         $scope.model.outputFields = []; // initialize outputFields as empty
-        for (let i in fieldArray) {
+        for (var i in fieldArray) {
             fieldArray[i].check = true;
             $scope.model.outputFields.push(fieldArray[i]);
         }
@@ -409,11 +458,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         if (componentName === "Mapper") //test method for mapper
         {
         	//Finding previous node
-            let previousKey = 0;
-            let nodeList = $scope.myDiagram.model.nodeDataArray;
-            let previousNode = null;
-            let linkList=$scope.myDiagram.model.linkDataArray;
-            for (let i = 0; i < linkList.length; i++) {
+            var previousKey = 0;
+            var nodeList = $scope.myDiagram.model.nodeDataArray;
+            var previousNode = null;
+            var linkList=$scope.myDiagram.model.linkDataArray;
+            for (var i = 0; i < linkList.length; i++) {
                 if (linkList[i].to == componentKey) {
                 	previousKey = linkList[i].from;
                     break;
@@ -423,18 +472,18 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             	notify.showError("Error!", "No input component");
             	return;
             }
-            for (let i = 0; i < nodeList.length; i++) {
+            for (var i = 0; i < nodeList.length; i++) {
                 if (nodeList[i].key == previousKey) {
                     previousNode = nodeList[i];
                     break;
                 }
             }
-            let prevOutput=nodeList.find(component => component.key == previousKey).config;
+            var prevOutput=nodeList.find(component => component.key == previousKey).config;
             if(prevOutput){
             	prevOutput=prevOutput.filePath;
             	if(prevOutput && prevOutput.length==0){
             		nodeList.find(component => component.key == previousKey).output=[];
-            		notify.showError("Warning!", "Previous component configuration incomplete");
+            		notify.showError("Warning!", "Previous component configuration incompvare");
                 	return;
             	}
             }
@@ -443,30 +492,30 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 function success(response) {
                     $scope.schema = response.data.schema;
                     $scope.form = response.data.form;
-                    let component = ($scope.getComponent(componentName));
+                    var component = ($scope.getComponent(componentName));
 
                     $scope.model.field = [];
                     $scope.model.outputFields = [];
 
-                    let obj = previousNode.output;
+                    var obj = previousNode.output;
                     if(!obj){
-                    	notify.showError("Warning!", "Previous component configuration incomplete");
+                    	notify.showError("Warning!", "Previous component configuration incompvare");
                     	return;
                     }
                     console.log(obj);
 
 
                     //$scope.model = component.config;
-                    let index = 0;
-                        for (let key in obj) {
+                    var index = 0;
+                        for (var key in obj) {
                             if (obj.hasOwnProperty(key)) {
-                                let dataType = obj[key];
+                                var dataType = obj[key];
                                 var checkVal = false;
 
                                 if (index < obj.length && component.config && component.config.field[index] && component.config.field[index].fieldName == dataType.fieldName) {
                                     checkVal = component.config.field[index].check;
                                 }
-                                let currentObject = {
+                                var currentObject = {
                                     "check": checkVal,
                                     "fieldName": dataType.fieldName,
                                     "dataType": dataType.dataType
@@ -493,7 +542,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 function success(response) {
                     $scope.schema = response.data.schema;
                     $scope.form = response.data.form;
-                    let component = ($scope.getComponent(componentName));
+                    var component = ($scope.getComponent(componentName));
                     if (!(component.config == null || $scope.getComponent(componentName).config == undefined)) {
                         $scope.model = component.config;
                     }
@@ -511,15 +560,15 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     $scope.loadComponents(); //
     // print the diagram by opening a new window holding SVG images of the diagram contents for each page
     $scope.printDiagram = function () {
-        let svgWindow = window.open();
+        var svgWindow = window.open();
         if (!svgWindow) return;  // failure to open a new Window
-        let printSize = new go.Size(700, 960);
-        let bnds = $scope.myDiagram.documentBounds;
-        let x = bnds.x;
-        let y = bnds.y;
+        var printSize = new go.Size(700, 960);
+        var bnds = $scope.myDiagram.documentBounds;
+        var x = bnds.x;
+        var y = bnds.y;
         while (y < bnds.bottom) {
             while (x < bnds.right) {
-                let svg = $scope.myDiagram.makeSVG({scale: 1.0, position: new go.Point(x, y), size: printSize});
+                var svg = $scope.myDiagram.makeSVG({scale: 1.0, position: new go.Point(x, y), size: printSize});
                 svgWindow.document.body.appendChild(svg);
                 x += printSize.width;
             }
@@ -539,7 +588,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     // This is the general menu command handler, parameterized by the name of the command.
     $scope.cxcommand = function ($event, val) {
         if (val === undefined) val = $event.currentTarget.id;
-        let diagram = $scope.myDiagram;
+        var diagram = $scope.myDiagram;
         switch (val) {
             /*		      case "cut": diagram.commandHandler.cutSelection(); break;
                   case "copy": diagram.commandHandler.copySelection(); break;
@@ -578,7 +627,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             GO(go.Diagram, "myDiagramDiv",  // must name or refer to the DIV HTML element
                 {
                     initialContentAlignment: go.Spot.Center,
-                    allowDrop: true,  // must be true to accept drops from the Palette
+                    allowDrop: true,  // must be true to accept drops from the Pavarte
                     "LinkDrawn": showLinkLabel,  // this DiagramEvent listener is defined below
                     "LinkRelinked": showLinkLabel,
                     scrollsPageOnFocus: false,
@@ -586,11 +635,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 });
 
 //		----------- Context Menu Initialization Start ----------------------------------------
-        let cxElement = document.getElementById("contextMenu");
+        var cxElement = document.getElementById("contextMenu");
 
         // Since we have only one main element, we don't have to declare a hide method,
         // we can set mainElement and GoJS will hide it automatically
-        let myContextMenu = GO(go.HTMLInfo, {
+        var myContextMenu = GO(go.HTMLInfo, {
             show: showContextMenu,
             mainElement: cxElement
         });
@@ -605,7 +654,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         function showContextMenu(obj, diagram, tool) {
             // Show only the relevant buttons given the current state.
-            let cmd = diagram.commandHandler;
+            var cmd = diagram.commandHandler;
             /*
                 document.getElementById("cut").style.display = cmd.canCutSelection() ? "block" : "none";
                 document.getElementById("copy").style.display = cmd.canCopySelection() ? "block" : "none";
@@ -625,7 +674,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             // Now show the whole context menu element
             cxElement.style.display = "block";
             // we don't bother overriding positionContextMenu, we just do it here:
-            let mousePt = diagram.lastInput.viewPoint;
+            var mousePt = diagram.lastInput.viewPoint;
             cxElement.style.left = mousePt.x + "px";
             cxElement.style.top = mousePt.y + "px";
         }
@@ -635,16 +684,16 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.myDiagram.addModelChangedListener(function (e) {
                 // var cmdhandler= MD.commandHandler;
                 if (e.modelChange == "linkDataArray" && e.newValue != null) {
-                    let MD = $scope.myDiagram, linkDataArr = MD.model.linkDataArray;
-                    let linkFrom = e.newValue.from;
-                    let linkTo = e.newValue.to;
-                    let componentFrom = MD.model.nodeDataArray.find(component => component.key == linkFrom).category;
-                    let componentTo = MD.model.nodeDataArray.find(component => component.key == linkTo).category;
-                    let validLink = $scope.validGraphLinks.find(link => link.from == componentFrom && link.to == componentTo);
-                    let index = linkDataArr.length - 1;
-                    let duplicateLink = linkDataArr.indexOf(linkDataArr.find(link => link.to == linkTo && link.from == linkFrom));
-                    let inputLink = linkDataArr.find(link => link.to == linkTo).from;
-                    let outputLink = linkDataArr.find(link => link.from == linkFrom).to;
+                    var MD = $scope.myDiagram, linkDataArr = MD.model.linkDataArray;
+                    var linkFrom = e.newValue.from;
+                    var linkTo = e.newValue.to;
+                    var componentFrom = MD.model.nodeDataArray.find(component => component.key == linkFrom).category;
+                    var componentTo = MD.model.nodeDataArray.find(component => component.key == linkTo).category;
+                    var validLink = $scope.validGraphLinks.find(link => link.from == componentFrom && link.to == componentTo);
+                    var index = linkDataArr.length - 1;
+                    var duplicateLink = linkDataArr.indexOf(linkDataArr.find(link => link.to == linkTo && link.from == linkFrom));
+                    var inputLink = linkDataArr.find(link => link.to == linkTo).from;
+                    var outputLink = linkDataArr.find(link => link.from == linkFrom).to;
 
                     //console.log("i:"+inputLink+"o:"+outputLink+"d:"+duplicateLink);
 
@@ -653,16 +702,16 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                         notify.showError("Error!", "Invalid link");
                     }
                 }
-            let button = document.getElementById("SaveButton");
+            var button = document.getElementById("SaveButton");
             if (button) button.disabled = !$scope.myDiagram.isModified;
             }
         );
 
         // when the document is modified, add a "*" to the title and enable the "Save" button
         $scope.myDiagram.addDiagramListener("Modified", function (e) {
-            let button = document.getElementById("SaveButton");
+            var button = document.getElementById("SaveButton");
             if (button) button.disabled = !$scope.myDiagram.isModified;
-            let idx = document.title.indexOf("*");
+            var idx = document.title.indexOf("*");
             if ($scope.myDiagram.isModified) {
                 if (idx < 0) document.title += "*";
             } else {
@@ -673,8 +722,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         //Listener when diagram component is changed
         $scope.myDiagram.addDiagramListener("ObjectDoubleClicked", function (e) {
-                let part = e.subject.part;
-                let componentName;
+                var part = e.subject.part;
+                var componentName;
                 if (!(part instanceof go.Link) && !(part.data.category === "Start" || part.data.category == "End")) {
                     // console.log(JSON.stringify(part.data.formData));
                     componentName = part.data.text;
@@ -712,7 +761,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         // stretches along the side of the node,
         // and the boolean "output" and "input" arguments control whether the user can draw links from or to the port.
         function makePort(name, align, spot, output, input) {
-            let horizontal = align.equals(go.Spot.Top) || align.equals(go.Spot.Bottom);
+            var horizontal = align.equals(go.Spot.Top) || align.equals(go.Spot.Bottom);
             // the port is basically just a transparent rectangle that stretches along the side of the node,
             // and becomes colored when the mouse passes over it
             return GO(go.Shape,
@@ -846,7 +895,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         // Make link labels visible if coming out of a "conditional" node.
         // This listener is called by the "LinkDrawn" and "LinkRelinked" DiagramEvents.
         function showLinkLabel(e) {
-            let label = e.subject.findObject("LABEL");
+            var label = e.subject.findObject("LABEL");
             if (label !== null) label.visible = (e.subject.fromNode.data.figure === "Diamond");
         }
 
@@ -887,13 +936,13 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     // Start Dynamic Table generation for INPUT/OUTPUT Fields
     $scope.loadInputOutput = function (componentName, componentKey, isInput) {
-        let component = ($scope.getComponent(componentName));
+        var component = ($scope.getComponent(componentName));
         // EXTRACT VALUE FOR HTML HEADER. 
         // ('Book ID', 'Book Name', 'Category' and 'Price')
         var divContainer = document.getElementById("showData");
         divContainer.innerHTML = "";
 
-        let jsonData = [];
+        var jsonData = [];
         if (isInput) {
             jsonData = component.input; //replace this part with api services
         } else {
@@ -918,27 +967,27 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         }
 
         // CREATE DYNAMIC TABLE.
-        let table = document.createElement("table");
+        var table = document.createElement("table");
         table.setAttribute("class", "table  table-hover");
 
         // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-        let header = table.createTHead();
+        var header = table.createTHead();
         header.setAttribute("class", "thead-light");
-        let tr = header.insertRow(-1);                   // TABLE ROW.
+        var tr = header.insertRow(-1);                   // TABLE ROW.
 
-        for (let i = 0; i < col.length; i++) {
-            let th = document.createElement("th");      // TABLE HEADER.
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // TABLE HEADER.
             th.innerHTML = col[i];
             header.appendChild(th);
         }
 
         // ADD JSON DATA TO THE TABLE AS ROWS.
-        for (let i = 0; i < jsonData.length; i++) {
+        for (var i = 0; i < jsonData.length; i++) {
 
             tr = table.insertRow(-1);
 
-            for (let j = 0; j < col.length; j++) {
-                let tabCell = tr.insertCell(-1);
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
                 tabCell.innerHTML = jsonData[i][col[j]];
             }
         }
