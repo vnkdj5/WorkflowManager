@@ -14,12 +14,13 @@ public class GraphNode {
     double y;
     String category;
 
-    public GraphNode(String CId, Component component, String category, double x, double y) {
+    public GraphNode(String CId, Component component, String category, double x, double y,String name) {
         this.CId = CId;
         this.component = component;
         this.category = category;
         this.x = x;
         this.y = y;
+        this.name=name;
     }
 
     public String getCId() {

@@ -137,7 +137,7 @@ public class GraphService {
                 double x = Double.parseDouble(update.get("x").toString());
                 double y = Double.parseDouble(update.get("y").toString());
                 Component newNode = help.getObjectByClassName(componentCategory);
-                GraphNode graphNode = new GraphNode(componentId, newNode, componentCategory, x, y);
+                GraphNode graphNode = new GraphNode(componentId, newNode, componentCategory, x, y, componentName);
 
                 int flag = 0;
                 List<GraphNode> nodes = graph.getNodes();
@@ -185,11 +185,11 @@ public class GraphService {
                 GraphNode toNode = null;
                 int flag = 0;
                 if (from.equals("Start")) {
-                    fromNode = new GraphNode("Start", null, "Start", 0, 0);
+                    fromNode = new GraphNode("Start", null, "Start", 0, 0, "Start");
                     flag++;
                 }
-                if (from.equals("End")) {
-                    toNode = new GraphNode("End", null, "End", 0, 0);
+                if (to.equals("End")) {
+                    toNode = new GraphNode("End", null, "End", 0, 0, "End");
                     flag++;
                 }
                 List<GraphNode> nodes = graph.getNodes();
@@ -203,7 +203,9 @@ public class GraphService {
                         flag++;
                     }
                 }
+                System.out.println(flag);
                 if (flag == 2) {
+                	System.out.println("in link add");
                     GraphLink checkLink = new GraphLink(fromNode.getCategory(), toNode.getCategory());
                     if (help.isValidLink(checkLink)) {
                         List<GraphLink> links = graph.getLinks();
@@ -214,7 +216,11 @@ public class GraphService {
                         graph.setTimestamp(new Date());
                         mongoTemplate.save(graph, COLLECTION);
                         return "Success";
-                    } else return "Invalid link";
+                    } else {
+                    	System.out.println("Invalid link");
+                    	return "Invalid link";
+                    }
+                    
                 } else return "Error";
 
             }
