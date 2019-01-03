@@ -719,7 +719,23 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
                     }
                 } else if (e.change === go.ChangedEvent.Remove) {
-                // console.log("REMOVE",e);
+                if (e.modelChange == "nodeDataArray") {
+
+                    reqData[0].type = "nodeDelete";
+                    reqData[0].CId = e.oldValue.key;
+                    reqData[0].name = e.oldValue.text;
+                    reqData[0].category = e.oldValue.category;
+                    let coordinates = e.oldValue.loc.split(" ");
+                    reqData[0].x = coordinates[0];
+                    reqData[0].y = coordinates[1];
+
+                } else if (e.modelChange == "linkDataArray") {
+                    reqData[0].type = "linkDelete";
+                    reqData[0].to = e.oldValue.to;
+                    reqData[0].from = e.oldValue.from;
+
+
+                }
             }
 
 
@@ -729,12 +745,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 reqData[0].y = coordinates[1];
             }
 
-            if (e.change == go.ChangedEvent.Transaction && e.propertyName == "CommittedTransaction") {
-                console.log("reqData", JSON.stringify(reqData));
+            if (e.change == go.ChangedEvent.Transaction && e.propertyName == "CommittedTransaction" && e.Os != "Initial Layout") {
+                console.log("reqData", JSON.stringify(reqData) + " Object ==> " + JSON.stringify(e.Os));
                 graphService.save(WFName, reqData);
                 reqData[0] = {};
             }
-            // console.log("CHange", e.propertyName+" ==>"+JSON.stringify(e.newValue)+ " event ==>" +e.change);
+            //console.log("Property Name", e.propertyName+" ==>"+JSON.stringify(e.newValue)+ " event ==>" +e.change);
 
             let button = document.getElementById("SaveButton");
             if (button) button.disabled = !$scope.myDiagram.isModified;
