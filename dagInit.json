@@ -5,7 +5,7 @@
 	"name": "",
 	"nodeDataArray": [
 		{
-			"key": -1,
+          "key": "Start",
 			"category": "Start",
 			"loc": "175 0",
 			"text": "Start",
@@ -20,7 +20,7 @@
 			"output": []
 		},
 		{
-			"key": -2,
+          "key": "End",
 			"category": "End",
 			"loc": "175 407",
 			"text": "Stop!",
