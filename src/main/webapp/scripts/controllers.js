@@ -763,7 +763,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
 
                         reqData[index] = {
-                            "key": ndArr[i].key,
+                            "CId": ndArr[i].key,
                             "x": coordinates[0],
                             "y": coordinates[1],
                             "type": "coordinateUpdate"

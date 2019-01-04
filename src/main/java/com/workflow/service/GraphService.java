@@ -238,8 +238,8 @@ public class GraphService {
                 return "Success";
             }
             case "coordinateUpdate": {
-                double x = (double) update.get("x");
-                double y = (double) update.get("y");
+                double x = Double.parseDouble(update.get("x").toString());
+                double y = Double.parseDouble(update.get("y").toString());
                 String componentId = (String) update.get("CId");
                 List<GraphNode> nodes = graph.getNodes();
                 for (int i = 0; i < nodes.size(); i++) {
