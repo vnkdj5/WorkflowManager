@@ -296,6 +296,7 @@ public class GraphService {
         if (WFgraph != null) {
 			map.put("Found", true);
             map.put("Graph", WFgraph);
+            System.out.println(WFgraph.toString());
 			System.out.println("found");
 
 		}else {
@@ -352,7 +353,7 @@ public class GraphService {
 		Query query=new Query();
 		query.addCriteria(Criteria.where("from").regex("^"));
 		JSONArray graphlist = new JSONArray();
-		graphlist.addAll((mongoTemplate.find(query,JSONObject.class,"validList")));
+		graphlist.addAll((mongoTemplate.find(query,JSONObject.class,"validLinks")));
 		System.out.println(graphlist.toString());
 		return graphlist;
 	}

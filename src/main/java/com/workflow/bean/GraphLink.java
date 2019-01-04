@@ -25,4 +25,11 @@ public class GraphLink {
         this.to = to;
     }
 
+    @Override
+    public String toString() {
+        return "GraphLink{" +
+                "from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                '}';
+    }
 }

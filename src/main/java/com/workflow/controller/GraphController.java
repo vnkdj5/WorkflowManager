@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
+import com.workflow.bean.GraphLink;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -106,5 +108,15 @@ public class GraphController {
 	@RequestMapping(value="/getValidLinks", method=RequestMethod.GET, headers = "Accept=application/json")
 	public JSONArray getValidLinks(){
 		return graphService.validLinks();
+	}
+
+	@Autowired
+	MongoTemplate mongoTemplate;
+
+	@RequestMapping(value="/addLink", method=RequestMethod.GET, headers = "Accept=application/json")
+	public String addLink(@RequestParam("to")String to, @RequestParam("from")String from){
+		GraphLink link = new GraphLink(from,to);
+		mongoTemplate.insert(link,"validLinks");
+    	return "success";
 	}
 }

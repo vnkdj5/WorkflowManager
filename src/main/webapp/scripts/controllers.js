@@ -60,6 +60,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         graphJson.wfid = graph.id;
 
         for (var i = 0; i < graph.nodes.length; i++) {
+            console.log(graph.nodes[i]);
             var comp = {};
             comp.text = graph.nodes[i].name;
             comp.key = graph.nodes[i].cid;
@@ -67,7 +68,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             comp.loc = "" + graph.nodes[i].x + " " + graph.nodes[i].y + "";
 
 
-            graphJson.nodeDataArray.concat(comp);
+            graphJson.nodeDataArray.push(comp);
 
         }
         graphJson.linkDataArray = graph.links;

@@ -173,10 +173,14 @@ public class Helper {
 	}
 
     public boolean isValidLink(GraphLink link) {
-        List<GraphLink> validLinks = mongoTemplate.findAll(GraphLink.class, "validList");
-        if (validLinks.contains(link)) {
-            return true;
-        }
+		System.out.println(link.toString());
+        List<GraphLink> validLinks = mongoTemplate.findAll(GraphLink.class, "validLinks");
+        System.out.println(validLinks.toString());
+        for(GraphLink l : validLinks){
+        	if(l.getFrom().equals(link.getFrom()) && l.getTo().equals(link.getTo())){
+        		return true;
+			}
+		}
         return false;
     }
 }
