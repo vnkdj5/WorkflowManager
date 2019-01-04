@@ -694,8 +694,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     notify.showError("Error!", "Invalid link");
                 }
             }
-        }
+        };
         var reqData = [{}];
+        var oldNodeDataArr = [];
         $scope.myDiagram.addModelChangedListener(function (e) {
                 // var cmdhandler= MD.commandHandler;
             // console.log("E",e);
@@ -734,8 +735,6 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     reqData[0].type = "linkDelete";
                     reqData[0].to = e.oldValue.to;
                     reqData[0].from = e.oldValue.from;
-
-
                 }
             }
 
@@ -745,13 +744,44 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 reqData[0].x = coordinates[0];
                 reqData[0].y = coordinates[1];
             }
+            if (e.Os == "Drag" && e.propertyName == "StartedTransaction") {
+                //console.log("Node Data Array CT: ", JSON.stringify($scope.myDiagram.model.nodeDataArray));
+                //Making copy of NodeDataArray before drag event
+                oldNodeDataArr = JSON.parse(JSON.stringify($scope.myDiagram.model.nodeDataArray));
+            }
+
+            if (e.Os == "Move" && e.propertyName == "CommittedTransaction") {
+                let ndArr = $scope.myDiagram.model.nodeDataArray;
+
+                reqData[0].type = "coordinateUpdate";
+
+                let index = 0;
+                for (let i in ndArr) {
+                    if (ndArr[i].loc != oldNodeDataArr[i].loc) {
+
+                        let coordinates = ndArr[i].loc.split(" ");
+
+
+                        reqData[index] = {
+                            "key": ndArr[i].key,
+                            "x": coordinates[0],
+                            "y": coordinates[1],
+                            "type": "coordinateUpdate"
+                        };
+                        index++;
+                    }
+                }
+                /*let coordinates = e.newValue.split(" ");
+                reqData[0].x = coordinates[0];
+                reqData[0].y = coordinates[1]*/
+            }
 
             if (e.change == go.ChangedEvent.Transaction && e.propertyName == "CommittedTransaction" && e.Os != "Initial Layout") {
-                console.log("reqData", JSON.stringify(reqData) + " Object ==> " + JSON.stringify(e.Os));
+                console.log("reqData", JSON.stringify(reqData) + " e.Os ==> " + JSON.stringify(e.Os));
                 graphService.save(WFName, reqData);
-                reqData[0] = {};
+                reqData = [{}];
             }
-            //console.log("Property Name", e.propertyName+" ==>"+JSON.stringify(e.newValue)+ " event ==>" +e.change);
+            //console.log("Property Name", e.propertyName+" e.Os "+e+ " event ==>" +e.change);
 
             let button = document.getElementById("SaveButton");
             if (button) button.disabled = !$scope.myDiagram.isModified;
@@ -875,7 +905,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     makePort("R", go.Spot.Right, go.Spot.RightSide, true, true),
                     makePort("B", go.Spot.Bottom, go.Spot.BottomSide, true, false)
                 ));
-        }
+        };
         $scope.myDiagram.nodeTemplateMap.add("Start",
             GO(go.Node, "Table", nodeStyle(),
                 GO(go.Panel, "Auto",
@@ -1051,7 +1081,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         divContainer.appendChild(table);
 
         $('#inputModal').modal('show');
-    }
+    };
 //End of Dynamic Table  generation for Input/Output of components
 
     //Watch for checking internet connection
