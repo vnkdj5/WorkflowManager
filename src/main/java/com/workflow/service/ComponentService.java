@@ -41,6 +41,26 @@ public class ComponentService {
         }
     }
 
+    public String setConfig(String WFId, String CId, Entity entity){
+        Query query=new Query();
+        query.addCriteria(Criteria.where("id").is(WFId));
+        WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");
+        if(graph==null)
+            return "Workflow does not exist!";
+        else {
+            ArrayList<GraphNode> nodeList = new ArrayList<>(graph.getNodes());
+            Iterator<GraphNode> it = nodeList.iterator();
+            while (it.hasNext()) {
+                GraphNode obj = it.next();
+                if (obj.getCId().equals(CId)) {
+                    obj.getComponent().setConfig(entity);
+                    return "Success";
+                }
+            }
+            return "Component does not exist";
+        }
+    }
+
     public Entity getInput(String WFId, String CId){
         Query query=new Query();
         query.addCriteria(Criteria.where("id").is(WFId));
