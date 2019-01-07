@@ -3,12 +3,17 @@ package com.workflow.component;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.opencsv.*;
 import com.workflow.annotation.wfComponent;
 
 @wfComponent(complete=true)
 public class CsvReader implements Component{
+
+	final static String FILEPATH = "filepath";
+	final static String INPUT = "input";
+	final static String OUTPUT = "output";
 
 	Entity output;
 	Entity input;
@@ -20,10 +25,9 @@ public class CsvReader implements Component{
 	int readCompleteFile;
 	
 	@Override
-	public boolean init(Entity config,Entity input,Entity output) {
-		this.input = input;
-		this.output = output;
-		csvFilePath = (ArrayList<String>) config.getObjectByName("filePath"); 
+	public boolean init(Entity config) {
+
+		csvFilePath = (ArrayList<String>) config.getObjectByName(FILEPATH);
 		totalFiles = csvFilePath.size();
 		readCompleteFile=0;
 		try {
@@ -128,37 +132,45 @@ public class CsvReader implements Component{
 				+ "}";
 		Entity config = new Entity();
 		config.addKeyValue("FORM", Configform);
+
+		//create model
+		HashMap<String, Object> model = new HashMap<>();
+		model.put(FILEPATH, csvFilePath);
+
+		config.addKeyValue("MODEL", model);
 		return config;
 	}
 
 	@Override
 	public Entity getOutput() {
-		// TODO Auto-generated method stub
+
 		return output;
 	}
 
 	@Override
     public Entity getInput(Component component) {
-		// TODO Auto-generated method stub
-        return new Entity();
+		setInput(component.getOutput());
+
+		return input;
 	}
 
 	@Override
 	public void setInput(Entity input) {
-		// TODO Auto-generated method stub
-		
+		input = new Entity();
+		input.addKeyValue(INPUT, null);
 	}
 
 	@Override
 	public void setOutput(Entity output) {
-		// TODO Auto-generated method stub
-		
+		output = new Entity();
+		output.addKeyValue(OUTPUT,headers);
+
 	}
 
 	@Override
 	public void setConfig(Entity config) {
-		// TODO Auto-generated method stub
-		
+		init(config);
+		setOutput(null);
 	}
 
 }

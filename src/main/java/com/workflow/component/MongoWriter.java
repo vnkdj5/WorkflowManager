@@ -27,7 +27,7 @@ public class MongoWriter implements Component{
 	}
 
 	@Override
-	public boolean init(Entity config,Entity input,Entity output) {
+	public boolean init(Entity config) {
 		mongo = new MongoClient((String)config.getObjectByName("url"),27017);
 		db = mongo.getDatabase((String)config.getObjectByName("database"));
 		collection = db.getCollection((String)config.getObjectByName("collection"));
@@ -52,26 +52,28 @@ public class MongoWriter implements Component{
 	@Override
     public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
-        input.addKeyValue("INPUT", component.getOutput().getEntity().get("OUTPUT"));
+        setInput(component.getOutput());
 		return input;
 	}
 
 	@Override
 	public void setInput(Entity input) {
 		// TODO Auto-generated method stub
-		
+		input.addKeyValue("INPUT", input.getObjectByName("OUTPUT"));
 	}
 
 	@Override
 	public void setOutput(Entity output) {
 		// TODO Auto-generated method stub
+		output = new Entity();
 		
 	}
 
 	@Override
 	public void setConfig(Entity config) {
 		// TODO Auto-generated method stub
-		
+		init(config);
+		setOutput(null);
 	}
 	
 }
