@@ -11,7 +11,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 @Service("componentService")
 public class ComponentService {
@@ -48,12 +50,17 @@ public class ComponentService {
         if(graph==null)
             return "Workflow does not exist!";
         else {
-            ArrayList<GraphNode> nodeList = new ArrayList<>(graph.getNodes());
+            List<GraphNode> nodeList = graph.getNodes();
             Iterator<GraphNode> it = nodeList.iterator();
             while (it.hasNext()) {
                 GraphNode obj = it.next();
                 if (obj.getCId().equals(CId)) {
+                    nodeList.remove(obj);
                     obj.getComponent().setConfig(entity);
+                    nodeList.add(obj);
+                    graph.setNodes(nodeList);
+                    graph.setTimestamp(new Date());
+                    mongoTemplate.insert(graph,"WFGraph");
                     return "Success";
                 }
             }
@@ -88,7 +95,7 @@ public class ComponentService {
                             }
                         }
                     }
-                    return null;
+                    return obj.getComponent().getInput(null);
                 }
             }
             return null;

@@ -84,7 +84,7 @@ public class MongoWriter implements Component{
 	public void setOutput(Entity output) {
 		// TODO Auto-generated method stub
 		output = new Entity();
-		
+
 	}
 
 	@Override

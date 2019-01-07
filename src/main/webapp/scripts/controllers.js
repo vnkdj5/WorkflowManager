@@ -156,6 +156,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         // First we broadcast an event so all fields validate themselves
         $scope.$broadcast('schemaFormValidate');
         var nodeDataArr = $scope.myDiagram.model.nodeDataArray;
+        let compId = $scope.selectedComponent.key;
+        let WFId = $scope.currentWorkflowName;
+
         var searchedComponent = nodeDataArr.find(component => component.category == $scope.selectedComponent.category);
         if (searchedComponent.config != $scope.model) {
             searchedComponent.isModified = true;
@@ -164,28 +167,39 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         searchedComponent.isModified = true;
         // Then we check if the form is valid
         if (form.$valid) {
-            if ($scope.selectedComponent.category == "Mapper") //TODO: Add separate attribute for finding components having no Config
-            {
-                searchedComponent.config = $scope.model;
-                //Now update checked fields into output of mapper
-                searchedComponent.output = [];
-                for (var i = 0; i < searchedComponent.config.field.length; i++) {
-                    if (searchedComponent.config.field[i].check) {
-                        searchedComponent.output.push(
-                            {
-                                "fieldName": searchedComponent.config.field[i].fieldName,
-                                "dataType": searchedComponent.config.field[i].dataType
-                            });
-                    }
-                }
-            } else {
-                searchedComponent.config = $scope.model;
+            //Client side mapper code
+            /* if ($scope.selectedComponent.category == "Mapper") //TODO: Add separate attribute for finding components having no Config
+             {
+                 searchedComponent.config = $scope.model;
+                 //Now update checked fields into output of mapper
+                 searchedComponent.output = [];
+                 for (var i = 0; i < searchedComponent.config.field.length; i++) {
+                     if (searchedComponent.config.field[i].check) {
+                         searchedComponent.output.push(
+                             {
+                                 "fieldName": searchedComponent.config.field[i].fieldName,
+                                 "dataType": searchedComponent.config.field[i].dataType
+                             });
+                     }
+                 }
+             } else {*/
 
-            }
+
+            /*searchedComponent.config = $scope.model;*/
+            componentService.setConfig(WFId, compId, $scope.model).then(
+                function success(response) {
+                    notify.showSuccess("Success", response.message);
+                },
+                function error(response) {
+                    notify.showError("Error", response.data);
+                }
+            );
+
+            /* }*/
             searchedComponent.valid = true;
 
             $scope.selectedComponent = {};
-            console.log(JSON.stringify(nodeDataArr));
+
 
         } else if (form.$invalid) {
 
