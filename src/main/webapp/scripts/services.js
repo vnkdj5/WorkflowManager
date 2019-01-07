@@ -1,3 +1,7 @@
+/****************************************************
+ *       Graph Service
+ *****************************************************/
+
 app.service("graphService", function ($http) {
     //graph create service
     this.newGraph = function (name) {
@@ -41,7 +45,7 @@ app.service("graphService", function ($http) {
             }
         });
 
-    }
+    };
     this.getAll = function () {
         return $http.get("/WorkflowManager/components");
     };
@@ -51,7 +55,7 @@ app.service("graphService", function ($http) {
             "WFId": name
         };
 
-        console.log(data);
+        //console.log(data);
         return $http({
             method: "POST",
             url: "open",
@@ -113,34 +117,74 @@ app.service("graphService", function ($http) {
     }
 });
 
-//================== Component Service
+/****************************************************
+ *      Component Service
+ *****************************************************/
 app.service("componentService", function ($http) {
     this.getAll = function () {
         return $http.get("/WorkflowManager/components");
     };
 
-    this.getFormData = function (formName) {
-        return $http.get(formName);
-    }
+    this.getFormData = function (componentName) {
+
+        let url = "/WorkflowManager/getConfig/" + componentName;
+        return $http.get(url);
+    };
+
+
+
+    this.getConfig = function (WFId, CompId) {
+        let url = "/WorkflowManager/getConfig/" + WFId + "/" + CompId;
+        return $http.get(url);
+    };
+
+
+    this.setConfig = function (WFId, CompId, reqData) {
+        let url = "/WorkflowManager/setConfig/" + WFId + "/" + CompId;
+
+        return $http.post(url, reqData);
+    };
+
+    this.getInput = function (WFId, CompId) {
+        let url = "/WorkflowManager/getInput/" + WFId + "/" + CompId;
+        return $http.get(url);
+    };
+
+    this.setInput = function (WFId, CompId, reqData) {
+        let url = "/WorkflowManager/setInput/" + WFId + "/" + CompId;
+        return $http.post(url, reqData);
+
+    };
+
+    this.setOutput = function (WFId, CompId, reqData) {
+        let url = "/WorkflowManager/setOutput/" + WFId + "/" + CompId;
+        return $http.post(url, reqData);
+
+    };
+
+    this.getOutput = function (WFId, CompId) {
+        let url = "/WorkflowManager/getOutput/" + WFId + "/" + CompId;
+        return $http.get(url);
+    };
 
 
 });
 
 
 /****************************************************
- Notification Service
+ *       Notification Service
  *****************************************************/
 app.service("notificationService", ['growl', function (growl) {
     this.showError = function (messageTitle, message) {
         growl.error(message, {title: messageTitle, ttl: 10000});
-    }
+    };
     this.showSuccess = function (messageTitle, message) {
         growl.success(message, {title: messageTitle, ttl: 5000});
-    }
+    };
 
     this.showInfo = function (messageTitle, message) {
         growl.info(message, {title: messageTitle, ttl: 5000});
-    }
+    };
 
     this.showWarning = function (messageTitle, message) {
         growl.warning(message, {title: messageTitle, ttl: 5000});
@@ -173,12 +217,12 @@ app.service('fileUpload', ['$q', '$http', function ($q, $http) {
     };
     this.getResponse = function () {
         return responseData;
-    }
+    };
     this.deleteFile=function(fileUrl){
-    	let data={
-    		"file":fileUrl	
-    	};
-    	return $http({
+        let data={
+            "file":fileUrl
+        };
+        return $http({
             method: "POST",
             url: "deletefile",
             data: angular.toJson(data),

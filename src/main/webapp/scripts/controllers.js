@@ -60,7 +60,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         graphJson.wfid = graph.id;
 
         for (var i = 0; i < graph.nodes.length; i++) {
-            console.log(graph.nodes[i]);
+            // console.log(graph.nodes[i]);
             var comp = {};
             comp.text = graph.nodes[i].name;
             comp.key = graph.nodes[i].cid;
@@ -74,13 +74,13 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         graphJson.linkDataArray = graph.links;
 
 
-        console.log(graphJson);
+        // console.log(graphJson);
         return graphJson;
     };
 
     //for welcome page
     graphService.getAllWorkflows().then(function success(response) {
-        console.log(response.data);
+        // console.log(response.data);
         $scope.file = response.data;
         $scope.data_limit = 10;
         $scope.filter_data = $scope.file.length;
@@ -281,9 +281,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     });
 
 
-    $scope.getComponent = function (componentName) {
+    $scope.getComponent = function (compKey) {
         //console.log($scope.myDiagram.model.nodeDataArray.find(component => component.text==componentName));
-        return $scope.myDiagram.model.nodeDataArray.find(component => component.text == componentName);
+        return $scope.myDiagram.model.nodeDataArray.find(component => component.key == compKey);
 
     };
 //	Workflow create function
@@ -345,7 +345,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 var graph = response.data.Graph;
 
                 graph = $scope.converter(graph);
-                console.log(JSON.stringify(graph));
+                // console.log(JSON.stringify(graph));
                 $scope.myDiagram.model = go.Model.fromJson(graph);
 
                 //console.log($scope.myDiagram.model.toJson());  //Check graph configuration
@@ -399,7 +399,6 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 for (i in result) {
                     if (!(result[i].category == "Start" || result[i].category == "End")) {
                         $scope.addNodeToPallete(result[i].category);
-                        console.log("Pallete cNode", result[i]);
                     }
                 }
                 $scope.myPalette.model.nodeDataArray = this.result;
@@ -447,9 +446,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         }
     };
     //Method for updating configuration of each component
-    $scope.loadForm = function (componentName, componentKey) {
+    $scope.loadForm = function (compCategory, componentKey) {
         $scope.model = {};
-        if (componentName === "Mapper") //test method for mapper
+        let WFId = $scope.currentWorkflowName;
+
+        //Mapper code removed frontend
+        /*if (compCategory === "Mapper") //test method for mapper
         {
         	//Finding previous node
             var previousKey = 0;
@@ -481,12 +483,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 	return;
             	}
             }
-            /* console.log(previousNode.output);*/
-            componentService.getFormData("/WorkflowManager/getConfig/" + componentName).then(
+            /!* console.log(previousNode.output);*!/
+            componentService.getConfig(WFId,componentKey).then(
                 function success(response) {
                     $scope.schema = response.data.schema;
                     $scope.form = response.data.form;
-                    var component = ($scope.getComponent(componentName));
+                    var component = ($scope.getComponent(compCategory));
 
                     $scope.model.field = [];
                     $scope.model.outputFields = [];
@@ -531,22 +533,31 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     notify.showError("Error!", "Config is not available fot this component!");
 
                 });
-        } else
-            componentService.getFormData("/WorkflowManager/getConfig/" + componentName).then(
+        } else*/
+        componentService.getConfig(WFId, componentKey).then(
                 function success(response) {
-                    $scope.schema = response.data.schema;
-                    $scope.form = response.data.form;
-                    var component = ($scope.getComponent(componentName));
-                    if (!(component.config == null || $scope.getComponent(componentName).config == undefined)) {
-                        $scope.model = component.config;
+                    $scope.model = {};
+                    let curForm = JSON.parse(response.data.FORM);
+                    $scope.schema = curForm.schema;
+                    $scope.form = curForm.form;
+                    $scope.model = response.data.MODEL;
+                    if (!$scope.model) {
+                        $scope.model = {};
                     }
+                    console.log("model : ", response.data.FORM.schema);
+                    /* var component = ($scope.getComponent(compCategory));
+                     if (!(component.config == null || $scope.getComponent(compCategory).config == undefined)) {
+                         $scope.model = component.config;
+                     }*/
+
                     $('#myModal').modal('show');
                 },
                 function error(response) {
                     //Add notification show "Component not found"
                     $scope.schema = null;
                     $scope.form = null;
-                    notify.showError("Error!", "Config is not available fot this component!");
+                    $scope.form.model = null;
+                    notify.showError("Error!", response.data);
 
                 });
     };
@@ -781,7 +792,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 graphService.save(WFName, reqData);
                 reqData = [{}];
             }
-            //console.log("Property Name", e.propertyName+" e.Os "+e+ " event ==>" +e.change);
+            console.log("Property Name", e.propertyName + " e.Os " + e.Os + " event ==>" + e.change);
 
             let button = document.getElementById("SaveButton");
             if (button) button.disabled = !$scope.myDiagram.isModified;
@@ -807,14 +818,14 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.myDiagram.addDiagramListener("ObjectDoubleClicked", function (e) {
                 let part = e.subject.part;
 
-            let componentName;
+            let compCategory;
                 if (!(part instanceof go.Link) && !(part.data.category === "Start" || part.data.category == "End")) {
                     // console.log(JSON.stringify(part.data.formData));
-                    componentName = part.data.text;
+                    compCategory = part.data.category;
 
-                    $scope.selectedComponent.category = componentName;
+                    $scope.selectedComponent.category = compCategory;
                     $scope.selectedComponent.key = part.data.key;
-                    $scope.loadForm(componentName, part.data.key);
+                    $scope.loadForm(compCategory, part.data.key);
 
 
                 }
