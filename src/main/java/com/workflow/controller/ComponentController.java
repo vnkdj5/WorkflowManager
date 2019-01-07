@@ -2,9 +2,9 @@ package com.workflow.controller;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
+import com.workflow.service.ComponentService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,28 +32,50 @@ import com.workflow.service.Helper;
 
 @RestController
 public class ComponentController {
-	
+
 	@Autowired
 	Helper helper;
+
+	@Autowired
+	ComponentService componentService;
 	
-	@RequestMapping(value="/getConfig/{component_name}", method= RequestMethod.GET)
-	public ResponseEntity<String> getConfig(@PathVariable("component_name") String componentName){
+	@RequestMapping(value="/getConfig/{WFId}/{componentId}", method= RequestMethod.GET)
+	public ResponseEntity<HashMap> getConfig(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		
-		Entity config = helper.getConfig(componentName);
-		
-		
+		Entity config = componentService.getConfig(WFId, CId);
+
 		//add config model to the response and send back the entity.
 		if(config==null) {
-			return new ResponseEntity<String>("",HttpStatus.INTERNAL_SERVER_ERROR);
+			HashMap obj=new HashMap<String,String>();
+			obj.put("Error","No config found");
+			return new ResponseEntity<HashMap>(obj,HttpStatus.INTERNAL_SERVER_ERROR);
 		}else {
-			return new ResponseEntity<String>(config.getObjectByName("FORM").toString(),HttpStatus.OK);
+			return new ResponseEntity<HashMap>(config.getEntity(),HttpStatus.OK);
 		}
 		
 		
 		
 	}
+
+	/*@RequestMapping(vale="/setConfig/{WFId}/{componentId}", method= RequestMethod.POST)
+	public ResponseEntity<String> setConfig(@RequestBody JSONObject config, @PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
+		JSONParser parser=new JSONParser();
+		Entity pass=new Entity();
+
+	}*/
 	
-	
+	@RequestMapping(value="/getInput/{WFId}/{componentId}", method=RequestMethod.GET)
+	public ResponseEntity<Entity> getInput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
+		Entity response=componentService.getInput(WFId, CId);
+		return new ResponseEntity<Entity>(response,HttpStatus.OK);
+	}
+
+	@RequestMapping(value="/getOutput/{WFId}/{componentId}", method=RequestMethod.GET)
+	public ResponseEntity<Entity> getOutput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
+		Entity response=componentService.getOutput(WFId, CId);
+		return new ResponseEntity<Entity>(response,HttpStatus.OK);
+	}
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/components", method=RequestMethod.GET)
 	public ResponseEntity<String> getAllComponents() throws ParseException{
