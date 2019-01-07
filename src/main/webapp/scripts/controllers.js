@@ -188,10 +188,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             /*searchedComponent.config = $scope.model;*/
             componentService.setConfig(WFId, compId, $scope.model).then(
                 function success(response) {
-                    notify.showSuccess("Success", response.message);
+                    notify.showSuccess("Success", response.data.message);
                 },
                 function error(response) {
-                    notify.showError("Error", response.data);
+                    notify.showError("Error", response.data.message);
                 }
             );
 
