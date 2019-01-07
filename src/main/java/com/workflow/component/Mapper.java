@@ -19,7 +19,7 @@ public class Mapper implements Component{
 	ArrayList<String> allowedHeadersDatatypes;
 	@Override
 	public boolean init(Entity config) {
-
+		input = new Entity();
 		allowedheaders = new ArrayList<>();
 		allowedHeadersDatatypes = new ArrayList<>();
 		JSONArray temp = (JSONArray) this.output.getEntity().get("allowed");

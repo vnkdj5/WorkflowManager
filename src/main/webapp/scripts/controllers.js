@@ -340,7 +340,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         //alert($scope.workflow.name);
 
-        graphService.loadGraph($scope.workflow.name).then(
+        graphService.loadGraph($scope.currentWorkflowName).then(
             function success(response) {
                 var graph = response.data.Graph;
 
@@ -356,8 +356,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
             },
             function error(response) {
-                //notify.showError("Error!", "Workflow not found!!");
-                $scope.createWorkflow();
+                notify.showError("Error!", "Loading Workflow!!");
+                //$scope.createWorkflow();
             }
         );
 

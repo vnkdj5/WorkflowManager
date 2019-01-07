@@ -310,7 +310,7 @@ public class GraphService {
 		ArrayList<String> errorList=new ArrayList<>();
 		for(Map.Entry<String, Node> node : nds.entrySet()) {
 			if(!node.getValue().isValid() && !node.getValue().getLabel().equals("Start") && !node.getValue().getLabel().equals("Stop"))
-				errorList.add("Incomplete configuration at "+node.getValue().getLabel());
+				errorList.add("Incomplete configuration at " + node.getValue().getLabel());
 		}
 
 		String cur=start;
