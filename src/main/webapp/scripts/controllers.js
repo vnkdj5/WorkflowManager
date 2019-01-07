@@ -536,9 +536,15 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         } else*/
         componentService.getConfig(WFId, componentKey).then(
                 function success(response) {
-                    $scope.schema = response.data.FORM.schema;
-                    $scope.form = response.data.FORM.form;
+                    $scope.model = {};
+                    let curForm = JSON.parse(response.data.FORM);
+                    $scope.schema = curForm.schema;
+                    $scope.form = curForm.form;
                     $scope.model = response.data.MODEL;
+                    if (!$scope.model) {
+                        $scope.model = {};
+                    }
+                    console.log("model : ", response.data.FORM.schema);
                     /* var component = ($scope.getComponent(compCategory));
                      if (!(component.config == null || $scope.getComponent(compCategory).config == undefined)) {
                          $scope.model = component.config;
