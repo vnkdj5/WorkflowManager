@@ -245,7 +245,6 @@ public class GraphService {
                 for (int i = 0; i < nodes.size(); i++) {
                     if (nodes.get(i).getCId().equals(componentId)) {
                         nodes.get(i).setXY(x, y);
-                        ;
                         break;
                     }
                 }
