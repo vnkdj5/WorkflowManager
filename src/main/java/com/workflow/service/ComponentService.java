@@ -60,7 +60,7 @@ public class ComponentService {
                     nodeList.add(obj);
                     graph.setNodes(nodeList);
                     graph.setTimestamp(new Date());
-                    mongoTemplate.insert(graph,"WFGraph");
+                    mongoTemplate.save(graph,"WFGraph");
                     return "Success";
                 }
             }
