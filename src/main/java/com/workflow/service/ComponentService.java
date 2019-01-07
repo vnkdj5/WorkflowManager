@@ -88,7 +88,7 @@ public class ComponentService {
                             }
                         }
                     }
-                    return null;
+                    return obj.getComponent().getInput(null);
                 }
             }
             return null;

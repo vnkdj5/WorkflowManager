@@ -52,7 +52,7 @@ public class MongoWriter implements Component{
 	@Override
     public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
-        input.addKeyValue("INPUT", component.getOutput().getEntity().get("OUTPUT"));
+		input.addKeyValue("INPUT", component.getOutput().getEntity().get("OUTPUT"));
 		return input;
 	}
 

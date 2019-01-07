@@ -83,13 +83,13 @@ public class ComponentController {
 	@RequestMapping(value="/getInput/{WFId}/{componentId}", method=RequestMethod.GET)
 	public ResponseEntity<Entity> getInput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		Entity response=componentService.getInput(WFId, CId);
-		return new ResponseEntity<Entity>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/getOutput/{WFId}/{componentId}", method=RequestMethod.GET)
 	public ResponseEntity<Entity> getOutput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		Entity response=componentService.getOutput(WFId, CId);
-		return new ResponseEntity<Entity>(response,HttpStatus.OK);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 
 	@SuppressWarnings("unchecked")
