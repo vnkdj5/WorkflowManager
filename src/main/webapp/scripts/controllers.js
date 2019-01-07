@@ -281,9 +281,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     });
 
 
-    $scope.getComponent = function (componentName) {
+    $scope.getComponent = function (compKey) {
         //console.log($scope.myDiagram.model.nodeDataArray.find(component => component.text==componentName));
-        return $scope.myDiagram.model.nodeDataArray.find(component => component.text == componentName);
+        return $scope.myDiagram.model.nodeDataArray.find(component => component.key == compKey);
 
     };
 //	Workflow create function
@@ -448,7 +448,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     //Method for updating configuration of each component
     $scope.loadForm = function (compCategory, componentKey) {
         $scope.model = {};
-        if (compCategory === "Mapper") //test method for mapper
+        let WFId = $scope.currentWorkflowName;
+
+        //Mapper code removed frontend
+        /*if (compCategory === "Mapper") //test method for mapper
         {
         	//Finding previous node
             var previousKey = 0;
@@ -480,8 +483,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 	return;
             	}
             }
-            /* console.log(previousNode.output);*/
-            componentService.getFormData(compCategory).then(
+            /!* console.log(previousNode.output);*!/
+            componentService.getConfig(WFId,componentKey).then(
                 function success(response) {
                     $scope.schema = response.data.schema;
                     $scope.form = response.data.form;
@@ -530,22 +533,25 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     notify.showError("Error!", "Config is not available fot this component!");
 
                 });
-        } else
-            componentService.getFormData(compCategory).then(
+        } else*/
+        componentService.getConfig(WFId, componentKey).then(
                 function success(response) {
-                    $scope.schema = response.data.schema;
-                    $scope.form = response.data.form;
-                    var component = ($scope.getComponent(compCategory));
-                    if (!(component.config == null || $scope.getComponent(compCategory).config == undefined)) {
-                        $scope.model = component.config;
-                    }
+                    $scope.schema = response.data.FORM.schema;
+                    $scope.form = response.data.FORM.form;
+                    $scope.model = response.data.MODEL;
+                    /* var component = ($scope.getComponent(compCategory));
+                     if (!(component.config == null || $scope.getComponent(compCategory).config == undefined)) {
+                         $scope.model = component.config;
+                     }*/
+
                     $('#myModal').modal('show');
                 },
                 function error(response) {
                     //Add notification show "Component not found"
                     $scope.schema = null;
                     $scope.form = null;
-                    notify.showError("Error!", "Config is not available fot this component!");
+                    $scope.form.model = null;
+                    notify.showError("Error!", response.data);
 
                 });
     };
