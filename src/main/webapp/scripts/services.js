@@ -129,8 +129,8 @@ app.service("componentService", function ($http) {
 
         let url = "/WorkflowManager/getConfig/" + componentName;
         return $http.get(url);
-    }
-    l
+    };
+
 
 
     this.getConfig = function (WFId, CompId) {
