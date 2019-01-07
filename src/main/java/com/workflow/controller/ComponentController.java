@@ -48,21 +48,37 @@ public class ComponentController {
 		if(config==null) {
 			HashMap obj=new HashMap<String,String>();
 			obj.put("Error","No config found");
-			return new ResponseEntity<HashMap>(obj,HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(obj,HttpStatus.INTERNAL_SERVER_ERROR);
 		}else {
-			return new ResponseEntity<HashMap>(config.getEntity(),HttpStatus.OK);
+			return new ResponseEntity<>(config.getEntity(),HttpStatus.OK);
 		}
 		
 		
 		
 	}
 
-	/*@RequestMapping(vale="/setConfig/{WFId}/{componentId}", method= RequestMethod.POST)
+	@RequestMapping(value="/setConfig/{WFId}/{componentId}", method= RequestMethod.POST)
 	public ResponseEntity<String> setConfig(@RequestBody JSONObject config, @PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		JSONParser parser=new JSONParser();
 		Entity pass=new Entity();
+		HashMap<String,Object> hmap=new HashMap<>();
+		Set<String> keys=config.keySet();
+		Iterator it=keys.iterator();
+		while(it.hasNext()){
+		    String key=it.next().toString();
+		    hmap.put(key,config.get(key));
+        }
+		if(hmap.isEmpty())
+		    return new ResponseEntity<>("Success",HttpStatus.OK);
+		else{
+		    pass.setEntity(hmap);
+		    String res=componentService.setConfig(WFId,CId,pass);
+		    if(res.equals("Success"))
+                return new ResponseEntity<>(res,HttpStatus.OK);
+            return new ResponseEntity<>(res,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-	}*/
+	}
 	
 	@RequestMapping(value="/getInput/{WFId}/{componentId}", method=RequestMethod.GET)
 	public ResponseEntity<Entity> getInput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
