@@ -50,8 +50,8 @@ public class FileUploadController {
 				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 				stream.write(bytes);
 				stream.close();
-				List<Object> headers = helper.getHeaders(serverFile.getAbsolutePath()).toList();
-				map.put("headers", helper.getHeaders(serverFile.getAbsolutePath()).toList());
+				String[] headers = helper.getHeaders(serverFile.getAbsolutePath());
+				map.put("headers", helper.getHeaders(serverFile.getAbsolutePath()));
 				map.put("message", "File Uploaded successfully");
 				map.put("path",serverFile.getAbsolutePath());
 

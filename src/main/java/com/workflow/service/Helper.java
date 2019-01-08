@@ -136,7 +136,7 @@ public class Helper {
 		return checkResult;
 	}
 
-	public JSONArray getHeaders(String filePath){
+	public String[] getHeaders(String filePath){
 		JSONArray headerInfo=new JSONArray();
 		String[] headers;
 		String[] entry;
@@ -169,7 +169,7 @@ public class Helper {
 			headerInfo.put(obj);
 		}
 		System.out.println(headerInfo.toString());
-		return headerInfo;
+		return headers;
 	}
 
     public boolean isValidLink(GraphLink link) {
