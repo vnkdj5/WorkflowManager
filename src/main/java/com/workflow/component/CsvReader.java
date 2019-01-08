@@ -20,10 +20,10 @@ public class CsvReader implements Component{
 	int readCompleteFile;
 	
 	@Override
-	public boolean init(Entity config,Entity input,Entity output) {
-		this.input = input;
+	public boolean init() {
+		/*this.input = input;
 		this.output = output;
-		csvFilePath = (ArrayList<String>) config.getObjectByName("filePath"); 
+		csvFilePath = (ArrayList<String>) config.getObjectByName("filePath"); */
 		totalFiles = csvFilePath.size();
 		readCompleteFile=0;
 		try {
@@ -159,6 +159,11 @@ public class CsvReader implements Component{
 	public void setConfig(Entity config) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean isValid() {
+		return true;
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.workflow.component;
 
 public interface Component {
-	public boolean init(Entity config,Entity input,Entity output);
+	public boolean init();
 	public Entity process(Entity input);
 	
 	//input output getters
@@ -12,4 +12,5 @@ public interface Component {
 	public void setInput(Entity input);
 	public void setOutput(Entity output);
 	public void setConfig(Entity config);
+	public boolean isValid();
 }

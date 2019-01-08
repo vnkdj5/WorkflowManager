@@ -27,10 +27,10 @@ public class MongoWriter implements Component{
 	}
 
 	@Override
-	public boolean init(Entity config,Entity input,Entity output) {
-		mongo = new MongoClient((String)config.getObjectByName("url"),27017);
+	public boolean init() {
+		/*mongo = new MongoClient((String)config.getObjectByName("url"),27017);
 		db = mongo.getDatabase((String)config.getObjectByName("database"));
-		collection = db.getCollection((String)config.getObjectByName("collection"));
+		collection = db.getCollection((String)config.getObjectByName("collection"));*/
 		return true;
 	}
 
@@ -72,6 +72,11 @@ public class MongoWriter implements Component{
 	public void setConfig(Entity config) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean isValid() {
+		return true;
 	}
 	
 }

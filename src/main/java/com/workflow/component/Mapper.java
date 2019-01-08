@@ -18,10 +18,10 @@ public class Mapper implements Component{
 	ArrayList<String> allowedheaders;
 	ArrayList<String> allowedHeadersDatatypes;
 	@Override
-	public boolean init(Entity config,Entity input,Entity output) {
+	public boolean init() {
 		
-		this.output = output;
-        this.input = input;
+		/*this.output = output;
+        this.input = input;*/
 
 
 		allowedheaders = new ArrayList<>();
@@ -264,5 +264,8 @@ public class Mapper implements Component{
 		
 	}
 
-	
+	@Override
+	public boolean isValid() {
+		return true;
+	}
 }
