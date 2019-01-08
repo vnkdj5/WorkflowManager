@@ -1,7 +1,10 @@
 package com.workflow.controller;
+import com.workflow.service.ComponentService;
 import com.workflow.service.Helper;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +21,12 @@ public class FileUploadController {
 
 	@Autowired
 	Helper helper;
+
+	@Autowired
+	ComponentService componentService;
+
 	@RequestMapping(value="/uploadfile", method=RequestMethod.POST)
-	public ResponseEntity<HashMap> uploadFile(@RequestParam("file") MultipartFile file){
+	public ResponseEntity<HashMap> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("WFId")String WFId, @RequestParam("CompId")String CompId){
 		
 		HashMap<String,Object> map = new HashMap<>();
 		if (!file.isEmpty()) {
@@ -42,9 +49,13 @@ public class FileUploadController {
 				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 				stream.write(bytes);
 				stream.close();
+				List<Object> headers = helper.getHeaders(serverFile.getAbsolutePath()).toList();
 				map.put("headers", helper.getHeaders(serverFile.getAbsolutePath()).toList());
 				map.put("message", "File Uploaded successfully");
 				map.put("path",serverFile.getAbsolutePath());
+
+				componentService.fileUploadConfig(WFId,CompId,map.get("path").toString(),headers);
+
 				return new ResponseEntity<HashMap>(map,HttpStatus.OK);
 
 				

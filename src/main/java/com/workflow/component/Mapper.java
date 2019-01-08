@@ -14,6 +14,7 @@ public class Mapper implements Component{
 	
 	Entity input;
 	Entity output;
+	Entity config;
 	
 	ArrayList<String> allowedheaders;
 	ArrayList<String> allowedHeadersDatatypes;
@@ -280,7 +281,8 @@ public class Mapper implements Component{
 	@Override
 	public void setConfig(Entity config) {
         // TODO method updation
-		init(config);
+		this.config = config;
+		//init(config);
 		setOutput(null);
 	}
 

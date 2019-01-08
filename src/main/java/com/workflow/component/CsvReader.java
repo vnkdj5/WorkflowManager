@@ -12,11 +12,13 @@ import com.workflow.annotation.wfComponent;
 public class CsvReader implements Component{
 
 	final static String FILEPATH = "filepath";
+	final static String HEADERS = "headers";
 	final static String INPUT = "input";
 	final static String OUTPUT = "output";
 
 	Entity output;
 	Entity input;
+	Entity config;
 	
 	ArrayList<String> csvFilePath;
 	CSVReader reader;
@@ -163,13 +165,15 @@ public class CsvReader implements Component{
 	@Override
 	public void setOutput(Entity output) {
 		output = new Entity();
-		output.addKeyValue(OUTPUT,headers);
+		output.addKeyValue(OUTPUT,this.config.getObjectByName(HEADERS));
 
 	}
 
 	@Override
 	public void setConfig(Entity config) {
-		init(config);
+
+		this.config = config;
+		//init(config);
 		setOutput(null);
 	}
 

@@ -43,9 +43,10 @@ public class ComponentController {
 	public ResponseEntity<HashMap> getConfig(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		
 		Entity config = componentService.getConfig(WFId, CId);
-
+		System.out.println(config.getEntity());
 		//add config model to the response and send back the entity.
 		if(config==null) {
+
 			HashMap obj=new HashMap<String,String>();
 			obj.put("Error","No config found");
 			return new ResponseEntity<>(obj,HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,6 +60,9 @@ public class ComponentController {
 
 	@RequestMapping(value="/setConfig/{WFId}/{componentId}", method= RequestMethod.POST)
 	public ResponseEntity<HashMap> setConfig(@RequestBody JSONObject config, @PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
+
+		System.out.println(config.toJSONString());
+
 		JSONParser parser=new JSONParser();
 		Entity pass=new Entity();
 		HashMap<String,Object> hmap=new HashMap<>();
@@ -68,6 +72,7 @@ public class ComponentController {
 		    String key=it.next().toString();
 		    hmap.put(key,config.get(key));
         }
+		System.out.println(hmap.toString());
 		if(hmap.isEmpty()) {
 			HashMap<String,String> ret=new HashMap<>();
 			ret.put("message", "Success");

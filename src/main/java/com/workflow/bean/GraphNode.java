@@ -60,4 +60,15 @@ public class GraphNode {
         return y;
     }
 
+    @Override
+    public String toString() {
+        return "GraphNode{" +
+                "CId='" + CId + '\'' +
+                ", component=" + component +
+                ", name='" + name + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }
