@@ -63,6 +63,7 @@ public class CodeGenerationService {
 				previous=new GraphNode();
 				previous.setName(currentNode);
 				previous.setComponent(null);
+				break;
 			}
 		}
 		if(currentNode.equals("Start")){
@@ -70,10 +71,12 @@ public class CodeGenerationService {
 			error=true;
 			currentNode=null;
 		}
+		System.out.println("cur: "+currentNode);
 		while(!currentNode.equals("End") && currentNode!=null) {
 			GraphNode temp=null;
 			for (int i = 0; i < nodeList.size(); i++) {
 				if (nodeList.get(i).getCId().equals(currentNode)) {
+					System.out.println("in for: "+nodeList.get(i));
 					temp = nodeList.get(i);
 					Node obj=new Node();
 					/*obj.setLabel(temp.getName());
@@ -111,6 +114,7 @@ public class CodeGenerationService {
 				error=true;
 			}
 		}
+		System.out.println("nodes: "+nodeArray.toString());
 		LogicGraph lgraph=new LogicGraph();
 		lgraph.setId(WFId);
 		lgraph.setNodes(nodeArray);

@@ -67,17 +67,8 @@ app.service("graphService", function ($http) {
     };
 
     this.runWorkflow = function (name) {
-        data = {
-            "name": name
-        };
-        return $http({
-            method: "POST",
-            url: "run/" + name,
-            data: angular.toJson(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+
+        return $http.get("run/" + name);
     };
 
     this.checkDBConnection = function (data) {
