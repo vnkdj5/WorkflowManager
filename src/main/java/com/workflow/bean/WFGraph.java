@@ -50,8 +50,15 @@ public class WFGraph {
 
     @Override
     public String toString() {
-        return "LogicGraph [name=" + WFName + ", timestamp=" + timestamp + "]";
+        return "WFGraph{" +
+                "id='" + id + '\'' +
+                ", WFName='" + WFName + '\'' +
+                ", timestamp=" + timestamp +
+                ", nodes=" + nodes +
+                ", links=" + links +
+                '}';
     }
+
     public List<GraphLink> getLinks() {
         return links;
     }

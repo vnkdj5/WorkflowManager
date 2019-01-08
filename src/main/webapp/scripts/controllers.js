@@ -188,10 +188,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             /*searchedComponent.config = $scope.model;*/
             componentService.setConfig(WFId, compId, $scope.model).then(
                 function success(response) {
-                    notify.showSuccess("Success", response.message);
+                    notify.showSuccess("Success", response.data.message);
                 },
                 function error(response) {
-                    notify.showError("Error", response.data);
+                    notify.showError("Error", response.data.message);
                 }
             );
 
@@ -354,7 +354,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         //alert($scope.workflow.name);
 
-        graphService.loadGraph($scope.workflow.name).then(
+        graphService.loadGraph($scope.currentWorkflowName).then(
             function success(response) {
                 var graph = response.data.Graph;
 
@@ -370,8 +370,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
             },
             function error(response) {
-                //notify.showError("Error!", "Workflow not found!!");
-                $scope.createWorkflow();
+                notify.showError("Error!", "Loading Workflow!!");
+                //$scope.createWorkflow();
             }
         );
 

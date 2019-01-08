@@ -14,16 +14,13 @@ public class Mapper implements Component{
 	
 	Entity input;
 	Entity output;
-	
+	Entity config;
+
 	ArrayList<String> allowedheaders;
 	ArrayList<String> allowedHeadersDatatypes;
 	@Override
 	public boolean init() {
-		
-		/*this.output = output;
-        this.input = input;*/
-
-
+		input = new Entity();
 		allowedheaders = new ArrayList<>();
 		allowedHeadersDatatypes = new ArrayList<>();
 		JSONArray temp = (JSONArray) this.output.getEntity().get("allowed");
@@ -230,38 +227,63 @@ public class Mapper implements Component{
 		Entity config = new Entity();
 		config.addKeyValue("FORM", Configform);
 
+		HashMap<String,Object> model = new HashMap<>();
+		ArrayList<JSONObject> fields = new ArrayList<>();
+		ArrayList<JSONObject> outputFields = new ArrayList<>();
 
+
+		ArrayList<String> in = (ArrayList<String>) input.getObjectByName("INPUT");
+ 		for(int i=0;i<in.size();i++){
+			JSONObject obj = new JSONObject();
+			obj.put("fieldName",in.get(i));
+
+			obj.put("check",allowedheaders.contains(in.get(i)) );
+			obj.put("dataType","String");
+			fields.add(obj);
+
+			if((boolean)obj.get("check")){
+				outputFields.add(obj);
+			}
+		}
+ 		model.put("fields",fields);
+ 		model.put("outputFields",outputFields);
+ 		config.addKeyValue("MODEL",model);
         return config;
 	}
 
 	@Override
 	public Entity getOutput() {
 		// TODO Auto-generated method stub
-		return input;
+		return output;
 	}
 
 	@Override
     public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
+		setInput(component.getOutput());
 		return output;
 	}
 
 	@Override
 	public void setInput(Entity input) {
 		// TODO Auto-generated method stub
-		
+		input = new Entity();
+		input.addKeyValue("INPUT", input.getObjectByName("OUTPUT"));
+
 	}
 
 	@Override
 	public void setOutput(Entity output) {
-		// TODO Auto-generated method stub
-		
+		output = new Entity();
+		this.output.addKeyValue("OUTPUT",allowedheaders);
 	}
 
 	@Override
 	public void setConfig(Entity config) {
         // TODO method updation
-		
+		this.config = config;
+		//init(config);
+		setOutput(null);
 	}
 
 	@Override

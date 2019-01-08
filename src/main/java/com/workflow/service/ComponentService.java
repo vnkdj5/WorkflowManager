@@ -55,11 +55,14 @@ public class ComponentService {
             while (it.hasNext()) {
                 GraphNode obj = it.next();
                 if (obj.getCId().equals(CId)) {
-                    nodeList.remove(obj);
                     obj.getComponent().setConfig(entity);
-                    nodeList.add(obj);
-                    graph.setNodes(nodeList);
+
+                    System.out.println(obj.getComponent().getConfig().toString());
+
                     graph.setTimestamp(new Date());
+
+                    System.out.println("UPDATE CONFIG: "+ graph);
+
                     mongoTemplate.save(graph,"WFGraph");
                     return "Success";
                 }
@@ -119,5 +122,44 @@ public class ComponentService {
             }
             return null;
         }
+    }
+
+    public Entity fileUploadConfig(String WFId,String CId,String path, List<Object> headers) {
+        Query query=new Query();
+        query.addCriteria(Criteria.where("id").is(WFId));
+        WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");
+        if(graph==null)
+            return null;
+        else {
+            List<GraphNode> nodeList = graph.getNodes();
+            Iterator<GraphNode> it = nodeList.iterator();
+            while (it.hasNext()) {
+                GraphNode obj = it.next();
+                if (obj.getCId().equals(CId)) {
+                    ArrayList<String> filepaths =(ArrayList<String>) obj.getComponent().getConfig().getObjectByName("filepath");
+                    if(filepaths==null){
+                        filepaths = new ArrayList<>();
+                    }
+
+                    filepaths.add(path);
+
+                    Entity updatedConfig = new Entity();
+                    updatedConfig.addKeyValue("filepath", filepaths);
+                    updatedConfig.addKeyValue("headers",headers);
+
+                    obj.getComponent().setConfig(updatedConfig);
+                    System.out.println(obj.getComponent().getConfig().toString());
+
+                    graph.setTimestamp(new Date());
+
+                    System.out.println("UPDATE CONFIG: "+ graph);
+
+                    mongoTemplate.save(graph,"WFGraph");
+                    return obj.getComponent().getConfig();
+                }
+            }
+            return null;
+        }
+
     }
 }

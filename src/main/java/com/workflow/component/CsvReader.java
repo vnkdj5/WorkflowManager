@@ -3,6 +3,7 @@ package com.workflow.component;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.opencsv.*;
 import com.workflow.annotation.wfComponent;
@@ -10,9 +11,15 @@ import com.workflow.annotation.wfComponent;
 @wfComponent(complete=true)
 public class CsvReader implements Component{
 
+	final static String FILEPATH = "filepath";
+	final static String HEADERS = "headers";
+	final static String INPUT = "input";
+	final static String OUTPUT = "output";
+
 	Entity output;
 	Entity input;
-	
+	Entity config;
+
 	ArrayList<String> csvFilePath;
 	CSVReader reader;
 	String[] headers;
@@ -21,9 +28,8 @@ public class CsvReader implements Component{
 	
 	@Override
 	public boolean init() {
-		/*this.input = input;
-		this.output = output;
-		csvFilePath = (ArrayList<String>) config.getObjectByName("filePath"); */
+
+		csvFilePath = (ArrayList<String>) config.getObjectByName(FILEPATH);
 		totalFiles = csvFilePath.size();
 		readCompleteFile=0;
 		try {
@@ -128,37 +134,47 @@ public class CsvReader implements Component{
 				+ "}";
 		Entity config = new Entity();
 		config.addKeyValue("FORM", Configform);
+
+		//create model
+		HashMap<String, Object> model = new HashMap<>();
+		model.put(FILEPATH, csvFilePath);
+
+		config.addKeyValue("MODEL", model);
 		return config;
 	}
 
 	@Override
 	public Entity getOutput() {
-		// TODO Auto-generated method stub
+
 		return output;
 	}
 
 	@Override
     public Entity getInput(Component component) {
-		// TODO Auto-generated method stub
-        return new Entity();
+		setInput(component.getOutput());
+
+		return input;
 	}
 
 	@Override
 	public void setInput(Entity input) {
-		// TODO Auto-generated method stub
-		
+		input = new Entity();
+		input.addKeyValue(INPUT, null);
 	}
 
 	@Override
 	public void setOutput(Entity output) {
-		// TODO Auto-generated method stub
-		
+		output = new Entity();
+		output.addKeyValue(OUTPUT,this.config.getObjectByName(HEADERS));
+
 	}
 
 	@Override
 	public void setConfig(Entity config) {
-		// TODO Auto-generated method stub
-		
+
+		this.config = config;
+		//init(config);
+		setOutput(null);
 	}
 
 	@Override
