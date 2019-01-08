@@ -93,7 +93,9 @@ public class ComponentService {
                             while(it.hasNext()) {
                                 GraphNode parent = it.next();
                                 if (parent.getCId().equals(link.getFrom())) {
-                                    return obj.getComponent().getInput(parent.getComponent());
+                                    Entity updatedinput = obj.getComponent().getInput(parent.getComponent());
+                                    mongoTemplate.save(graph,"WFGraph");
+                                    return updatedinput;
                                 }
                             }
                         }
@@ -136,7 +138,7 @@ public class ComponentService {
             while (it.hasNext()) {
                 GraphNode obj = it.next();
                 if (obj.getCId().equals(CId)) {
-                    ArrayList<String> filepaths =(ArrayList<String>) obj.getComponent().getConfig().getObjectByName("filepath");
+                    ArrayList<String> filepaths =(ArrayList<String>) obj.getComponent().getConfig().getObjectByName("filePath");
                     if(filepaths==null){
                         filepaths = new ArrayList<>();
                     }
@@ -144,7 +146,7 @@ public class ComponentService {
                     filepaths.add(path);
 
                     Entity updatedConfig = new Entity();
-                    updatedConfig.addKeyValue("filepath", filepaths);
+                    updatedConfig.addKeyValue("filePath", filepaths);
                     updatedConfig.addKeyValue("headers",headers);
 
                     obj.getComponent().setConfig(updatedConfig);
@@ -155,7 +157,7 @@ public class ComponentService {
                     System.out.println("UPDATE CONFIG: "+ graph);
 
                     mongoTemplate.save(graph,"WFGraph");
-                    return obj.getComponent().getConfig();
+                    return updatedConfig;
                 }
             }
             return null;

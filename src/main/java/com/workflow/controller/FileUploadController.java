@@ -1,4 +1,5 @@
 package com.workflow.controller;
+import com.workflow.component.Entity;
 import com.workflow.service.ComponentService;
 import com.workflow.service.Helper;
 import java.io.*;
@@ -26,7 +27,7 @@ public class FileUploadController {
 	ComponentService componentService;
 
 	@RequestMapping(value="/uploadfile", method=RequestMethod.POST)
-	public ResponseEntity<HashMap> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("WFId")String WFId, @RequestParam("CompId")String CompId){
+	public ResponseEntity<HashMap> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("WFId")String WFId, @RequestParam("compId")String CompId){
 		
 		HashMap<String,Object> map = new HashMap<>();
 		if (!file.isEmpty()) {
@@ -54,9 +55,10 @@ public class FileUploadController {
 				map.put("message", "File Uploaded successfully");
 				map.put("path",serverFile.getAbsolutePath());
 
-				componentService.fileUploadConfig(WFId,CompId,map.get("path").toString(),headers);
+				Entity model = componentService.fileUploadConfig(WFId,CompId,map.get("path").toString(),headers);
 
-				return new ResponseEntity<HashMap>(map,HttpStatus.OK);
+
+				return new ResponseEntity<HashMap>(model.getEntity(),HttpStatus.OK);
 
 				
 			} catch (Exception e) {

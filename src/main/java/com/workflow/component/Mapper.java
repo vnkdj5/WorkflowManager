@@ -228,25 +228,13 @@ public class Mapper implements Component{
 		config.addKeyValue("FORM", Configform);
 
 		HashMap<String,Object> model = new HashMap<>();
-		ArrayList<JSONObject> fields = new ArrayList<>();
-		ArrayList<JSONObject> outputFields = new ArrayList<>();
 
 
-		ArrayList<String> in = (ArrayList<String>) input.getObjectByName("INPUT");
- 		for(int i=0;i<in.size();i++){
-			JSONObject obj = new JSONObject();
-			obj.put("fieldName",in.get(i));
-
-			obj.put("check",allowedheaders.contains(in.get(i)) );
-			obj.put("dataType","String");
-			fields.add(obj);
-
-			if((boolean)obj.get("check")){
-				outputFields.add(obj);
-			}
+ 		model.put("field",input.getEntity().get("input"));
+ 		if(output==null){
+ 			output = new Entity();
 		}
- 		model.put("fields",fields);
- 		model.put("outputFields",outputFields);
+ 		model.put("outputFields",output.getEntity().get("output"));
  		config.addKeyValue("MODEL",model);
         return config;
 	}
@@ -260,22 +248,23 @@ public class Mapper implements Component{
 	@Override
     public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
+		System.out.println("MAPPER GETINPUT"+component.getOutput().toString());
 		setInput(component.getOutput());
-		return output;
+		return input;
 	}
 
 	@Override
 	public void setInput(Entity input) {
 		// TODO Auto-generated method stub
-		input = new Entity();
-		input.addKeyValue("INPUT", input.getObjectByName("OUTPUT"));
+		this.input = new Entity();
+		this.input.addKeyValue("input", input.getObjectByName("output"));
 
 	}
 
 	@Override
 	public void setOutput(Entity output) {
-		output = new Entity();
-		this.output.addKeyValue("OUTPUT",allowedheaders);
+		this.output = new Entity();
+		this.output.addKeyValue("output",allowedheaders);
 	}
 
 	@Override
