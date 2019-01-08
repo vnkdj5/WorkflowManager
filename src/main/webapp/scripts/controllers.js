@@ -217,12 +217,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     };
 //	run the workflow method
     $scope.runWorkflow = function () {
-        var name = $scope.workflow.name;
-        //console.log("name   "+ name);
-        notify.showInfo("Info:" + name, "Workflow checking and execution started.");
+        var WFId = $scope.workflow.name; //Name is also Id
+        //console.log("RUN name   "+ name);
+        notify.showInfo("Info:" + WFId, "Workflow checking and execution started.");
 
 
-        graphService.runWorkflow(name).then(
+        graphService.runWorkflow(WFId).then(
             function success(response) {
                 //console.log(response.data);
                 notify.showSuccess("Success!", "Workflow Execution Finished.");
@@ -1062,15 +1062,32 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         // ('Book ID', 'Book Name', 'Category' and 'Price')
         var divContainer = document.getElementById("showData");
         divContainer.innerHTML = "";
-
+        let WFid = $scope.currentWorkflowName;
         var jsonData = [];
         if (isInput) {
             $scope.inputOrOutput = $scope.selectedComponent.key + "'s Input";
-            jsonData = component.input; //replace this part with api services
+            // jsonData = component.input; //replace this part with api services
+            componentService.getInput(WFid, componentKey).then(
+                function success(response) { //response should be jsonArray
+                    jsonData = response.data;
+                },
+                function error(response) {
+                    notify.showError("Error!!", response.data.message);
+                }
+            );
         } else {
             $scope.inputOrOutput = $scope.selectedComponent.key + "'s Output";
 
-            jsonData = component.output;
+            // jsonData = component.output;
+
+            componentService.getOutput(WFid, componentKey).then(
+                function success(response) {
+                    jsonData = response.data;
+                },
+                function error(response) {
+                    notify.showError("Error!!", response.data.message);
+                }
+            )
         }
         if (!jsonData) {
             if (isInput) {
