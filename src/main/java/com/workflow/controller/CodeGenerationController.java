@@ -20,7 +20,7 @@ public class CodeGenerationController {
 	@Autowired
 	CodeGenerationService codeGenerationService;
 	
-	@RequestMapping(value="/run/{WFId}", method= RequestMethod.POST)
+	@RequestMapping(value="/run/{WFId}", method= RequestMethod.GET)
 	public ResponseEntity<HashMap> runWorkflow(@PathVariable("WFId") String WFId){
 
 		HashMap<String,Object> map = codeGenerationService.extract(WFId);
