@@ -11,7 +11,7 @@ import com.workflow.annotation.wfComponent;
 @wfComponent(complete=true)
 public class CsvReader implements Component{
 
-	final static String FILEPATH = "filepath";
+	final static String FILEPATH = "filePath";
 	final static String HEADERS = "headers";
 	final static String INPUT = "input";
 	final static String OUTPUT = "output";
