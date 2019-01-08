@@ -47,7 +47,7 @@ app.service("graphService", function ($http) {
 
     };
     this.getAll = function () {
-        return $http.get("/WorkflowManager/components");
+        return $http.get("components");
     };
 
     this.loadGraph = function (name) {
@@ -72,7 +72,7 @@ app.service("graphService", function ($http) {
         };
         return $http({
             method: "POST",
-            url: "run",
+            url: "run/" + name,
             data: angular.toJson(data),
             headers: {
                 'Content-Type': 'application/json'
@@ -94,7 +94,7 @@ app.service("graphService", function ($http) {
 
 
     this.getValidLinks = function () {
-        return $http.get("/WorkflowManager/getValidLinks");
+        return $http.get("getValidLinks");
     };
 
     this.getAllWorkflows = function () {
@@ -122,48 +122,48 @@ app.service("graphService", function ($http) {
  *****************************************************/
 app.service("componentService", function ($http) {
     this.getAll = function () {
-        return $http.get("/WorkflowManager/components");
+        return $http.get("components/");
     };
 
     this.getFormData = function (componentName) {
 
-        let url = "/WorkflowManager/getConfig/" + componentName;
+        let url = "getConfig/" + componentName;
         return $http.get(url);
     };
 
 
 
     this.getConfig = function (WFId, CompId) {
-        let url = "/WorkflowManager/getConfig/" + WFId + "/" + CompId;
+        let url = "getConfig/" + WFId + "/" + CompId;
         return $http.get(url);
     };
 
 
     this.setConfig = function (WFId, CompId, reqData) {
-        let url = "/WorkflowManager/setConfig/" + WFId + "/" + CompId;
+        let url = "setConfig/" + WFId + "/" + CompId;
 
         return $http.post(url, reqData);
     };
 
     this.getInput = function (WFId, CompId) {
-        let url = "/WorkflowManager/getInput/" + WFId + "/" + CompId;
+        let url = "getInput/" + WFId + "/" + CompId;
         return $http.get(url);
     };
 
     this.setInput = function (WFId, CompId, reqData) {
-        let url = "/WorkflowManager/setInput/" + WFId + "/" + CompId;
+        let url = "setInput/" + WFId + "/" + CompId;
         return $http.post(url, reqData);
 
     };
 
     this.setOutput = function (WFId, CompId, reqData) {
-        let url = "/WorkflowManager/setOutput/" + WFId + "/" + CompId;
+        let url = "setOutput/" + WFId + "/" + CompId;
         return $http.post(url, reqData);
 
     };
 
     this.getOutput = function (WFId, CompId) {
-        let url = "/WorkflowManager/getOutput/" + WFId + "/" + CompId;
+        let url = "getOutput/" + WFId + "/" + CompId;
         return $http.get(url);
     };
 
@@ -215,16 +215,19 @@ app.service('fileUpload', ['$q', '$http', function ($q, $http) {
                 return deffered.promise;
             });
     };
+
     this.getResponse = function () {
         return responseData;
     };
+
+    //Method for deleting file from server
     this.deleteFile=function(fileUrl){
         let data={
             "file":fileUrl
         };
         return $http({
             method: "POST",
-            url: "deletefile",
+            url: "deletefile/",
             data: angular.toJson(data),
             headers: {
                 'Content-Type': 'application/json'

@@ -72,7 +72,7 @@ app.controller('controller', function ($scope, $http, $timeout, welcomeService, 
         welcomeService.newGraph($scope.workflow.name).then(
             function success(response) {
                 console.log(response.data);
-                window.location.href = "/WorkflowManager/index.html?load=1&name=" + response.data.Graph.id;
+                window.location.href = "index.html?load=1&name=" + response.data.Graph.id;
             }, function error(response) {
                 alert("Workflow exists with the name");
             }
@@ -87,7 +87,7 @@ app.controller('controller', function ($scope, $http, $timeout, welcomeService, 
 
 	$scope.loadWorkflow = function(name){
 		console.log("workflow creaate");
-		window.location.href = "/WorkflowManager/index.html?load=1&name="+name;
+        window.location.href = "index.html?load=1&name=" + name;
 	};
     //TODO: Refactoring needed below
     $http.get('/WorkflowManager/getAll').then(function success(user_data) {
