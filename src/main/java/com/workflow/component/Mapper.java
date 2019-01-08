@@ -14,11 +14,12 @@ public class Mapper implements Component{
 	
 	Entity input;
 	Entity output;
-	
+	Entity config;
+
 	ArrayList<String> allowedheaders;
 	ArrayList<String> allowedHeadersDatatypes;
 	@Override
-	public boolean init(Entity config) {
+	public boolean init() {
 		input = new Entity();
 		allowedheaders = new ArrayList<>();
 		allowedHeadersDatatypes = new ArrayList<>();
@@ -280,9 +281,13 @@ public class Mapper implements Component{
 	@Override
 	public void setConfig(Entity config) {
         // TODO method updation
-		init(config);
+		this.config = config;
+		//init(config);
 		setOutput(null);
 	}
 
-	
+	@Override
+	public boolean isValid() {
+		return true;
+	}
 }

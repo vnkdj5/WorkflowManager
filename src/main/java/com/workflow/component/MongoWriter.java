@@ -16,16 +16,11 @@ public class MongoWriter implements Component{
 
 	Entity input;
 	Entity output;
+	Entity config;
 
-	String Username;
-	String Password;
-	String Database;
-	String Collection;
-	String Url;
-
-	MongoClient mongo;
-	MongoDatabase db;
-	MongoCollection<Document> collection;
+	private MongoClient mongo;
+	private MongoDatabase db;
+	private MongoCollection<Document> collection;
 
 	@Override
 	public Entity process(Entity input) {
@@ -36,10 +31,10 @@ public class MongoWriter implements Component{
 	}
 
 	@Override
-	public boolean init(Entity config) {
-		mongo = new MongoClient(Url,27017);
-		db = mongo.getDatabase(Database);
-		collection = db.getCollection(Collection);
+	public boolean init() {
+		mongo = new MongoClient(config.getObjectByName("url").toString(),27017);
+		db = mongo.getDatabase(config.getObjectByName("database").toString());
+		collection = db.getCollection(config.getObjectByName("collection").toString());
 		return true;
 	}
 
@@ -49,13 +44,10 @@ public class MongoWriter implements Component{
 		String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"Comment\",\"properties\":{\"name\":{\"title\":\"Username\",\"type\":\"string\",\"required\":true},\"password\":{\"title\":\"Password\",\"type\":\"string\",\"required\":true},\"collection\":{\"title\":\"collection_name\",\"type\":\"string\",\"required\":true},\"database\":{\"title\":\"database_name\",\"type\":\"string\",\"required\":true},\"url\":{\"title\":\"Url\",\"type\":\"string\",\"required\":true}},\"required\":[\"name\",\"password\",\"collection\",\"database\",\"url\"]},\"form\":[\"name\",\"password\",\"collection\",\"database\",\"url\",{\"type\":\"submit\",\"style\":\"btn-info\",\"title\":\"OK\"},{\"type\":\"button\",\"style\":\"btn-info testConBtn\",\"title\":\"Test\",\"onClick\":\"testConn(myForm)\"}]}";
 		Entity config = new Entity();
 		config.addKeyValue("FORM", Configform);
-		HashMap<String,String> model = new HashMap<>();
-		model.put("name",Username);
-		model.put("password",Password);
-		model.put("url",Url);
-		model.put("collection",Collection);
-		model.put("database",Database);
-
+		HashMap<String, Object> model = null;
+		if(this.config!=null){
+			model = this.config.getEntity();
+		}
 		config.addKeyValue("MODEL",model);
 		return config;
 	}
@@ -90,13 +82,15 @@ public class MongoWriter implements Component{
 	@Override
 	public void setConfig(Entity config) {
 		// TODO Auto-generated method stub
-		Username = (String)config.getObjectByName("username");
-		Password = (String)config.getObjectByName("password");
-		Database = (String)config.getObjectByName("database");
-		Collection = (String)config.getObjectByName("collection");
-		Url = (String)config.getObjectByName("url");
-		init(config);
+		this.config = config;
+		System.out.println("MONGOWRITER "+this.config.getEntity().toString());
+		//init(config);
 		setOutput(null);
 	}
-	
+
+	@Override
+	public boolean isValid() {
+		return true;
+	}
+
 }

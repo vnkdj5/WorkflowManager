@@ -14,6 +14,8 @@ public class GraphNode {
     double y;
     String category;
 
+    public GraphNode(){}
+
     public GraphNode(String CId, Component component, String category, double x, double y,String name) {
         this.CId = CId;
         this.component = component;
@@ -60,4 +62,15 @@ public class GraphNode {
         return y;
     }
 
+    @Override
+    public String toString() {
+        return "GraphNode{" +
+                "CId='" + CId + '\'' +
+                ", component=" + component +
+                ", name='" + name + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }

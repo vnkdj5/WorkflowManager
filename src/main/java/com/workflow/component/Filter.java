@@ -6,7 +6,7 @@ import com.workflow.annotation.wfComponent;
 public class Filter implements Component {
 
 	@Override
-	public boolean init(Entity config) {
+	public boolean init() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -53,4 +53,8 @@ public class Filter implements Component {
 
 	}
 
+	@Override
+	public boolean isValid() {
+		return true;
+	}
 }
