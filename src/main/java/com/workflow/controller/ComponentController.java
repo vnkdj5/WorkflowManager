@@ -48,7 +48,7 @@ public class ComponentController {
 		if(config==null) {
 
 			HashMap obj=new HashMap<String,String>();
-			obj.put("Error","No config found");
+			obj.put("message","No config found");
 			return new ResponseEntity<>(obj,HttpStatus.INTERNAL_SERVER_ERROR);
 		}else {
 			return new ResponseEntity<>(config.getEntity(),HttpStatus.OK);

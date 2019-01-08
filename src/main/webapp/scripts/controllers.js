@@ -9,7 +9,7 @@ app.filter('beginning_data', function () {
     }
 });
 
-app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphService', 'componentService', '$q', 'notificationService', '$timeout', function ($scope, $rootScope, fileUpload, graphService, componentService, $q, notify, $http, $location, $timeout) {
+app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphService', 'componentService', '$q', 'notificationService', '$http', '$location', '$timeout', function ($scope, $rootScope, fileUpload, graphService, componentService, $q, notify, $http, $location, $timeout) {
     $scope.schema = null;
     $scope.form = [];
     $scope.model = {};
@@ -168,7 +168,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         // Then we check if the form is valid
         if (form.$valid) {
             //Client side mapper code
-            /* if ($scope.selectedComponent.category == "Mapper") //TODO: Add separate attribute for finding components having no Config
+            /* if ($scope.selectedComponent.category == "Mapper")
              {
                  searchedComponent.config = $scope.model;
                  //Now update checked fields into output of mapper
@@ -464,6 +464,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.model = {};
         let WFId = $scope.currentWorkflowName;
 
+
+        //$location.path( +'?componentId='+componentKey, false);
+        // console.log($location.path);
         //Mapper code removed frontend
         /*if (compCategory === "Mapper") //test method for mapper
         {
@@ -552,13 +555,20 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 function success(response) {
                     $scope.model = {};
                     let curForm = JSON.parse(response.data.FORM);
+
+                    for (let i in curForm.form) {//For assigning WFId and compId (for specializing API)
+                        if (curForm.form[i].endpoint) {
+                            curForm.form[i].endpoint += "?WFId=" + WFId + "&compId=" + componentKey;
+                        }
+
+                    }
                     $scope.schema = curForm.schema;
                     $scope.form = curForm.form;
                     $scope.model = response.data.MODEL;
                     if (!$scope.model) {
                         $scope.model = {};
                     }
-                    console.log("model : ", response.data.FORM.schema);
+
                     /* var component = ($scope.getComponent(compCategory));
                      if (!(component.config == null || $scope.getComponent(compCategory).config == undefined)) {
                          $scope.model = component.config;
@@ -1042,7 +1052,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     }; // end init
 
-
+    $scope.inputOrOutput = "";
     // Start Dynamic Table generation for INPUT/OUTPUT Fields
     $scope.loadInputOutput = function (componentName, componentKey, isInput) {
         var component = ($scope.getComponent(componentName));
@@ -1053,8 +1063,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
         var jsonData = [];
         if (isInput) {
+            $scope.inputOrOutput = $scope.selectedComponent.key + "'s Input";
             jsonData = component.input; //replace this part with api services
         } else {
+            $scope.inputOrOutput = $scope.selectedComponent.key + "'s Output";
+
             jsonData = component.output;
         }
         if (!jsonData) {

@@ -31,7 +31,7 @@ public class MongoWriter implements Component{
 	}
 
 	@Override
-	public boolean init(Entity config) {
+	public boolean init() {
 		mongo = new MongoClient(config.getObjectByName("url").toString(),27017);
 		db = mongo.getDatabase(config.getObjectByName("database").toString());
 		collection = db.getCollection(config.getObjectByName("collection").toString());
@@ -87,5 +87,10 @@ public class MongoWriter implements Component{
 		//init(config);
 		setOutput(null);
 	}
-	
+
+	@Override
+	public boolean isValid() {
+		return true;
+	}
+
 }

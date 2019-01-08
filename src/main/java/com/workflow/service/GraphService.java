@@ -40,90 +40,6 @@ public class GraphService {
 	Helper help;
 
     final String COLLECTION = "WFGraph";
-	public HashMap extract(String name) {
-		Query query=new Query();
-		query.addCriteria(Criteria.where("name").is(name));
-		JSONObject jtemp=(mongoTemplate.findOne(query, JsonGraph.class, COLLECTION)).getJgraph();
-		org.json.JSONObject jgraph=new org.json.JSONObject(jtemp.toJSONString());
-		LogicGraph lgraph=new LogicGraph();
-		ArrayList<Node> nodes=new ArrayList<Node>();
-		lgraph.setId((String)jgraph.get("name"));
-		org.json.JSONArray nodeArray=jgraph.getJSONArray("nodeDataArray");
-		org.json.JSONArray linkArray=jgraph.getJSONArray("linkDataArray");
-		HashMap<String,Object> ret=new HashMap<String,Object>();
-		HashMap<String,Node> nds=new HashMap<String,Node>();
-		ArrayList<String> errorList=new ArrayList<>();
-		for(int i=0;i<nodeArray.length();i++) {
-			Node temp=new Node();
-			try {
-                temp.setConfig(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("config"))));
-			}
-			catch(JSONException e) {
-				//errorList.add("Incomplete configuration at "+nodeArray.getJSONObject(i).getString("text"));
-			}
-			temp.setLabel(nodeArray.getJSONObject(i).getString("text"));
-			if(nodeArray.getJSONObject(i).isNull("valid")) {
-				temp.setValid(true);
-			}else {
-				temp.setValid(nodeArray.getJSONObject(i).getBoolean("valid"));
-			}
-			//temp.setInput(new Entity(help.toMap((nodeArray.getJSONObject(i)).getJSONObject("input"))));
-
-
-            //improve logic here
-			if(!nodeArray.getJSONObject(i).isNull("output")) {
-				Entity o = new Entity();
-				o.addKeyValue("allowed", nodeArray.getJSONObject(i).getJSONArray("output"));
-				temp.setOutput(o);
-			}
-
-			String key=((nodeArray.getJSONObject(i))).getString("key");
-			nds.put(key, temp);
-		}
-		System.out.println("nds="+nds.size());
-		ArrayList<String> from=new ArrayList<String>(linkArray.length());
-		ArrayList<String> to=new ArrayList<String>(linkArray.length());
-		for(int i=0;i<linkArray.length();i++) {
-			from.add(i,((linkArray.getJSONObject(i)).getString("from")));
-			to.add(i, ((linkArray.getJSONObject(i)).getString("to")));
-		}
-		String cur="Start";
-		/*for(int i=0;i<nodeArray.length();i++) {
-			if(((nodeArray.getJSONObject(i)).getString("text"))=="start") {
-				cur=Integer.parseInt(((nodeArray.getJSONObject(i)).get("key")).toString());
-				break;
-			}
-		}*/
-		errorList.addAll(validate(to,from,nds,cur));
-		if(!errorList.isEmpty()) {
-			ret.put("error",true );
-			ret.put("cause", errorList);
-			return ret;
-		}
-		cur="Start";
-		while(true) {
-			String next;
-			try {
-				next=to.get(from.indexOf(cur));
-			}
-			catch (Exception e) {
-				break;
-			}
-			//stopping is -2
-			if(!next.equals("End"))//nds.size()*(-1))
-				nodes.add(nds.get(next));
-			else {
-				break;
-			}
-			cur=next;
-		}
-		lgraph.setNodes(nodes);
-		ret.put("error",false );
-		ret.put("nodeList", lgraph);
-		System.out.println("logicGraphmap="+lgraph.toString());
-		System.out.println("length="+nodes.size());
-		return ret;
-	}
 
     public String saveGraph(String WFId, JSONObject update) {
         Query query = new Query();
@@ -317,30 +233,6 @@ public class GraphService {
 			System.out.println("not found");
 		}
 		return map;
-	}
-
-	public ArrayList<String> validate(ArrayList<String> to, ArrayList<String> from, HashMap<String,Node> nds,String start) {
-		ArrayList<String> errorList=new ArrayList<>();
-		for(Map.Entry<String, Node> node : nds.entrySet()) {
-			if(!node.getValue().isValid() && !node.getValue().getLabel().equals("Start") && !node.getValue().getLabel().equals("Stop"))
-				errorList.add("Incomplete configuration at " + node.getValue().getLabel());
-		}
-
-		String cur=start;
-		int count=0;
-		System.out.println(nds.size());
-		while(count<nds.size()-1) {
-			System.out.println(cur);
-			try {
-				cur=to.get(from.indexOf(cur));
-			}
-			catch(IndexOutOfBoundsException e) {
-				errorList.add("Disconnected at "+nds.get(cur).getLabel());
-				break;
-			}
-			count++;
-		}
-		return errorList;
 	}
 
     public List getWF(){

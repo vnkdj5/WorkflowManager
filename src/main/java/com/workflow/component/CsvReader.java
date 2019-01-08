@@ -19,7 +19,7 @@ public class CsvReader implements Component{
 	Entity output;
 	Entity input;
 	Entity config;
-	
+
 	ArrayList<String> csvFilePath;
 	CSVReader reader;
 	String[] headers;
@@ -27,7 +27,7 @@ public class CsvReader implements Component{
 	int readCompleteFile;
 	
 	@Override
-	public boolean init(Entity config) {
+	public boolean init() {
 
 		csvFilePath = (ArrayList<String>) config.getObjectByName(FILEPATH);
 		totalFiles = csvFilePath.size();
@@ -175,6 +175,11 @@ public class CsvReader implements Component{
 		this.config = config;
 		//init(config);
 		setOutput(null);
+	}
+
+	@Override
+	public boolean isValid() {
+		return true;
 	}
 
 }

@@ -5,32 +5,33 @@ import java.util.List;
 import java.util.Map;
 
 import com.workflow.bean.Node;
+import com.workflow.component.Component;
 import com.workflow.component.Entity;
 
 public class LogicGraph {
 
 	private String id;
-	private List<Node> nodes= new ArrayList<Node>();
+	private ArrayList<GraphNode> nodes= new ArrayList<>();
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	public List<Node> getNodes() {
+	public ArrayList<GraphNode> getNodes() {
 		return nodes;
 	}
-	public void setNodes(List<Node> nodes) {
+	public void setNodes(ArrayList<GraphNode> nodes) {
 		this.nodes = nodes;
 	}
-	public Entity getInput(int ind) {
-		return nodes.get(ind).getInput();
+	public Entity getInput(int ind, Component parent) {
+		return nodes.get(ind).getComponent().getInput(parent);
 	}
 	public Entity getOutput(int ind) {
-		return nodes.get(ind).getOutput();
+		return nodes.get(ind).getComponent().getOutput();
 	}
 	public Entity getConfig(int ind) {
-		return nodes.get(ind).getConfig();
+		return nodes.get(ind).getComponent().getConfig();
 	}
 	@Override
 	public String toString() {
