@@ -145,6 +145,20 @@ public class GraphService {
                 String to = (String) update.get("to");
                 List<GraphLink> links = graph.getLinks();
                 GraphLink deletelink = new GraphLink(from, to);
+                int deleteIndex = -1;
+                for(int i=0;i<links.size();i++){
+                    if(links.get(i).getTo().equals(to) && links.get(i).getFrom().equals(from)){
+                        deleteIndex=i;
+                        break;
+                    }
+                }
+                if(deleteIndex!=-1){
+                    links.remove(deleteIndex);
+                    graph.setLinks(links);
+                    graph.setTimestamp(new Date());
+                    mongoTemplate.save(graph, COLLECTION);
+                }
+
                 if (links.contains(deletelink)) {
                     links.remove(deletelink);
                     graph.setLinks(links);
