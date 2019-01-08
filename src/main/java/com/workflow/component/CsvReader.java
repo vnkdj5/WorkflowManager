@@ -136,10 +136,10 @@ public class CsvReader implements Component{
 		config.addKeyValue("FORM", Configform);
 
 		//create model
-		HashMap<String, Object> model = new HashMap<>();
-		model.put(FILEPATH, csvFilePath);
-
-		config.addKeyValue("MODEL", model);
+		if(this.config==null){
+			this.config = new Entity();
+		}
+		config.addKeyValue("MODEL", this.config.getEntity());
 		return config;
 	}
 
@@ -164,9 +164,9 @@ public class CsvReader implements Component{
 
 	@Override
 	public void setOutput(Entity output) {
-		output = new Entity();
-		output.addKeyValue(OUTPUT,this.config.getObjectByName(HEADERS));
-
+		this.output = new Entity();
+		this.output.addKeyValue(OUTPUT,this.config.getObjectByName(HEADERS));
+		System.out.println("OUTPUT CSVREADDER"+this.config.getObjectByName(HEADERS));
 	}
 
 	@Override

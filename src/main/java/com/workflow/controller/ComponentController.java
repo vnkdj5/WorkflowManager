@@ -91,9 +91,9 @@ public class ComponentController {
 	}
 	
 	@RequestMapping(value="/getInput/{WFId}/{componentId}", method=RequestMethod.GET)
-	public ResponseEntity<Entity> getInput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
+	public ResponseEntity<ArrayList<JSONObject>> getInput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		Entity response=componentService.getInput(WFId, CId);
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		return new ResponseEntity<>((ArrayList<JSONObject>)response.getEntity().get("input"),HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/getOutput/{WFId}/{componentId}", method=RequestMethod.GET)
