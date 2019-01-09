@@ -61,6 +61,7 @@ public class MongoWriter implements Component{
 	@Override
     public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
+		System.out.println("MONGOWRITER "+component.getOutput());
         setInput(component.getOutput());
 		return input;
 	}
@@ -68,14 +69,14 @@ public class MongoWriter implements Component{
 	@Override
 	public void setInput(Entity input) {
 		// TODO Auto-generated method stub
-		input = new Entity();
-		input.addKeyValue("INPUT", input.getObjectByName("OUTPUT"));
+		this.input = new Entity();
+		this.input.addKeyValue("input", input.getEntity().get("output"));
 	}
 
 	@Override
 	public void setOutput(Entity output) {
 		// TODO Auto-generated method stub
-		output = new Entity();
+		this.output = new Entity();
 
 	}
 

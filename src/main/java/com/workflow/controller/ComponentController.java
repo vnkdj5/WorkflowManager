@@ -97,9 +97,9 @@ public class ComponentController {
 	}
 
 	@RequestMapping(value="/getOutput/{WFId}/{componentId}", method=RequestMethod.GET)
-	public ResponseEntity<Entity> getOutput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
+	public ResponseEntity<ArrayList<JSONObject>> getOutput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		Entity response=componentService.getOutput(WFId, CId);
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		return new ResponseEntity<>((ArrayList<JSONObject>)response.getEntity().get("output"),HttpStatus.OK);
 	}
 
 	@SuppressWarnings("unchecked")

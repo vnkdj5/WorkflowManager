@@ -126,7 +126,7 @@ public class ComponentService {
         }
     }
 
-    public Entity fileUploadConfig(String WFId,String CId,String path, String[] headers) {
+    public Entity fileUploadConfig(String WFId,String CId,String path, List headers) {
         Query query=new Query();
         query.addCriteria(Criteria.where("id").is(WFId));
         WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");

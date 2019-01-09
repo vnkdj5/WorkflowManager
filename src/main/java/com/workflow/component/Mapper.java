@@ -233,8 +233,10 @@ public class Mapper implements Component{
  		model.put("field",input.getEntity().get("input"));
  		if(output==null){
  			output = new Entity();
+			model.put("outputFields",new ArrayList<JSONObject>());
+		}else {
+			model.put("outputFields", output.getEntity().get("outputFields"));
 		}
- 		model.put("outputFields",output.getEntity().get("output"));
  		config.addKeyValue("MODEL",model);
         return config;
 	}
@@ -264,7 +266,7 @@ public class Mapper implements Component{
 	@Override
 	public void setOutput(Entity output) {
 		this.output = new Entity();
-		this.output.addKeyValue("output",allowedheaders);
+		this.output.addKeyValue("output",this.config.getEntity().get("outputFields"));
 	}
 
 	@Override
