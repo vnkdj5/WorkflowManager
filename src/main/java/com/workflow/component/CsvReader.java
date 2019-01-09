@@ -151,15 +151,20 @@ public class CsvReader implements Component{
 
 	@Override
     public Entity getInput(Component component) {
-		setInput(component.getOutput());
+		if(component!=null){
+			setInput(component.getOutput());
+		}else{
+			setInput(null);
+		}
+
 
 		return input;
 	}
 
 	@Override
 	public void setInput(Entity input) {
-		input = new Entity();
-		input.addKeyValue(INPUT, null);
+		this.input = new Entity();
+		this.input.addKeyValue(INPUT, null);
 	}
 
 	@Override
