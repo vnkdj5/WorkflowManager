@@ -901,19 +901,64 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     $scope.inputOrOutput = "";
     // Start Dynamic Table generation for INPUT/OUTPUT Fields
     $scope.loadInputOutput = function (componentName, componentKey, isInput) {
-        var component = ($scope.getComponent(componentName));
-        // EXTRACT VALUE FOR HTML HEADER. 
+        // EXTRACT VALUE FOR HTML HEADER.
         // ('Book ID', 'Book Name', 'Category' and 'Price')
         var divContainer = document.getElementById("showData");
         divContainer.innerHTML = "";
         let WFid = $scope.currentWorkflowName;
         var jsonData = [];
+
+
+        // CREATE DYNAMIC TABLE from JSON.
+        var table = document.createElement("table");
+        table.setAttribute("class", "table  table-hover");
+
+        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+        var header = table.createTHead();
+        header.setAttribute("class", "thead-light");
+
+
         if (isInput) {
             $scope.inputOrOutput = $scope.selectedComponent.key + "'s Input";
             // jsonData = component.input; //replace this part with api services
             componentService.getInput(WFid, componentKey).then(
                 function success(response) { //response should be jsonArray
                     jsonData = response.data;
+
+                    var col = [];
+                    for (var i = 0; i < jsonData.length; i++) {
+                        for (var key in jsonData[i]) {
+                            if (col.indexOf(key) === -1) {
+                                col.push(key);
+                            }
+                        }
+                    }
+
+
+                    var tr = header.insertRow(-1);                   // TABLE ROW.
+
+                    for (var i = 0; i < col.length; i++) {
+                        var th = document.createElement("th");      // TABLE HEADER.
+                        th.innerHTML = col[i];
+                        header.appendChild(th);
+                    }
+
+                    // ADD JSON DATA TO THE TABLE AS ROWS.
+                    for (var i = 0; i < jsonData.length; i++) {
+
+                        tr = table.insertRow(-1);
+
+                        for (var j = 0; j < col.length; j++) {
+                            var tabCell = tr.insertCell(-1);
+                            tabCell.innerHTML = jsonData[i][col[j]];
+                        }
+                    }
+
+                    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+
+                    divContainer.appendChild(table);
+
+                    $('#inputModal').modal('show');
                 },
                 function error(response) {
                     notify.showError("Error!!", response.data.message);
@@ -927,6 +972,41 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             componentService.getOutput(WFid, componentKey).then(
                 function success(response) {
                     jsonData = response.data;
+                    //table logic
+                    var col = [];
+                    for (var i = 0; i < jsonData.length; i++) {
+                        for (var key in jsonData[i]) {
+                            if (col.indexOf(key) === -1) {
+                                col.push(key);
+                            }
+                        }
+                    }
+
+
+                    var tr = header.insertRow(-1);                   // TABLE ROW.
+
+                    for (var i = 0; i < col.length; i++) {
+                        var th = document.createElement("th");      // TABLE HEADER.
+                        th.innerHTML = col[i];
+                        header.appendChild(th);
+                    }
+
+                    // ADD JSON DATA TO THE TABLE AS ROWS.
+                    for (var i = 0; i < jsonData.length; i++) {
+
+                        tr = table.insertRow(-1);
+
+                        for (var j = 0; j < col.length; j++) {
+                            var tabCell = tr.insertCell(-1);
+                            tabCell.innerHTML = jsonData[i][col[j]];
+                        }
+                    }
+
+                    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+
+                    divContainer.appendChild(table);
+
+                    $('#inputModal').modal('show');
                 },
                 function error(response) {
                     notify.showError("Error!!", response.data.message);
@@ -942,46 +1022,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             $('#inputModal').modal('show');
             return;
         }
-        var col = [];
-        for (var i = 0; i < jsonData.length; i++) {
-            for (var key in jsonData[i]) {
-                if (col.indexOf(key) === -1) {
-                    col.push(key);
-                }
-            }
-        }
 
-        // CREATE DYNAMIC TABLE.
-        var table = document.createElement("table");
-        table.setAttribute("class", "table  table-hover");
-
-        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-        var header = table.createTHead();
-        header.setAttribute("class", "thead-light");
-        var tr = header.insertRow(-1);                   // TABLE ROW.
-
-        for (var i = 0; i < col.length; i++) {
-            var th = document.createElement("th");      // TABLE HEADER.
-            th.innerHTML = col[i];
-            header.appendChild(th);
-        }
-
-        // ADD JSON DATA TO THE TABLE AS ROWS.
-        for (var i = 0; i < jsonData.length; i++) {
-
-            tr = table.insertRow(-1);
-
-            for (var j = 0; j < col.length; j++) {
-                var tabCell = tr.insertCell(-1);
-                tabCell.innerHTML = jsonData[i][col[j]];
-            }
-        }
-
-        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-
-        divContainer.appendChild(table);
-
-        $('#inputModal').modal('show');
     };
 //End of Dynamic Table  generation for Input/Output of components
 
