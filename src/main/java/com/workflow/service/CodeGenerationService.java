@@ -75,7 +75,8 @@ public class CodeGenerationService {
 			GraphNode temp=null;
 			for (int i = 0; i < nodeList.size(); i++) {
 				if (nodeList.get(i).getCId().equals(currentNode)) {
-					nodeArray.add(nodeList.get(i));
+					temp=nodeList.get(i);
+					nodeArray.add(temp);
 					break;
 				}
 			}
