@@ -229,15 +229,18 @@ public class Mapper implements Component{
 
 		HashMap<String,Object> model = new HashMap<>();
 
-
- 		model.put("field",input.getEntity().get("input"));
- 		if(output==null){
- 			output = new Entity();
-			model.put("outputFields",new ArrayList<JSONObject>());
-		}else {
-			model.put("outputFields", output.getEntity().get("outputFields"));
+		if(this.config==null) {
+			model.put("field", input.getEntity().get("input"));
+			if (output == null) {
+				output = new Entity();
+				model.put("outputFields", new ArrayList<JSONObject>());
+			} else {
+				model.put("outputFields", output.getEntity().get("outputFields"));
+			}
+			config.addKeyValue("MODEL", model);
+		}else{
+			config.addKeyValue("MODEL",this.config.getEntity());
 		}
- 		config.addKeyValue("MODEL",model);
         return config;
 	}
 
