@@ -2,8 +2,10 @@ package com.workflow.component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
+import com.mongodb.util.JSON;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,11 +25,12 @@ public class Mapper implements Component{
 		input = new Entity();
 		allowedheaders = new ArrayList<>();
 		allowedHeadersDatatypes = new ArrayList<>();
-		JSONArray temp = (JSONArray) this.output.getEntity().get("allowed");
+		JSONArray temp =new JSONArray((List<JSONObject>)this.output.getEntity().get("output"));
 		
 		for(int i=0;i<temp.length();i++) {
-			String header = ((JSONObject)temp.get(i)).getString("fieldName");
-			String datatype = ((JSONObject)temp.get(i)).getString("dataType");
+			JSONObject obj = new JSONObject(temp.get(i).toString());
+			String header = obj.getString("fieldName");
+			String datatype = obj.getString("dataType");
 			allowedheaders.add(header);
 			allowedHeadersDatatypes.add(datatype);
 		}
