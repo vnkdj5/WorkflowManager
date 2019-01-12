@@ -924,7 +924,15 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             componentService.getInput(WFid, componentKey).then(
                 function success(response) { //response should be jsonArray
                     jsonData = response.data;
-
+                    if (!jsonData || jsonData.length == 0) {
+                        if (isInput) {
+                            divContainer.innerHTML = "No Input available for this component.";
+                        } else {
+                            divContainer.innerHTML = "No Output available for this component.";
+                        }
+                        $('#inputModal').modal('show');
+                        return;
+                    }
                     var col = [];
                     for (var i = 0; i < jsonData.length; i++) {
                         for (var key in jsonData[i]) {
@@ -972,6 +980,17 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             componentService.getOutput(WFid, componentKey).then(
                 function success(response) {
                     jsonData = response.data;
+
+
+                    if (!jsonData || jsonData.length == 0) {
+                        if (isInput) {
+                            divContainer.innerHTML = "No Input available for this component.";
+                        } else {
+                            divContainer.innerHTML = "No Output available for this component.";
+                        }
+                        $('#inputModal').modal('show');
+                        return;
+                    }
                     //table logic
                     var col = [];
                     for (var i = 0; i < jsonData.length; i++) {
@@ -1013,15 +1032,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 }
             )
         }
-        if (!jsonData) {
-            if (isInput) {
-                divContainer.innerHTML = "No Input available for this component.";
-            } else {
-                divContainer.innerHTML = "No Output available for this component.";
-            }
-            $('#inputModal').modal('show');
-            return;
-        }
+
 
     };
 //End of Dynamic Table  generation for Input/Output of components
