@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.workflow.annotation.wfComponent;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 @wfComponent(complete=true)
 public class Mapper implements Component{
@@ -70,165 +72,14 @@ public class Mapper implements Component{
 	public Entity getConfig() {
 
 		// TODO Auto-generated method stub
-		String Configform =  "{\n" +
-                "\t\"schema\": {\n" +
-                "\t\t\"type\": \"object\",\n" +
-                "\t\t\"title\": \"\",\n" +
-                "\t\t\"properties\": {\n" +
-                "\t\t\t\"field\": {\n" +
-                "\t\t\t\t\"type\": \"array\",\n" +
-                "\t\t\t\t\"items\": {\n" +
-                "\t\t\t\t\t\"type\": \"object\",\n" +
-                "\t\t\t\t\t\"properties\": {\n" +
-                "\t\t\t\t\t\t\"check\": {\n" +
-                "\t\t\t\t\t\t\t\"title\": \"\",\n" +
-                "\t\t\t\t\t\t\t\"type\": \"boolean\"\n" +
-                "\t\t\t\t\t\t},\n" +
-                "\t\t\t\t\t\t\"fieldName\": {\n" +
-                "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
-                "\t\t\t\t\t\t\t\"readonly\": false\n" +
-                "\t\t\t\t\t\t},\n" +
-                "\t\t\t\t\t\t\"dataType\": {\n" +
-                "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
-                "\t\t\t\t\t\t\t\"readonly\": false\n" +
-                "\t\t\t\t\t\t}\n" +
-                "\t\t\t\t\t}\n" +
-                "\t\t\t\t}\n" +
-                "\t\t\t},\n" +
-                "\t\t\t\"outputFields\": {\n" +
-                "\t\t\t\t\"type\": \"array\",\n" +
-                "\t\t\t\t\"items\": {\n" +
-                "\t\t\t\t\t\"type\": \"object\",\n" +
-                "\t\t\t\t\t\"properties\": {\n" +
-                "\t\t\t\t\t\t\"check\": {\n" +
-                "\t\t\t\t\t\t\t\"title\": \"\",\n" +
-                "\t\t\t\t\t\t\t\"type\": \"boolean\"\n" +
-                "\t\t\t\t\t\t},\n" +
-                "\t\t\t\t\t\t\"fieldName\": {\n" +
-                "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
-                "\t\t\t\t\t\t\t\"readonly\": false\n" +
-                "\t\t\t\t\t\t},\n" +
-                "\t\t\t\t\t\t\"dataType\": {\n" +
-                "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
-                "\t\t\t\t\t\t\t\"readonly\": false\n" +
-                "\t\t\t\t\t\t}\n" +
-                "\t\t\t\t\t}\n" +
-                "\t\t\t\t}\n" +
-                "\t\t\t}\n" +
-                "\t\t},\n" +
-                "\t\t\"required\": [\n" +
-                "\t\t\t\"field\"\n" +
-                "\t\t]\n" +
-                "\t},\n" +
-                "\t\"form\": [" +
-                "\t\t{\n" +
-                "\t\t\t\"type\": \"button\",\n" +
-                "\t\t\t\"title\": \"Add >\",\n" +
-                "\t\t\t\"style\": \"btn-info float-btn\",\n" +
-                "\t\t\t\"htmlClass\": \"text-center\",\n" +
-                "\t\t\t\"onClick\": \"mapperHandler()\"\n" +
-                "\t\t},\n" +
-                "\t\t{\n" +
-                "\t\t\t\"type\": \"button\",\n" +
-                "\t\t\t\"title\": \"Add All\",\n" +
-                "\t\t\t\"style\": \"btn-info float-btn2\",\n" +
-                "\t\t\t\"htmlClass\": \"text-center\",\n" +
-                "\t\t\t\"onClick\": \"mapperAddAllHandler()\"\n" +
-                "\t\t},\n" +
-                "{\n" +
-                "\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\"htmlClass\": \"row\",\n" +
-                "\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\"htmlClass\": \"col-md-6\",\n" +
-                "\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\"key\": \"field\",\n" +
-                "\t\t\t\t\t\t\"htmlClass\": \"\",\n" +
-                "\t\t\t\t\t\t\"notitle\": false,\n" +
-                "\t\t\t\t\t\t\"add\": null,\n" +
-                "\t\t\t\t\t\t\"remove\": null,\n" +
-                "\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\t\t\"htmlClass\": \"form-row\",\n" +
-                "\t\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-2\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['field'][].['check']\",\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"type\": \"checkbox\",\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"title\": \"\",\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
-                "\t\t\t\t\t\t\t\t\t}]\n" +
-                "\t\t\t\t\t\t\t\t},\n" +
-                "\t\t\t\t\t\t\t\t{\n" +
-                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-4\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['field'][].['fieldName']\",\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
-                "\t\t\t\t\t\t\t\t\t}]\n" +
-                "\t\t\t\t\t\t\t\t},\n" +
-                "\t\t\t\t\t\t\t\t{\n" +
-                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-4\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['field'][].['dataType']\",\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
-                "\t\t\t\t\t\t\t\t\t}]\n" +
-                "\t\t\t\t\t\t\t\t}\n" +
-                "\t\t\t\t\t\t\t]\n" +
-                "\t\t\t\t\t\t}]\n" +
-                "\t\t\t\t\t}]\n" +
-                "\t\t\t\t},\n" +
-                "\t\t\t\t{\n" +
-                "\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\"htmlClass\": \"col-md-6\",\n" +
-                "\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\"key\": \"outputFields\",\n" +
-                "\t\t\t\t\t\t\"htmlClass\": \"\",\n" +
-                "\t\t\t\t\t\t\"notitle\": false ,\n" +
-                "\t\t\t\t\t\t\"add\": null,\n" +
-                "\t\t\t\t\t\t\"remove\": null,\n" +
-                "\t\t\t\t\t\t\"startEmpty\": true,\n" +
-                "\n" +
-                "\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\t\t\"htmlClass\": \"form-row\",\n" +
-                "\t\t\t\t\t\t\t\"items\": [\n" +
-                "\n" +
-                "\t\t\t\t\t\t\t\t{\n" +
-                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-5\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['outputFields'][].['fieldName']\",\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
-                "\t\t\t\t\t\t\t\t\t}]\n" +
-                "\t\t\t\t\t\t\t\t},\n" +
-                "\t\t\t\t\t\t\t\t{\n" +
-                "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-5\",\n" +
-                "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['outputFields'][].['dataType']\",\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
-                "\t\t\t\t\t\t\t\t\t}]\n" +
-                "\t\t\t\t\t\t\t\t}\n" +
-                "\t\t\t\t\t\t\t]\n" +
-                "\t\t\t\t\t\t}]\n" +
-                "\t\t\t\t\t}]\n" +
-                "\t\t\t\t}\n" +
-                "\t\t\t]\n" +
-                "\t\t},\n" +
-                "\t\t{\n" +
-                "\t\t\t\"type\": \"submit\",\n" +
-                "\t\t\t\"style\": \"btn-info btn\",\n" +
-                "\t\t\t\"htmlClass\": \"text-center\",\n" +
-                "\t\t\t\"title\": \"Save\"\n" +
-                "\t\t}\n" +
-                "\t]\n" +
-                "}";
-		
+		String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"\",\"properties\":{\"field\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"check\":{\"title\":\"\",\"type\":\"boolean\"},\"fieldName\":{\"type\":\"string\",\"readonly\":true},\"dataType\":{\"type\":\"string\",\"readonly\":true}}}},\"outputFields\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"check\":{\"title\":\"\",\"type\":\"boolean\"},\"newFieldName\":{\"type\":\"string\",\"readonly\":false},\"dataType\":{\"type\":\"string\",\"readonly\":false}}}}},\"required\":[\"field\"]},\"form\":[{\"type\":\"button\",\"title\":\"Add >\",\"style\":\"btn-info float-btn\",\"htmlClass\":\"text-center\",\"onClick\":\"mapperHandler()\"},{\"type\":\"button\",\"title\":\"Add All\",\"style\":\"btn-info float-btn2\",\"htmlClass\":\"text-center\",\"onClick\":\"mapperAddAllHandler()\"},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[{\"key\":\"field\",\"htmlClass\":\"\",\"notitle\":false,\"add\":null,\"remove\":null,\"items\":[{\"type\":\"section\",\"htmlClass\":\"form-row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-2\",\"items\":[{\"key\":[\"field\"],\"type\":\"checkbox\",\"title\":\"\",\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-4\",\"items\":[{\"key\":[\"field\"],\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-4\",\"items\":[{\"key\":[\"field\"],\"notitle\":true}]}]}]}]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[{\"key\":\"outputFields\",\"htmlClass\":\"\",\"notitle\":false,\"add\":null,\"remove\":null,\"startEmpty\":true,\"items\":[{\"type\":\"section\",\"htmlClass\":\"form-row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-5\",\"items\":[{\"key\":[\"outputFields\"],\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-5\",\"items\":[{\"key\":[\"outputFields\"],\"notitle\":true}]}]}]}]}]},{\"type\":\"submit\",\"style\":\"btn-info btn\",\"htmlClass\":\"text-center\",\"title\":\"Save\"}]}";
+
+
+			JSONObject obj = new JSONObject(Configform);
+			System.out.println(obj.toString());
+
 		Entity config = new Entity();
-		config.addKeyValue("FORM", Configform);
+		config.addKeyValue("FORM", obj.toMap());
 
 		HashMap<String,Object> model = new HashMap<>();
 
