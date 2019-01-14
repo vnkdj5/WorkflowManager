@@ -396,7 +396,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
      */
     $scope.mapperHandler = function () {
 
-        let fieldArray = JSON.parse(JSON.stringify($scope.model.field));
+        let fieldArray = $scope.model.field;// JSON.parse(JSON.stringify($scope.model.field));
         if ($scope.model.outputFields == null)
             $scope.model.outputFields = [];
         let outputFieldArray = $scope.model.outputFields;
@@ -436,7 +436,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     };
 
     $scope.mapperAddAllHandler = function () {
-        let fieldArray = JSON.parse(JSON.stringify($scope.model.field));
+        let fieldArray = $scope.model.field;// JSON.parse(JSON.stringify($scope.model.field));
         if ($scope.model.outputFields == null)
             $scope.model.outputFields = [];
         let outputFieldArray = $scope.model.outputFields;
@@ -479,6 +479,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                         curForm.form[i].endpoint += "?WFId=" + WFId + "&compId=" + componentKey;
                     }
                 }
+                console.log(curForm);
+                console.log("STRINGIFY", JSON.stringify(curForm));
                 $scope.schema = curForm.schema;
                 $scope.form = curForm.form;
                 $scope.model = response.data.MODEL;
