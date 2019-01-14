@@ -86,11 +86,11 @@ public class Mapper implements Component{
                 "\t\t\t\t\t\t},\n" +
                 "\t\t\t\t\t\t\"fieldName\": {\n" +
                 "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
-                "\t\t\t\t\t\t\t\"readonly\": false\n" +
+				"\t\t\t\t\t\t\t\"readonly\": true\n" +
                 "\t\t\t\t\t\t},\n" +
                 "\t\t\t\t\t\t\"dataType\": {\n" +
                 "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
-                "\t\t\t\t\t\t\t\"readonly\": false\n" +
+				"\t\t\t\t\t\t\t\"readonly\": true\n" +
                 "\t\t\t\t\t\t}\n" +
                 "\t\t\t\t\t}\n" +
                 "\t\t\t\t}\n" +
@@ -104,7 +104,7 @@ public class Mapper implements Component{
                 "\t\t\t\t\t\t\t\"title\": \"\",\n" +
                 "\t\t\t\t\t\t\t\"type\": \"boolean\"\n" +
                 "\t\t\t\t\t\t},\n" +
-                "\t\t\t\t\t\t\"fieldName\": {\n" +
+				"\t\t\t\t\t\t\"newFieldName\": {\n" +
                 "\t\t\t\t\t\t\t\"type\": \"string\",\n" +
                 "\t\t\t\t\t\t\t\"readonly\": false\n" +
                 "\t\t\t\t\t\t},\n" +
@@ -200,7 +200,7 @@ public class Mapper implements Component{
                 "\t\t\t\t\t\t\t\t\t\"type\": \"section\",\n" +
                 "\t\t\t\t\t\t\t\t\t\"htmlClass\": \"col-md-5\",\n" +
                 "\t\t\t\t\t\t\t\t\t\"items\": [{\n" +
-                "\t\t\t\t\t\t\t\t\t\t\"key\": \"['outputFields'][].['fieldName']\",\n" +
+				"\t\t\t\t\t\t\t\t\t\t\"key\": \"['outputFields'][].['newFieldName']\",\n" +
                 "\t\t\t\t\t\t\t\t\t\t\"notitle\": true\n" +
                 "\t\t\t\t\t\t\t\t\t}]\n" +
                 "\t\t\t\t\t\t\t\t},\n" +
