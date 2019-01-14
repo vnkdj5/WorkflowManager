@@ -22,20 +22,26 @@ public class Mapper implements Component{
 
 	ArrayList<String> allowedheaders;
 	ArrayList<String> allowedHeadersDatatypes;
+	HashMap<String,String> newLabels;
 	@Override
 	public boolean init() {
 		input = new Entity();
 		allowedheaders = new ArrayList<>();
 		allowedHeadersDatatypes = new ArrayList<>();
+		newLabels = new HashMap<>();
 		JSONArray temp =new JSONArray((List<JSONObject>)this.output.getEntity().get("output"));
 		
 		for(int i=0;i<temp.length();i++) {
 			JSONObject obj = new JSONObject(temp.get(i).toString());
 			String header = obj.getString("fieldName");
 			String datatype = obj.getString("dataType");
+			String newLabel = obj.getString("newFieldName");
 			allowedheaders.add(header);
 			allowedHeadersDatatypes.add(datatype);
+			newLabels.put(header,newLabel);
 		}
+
+		System.out.println(newLabels.toString());
 		return true;
 	}
 
@@ -49,17 +55,17 @@ public class Mapper implements Component{
                     //improve logic here
                     String datatype = allowedHeadersDatatypes.get(allowedheaders.indexOf(entry.getKey()));
                     if (datatype.equals("boolean")) {
-                        out.addKeyValue(entry.getKey(), Boolean.parseBoolean((String) entry.getValue()));
+                        out.addKeyValue(newLabels.get(entry.getKey()), Boolean.parseBoolean((String) entry.getValue()));
                     } else if (datatype.equals("int")) {
-                        out.addKeyValue(entry.getKey(), Integer.parseInt((String) entry.getValue()));
+                        out.addKeyValue(newLabels.get(entry.getKey()), Integer.parseInt((String) entry.getValue()));
                     } else if (datatype.equals("float")) {
-                        out.addKeyValue(entry.getKey(), Float.parseFloat((String) entry.getValue()));
+                        out.addKeyValue(newLabels.get(entry.getKey()), Float.parseFloat((String) entry.getValue()));
                     } else {
-                        out.addKeyValue(entry.getKey(), entry.getValue());
+                        out.addKeyValue(newLabels.get(entry.getKey()), entry.getValue());
                     }
                 }
             } catch (NumberFormatException e) {
-                out.addKeyValue(entry.getKey(), 0);
+                out.addKeyValue(newLabels.get(entry.getKey()), 0);
 			}
 
 
@@ -72,7 +78,7 @@ public class Mapper implements Component{
 	public Entity getConfig() {
 
 		// TODO Auto-generated method stub
-		String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"\",\"properties\":{\"field\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"check\":{\"title\":\"\",\"type\":\"boolean\"},\"fieldName\":{\"type\":\"string\",\"readonly\":true},\"dataType\":{\"type\":\"string\",\"readonly\":true}}}},\"outputFields\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"check\":{\"title\":\"\",\"type\":\"boolean\"},\"newFieldName\":{\"type\":\"string\",\"readonly\":false},\"dataType\":{\"type\":\"string\",\"readonly\":false}}}}},\"required\":[\"field\"]},\"form\":[{\"type\":\"button\",\"title\":\"Add >\",\"style\":\"btn-info float-btn\",\"htmlClass\":\"text-center\",\"onClick\":\"mapperHandler()\"},{\"type\":\"button\",\"title\":\"Add All\",\"style\":\"btn-info float-btn2\",\"htmlClass\":\"text-center\",\"onClick\":\"mapperAddAllHandler()\"},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[{\"key\":\"field\",\"htmlClass\":\"\",\"notitle\":false,\"add\":null,\"remove\":null,\"items\":[{\"type\":\"section\",\"htmlClass\":\"form-row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-2\",\"items\":[{\"key\":[\"field\"],\"type\":\"checkbox\",\"title\":\"\",\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-4\",\"items\":[{\"key\":[\"field\"],\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-4\",\"items\":[{\"key\":[\"field\"],\"notitle\":true}]}]}]}]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[{\"key\":\"outputFields\",\"htmlClass\":\"\",\"notitle\":false,\"add\":null,\"remove\":null,\"startEmpty\":true,\"items\":[{\"type\":\"section\",\"htmlClass\":\"form-row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-5\",\"items\":[{\"key\":[\"outputFields\"],\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-5\",\"items\":[{\"key\":[\"outputFields\"],\"notitle\":true}]}]}]}]}]},{\"type\":\"submit\",\"style\":\"btn-info btn\",\"htmlClass\":\"text-center\",\"title\":\"Save\"}]}";
+		String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"\",\"properties\":{\"field\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"check\":{\"title\":\"\",\"type\":\"boolean\"},\"fieldName\":{\"type\":\"string\",\"readonly\":true},\"dataType\":{\"type\":\"string\",\"readonly\":true}}}},\"outputFields\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"check\":{\"title\":\"\",\"type\":\"boolean\"},\"newFieldName\":{\"type\":\"string\",\"readonly\":false},\"dataType\":{\"type\":\"string\",\"readonly\":false}}}}},\"required\":[\"field\"]},\"form\":[{\"type\":\"button\",\"title\":\"Add >\",\"style\":\"btn-info float-btn\",\"htmlClass\":\"text-center\",\"onClick\":\"mapperHandler()\"},{\"type\":\"button\",\"title\":\"Add All\",\"style\":\"btn-info float-btn2\",\"htmlClass\":\"text-center\",\"onClick\":\"mapperAddAllHandler()\"},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[{\"key\":\"field\",\"htmlClass\":\"\",\"notitle\":false,\"add\":null,\"remove\":null,\"items\":[{\"type\":\"section\",\"htmlClass\":\"form-row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-2\",\"items\":[{\"key\":\"['field'][].['check']\",\"type\":\"checkbox\",\"title\":\"\",\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-4\",\"items\":[{\"key\":\"['field'][].['fieldName']\",\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-4\",\"items\":[{\"key\":\"['field'][].['dataType']\",\"notitle\":true}]}]}]}]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[{\"key\":\"outputFields\",\"htmlClass\":\"\",\"notitle\":false,\"add\":null,\"remove\":null,\"startEmpty\":true,\"items\":[{\"type\":\"section\",\"htmlClass\":\"form-row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-5\",\"items\":[{\"key\":\"['outputFields'][].['newFieldName']\",\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-5\",\"items\":[{\"key\":\"['outputFields'][].['dataType']\",\"notitle\":true}]}]}]}]}]},{\"type\":\"submit\",\"style\":\"btn-info btn\",\"htmlClass\":\"text-center\",\"title\":\"Save\"}]}";
 
 
 			JSONObject obj = new JSONObject(Configform);
