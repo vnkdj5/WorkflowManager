@@ -154,7 +154,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
 
         // Then we check if the form is valid
-        if (form.$valid) {
+        if (form.$valid)    {
             componentService.setConfig(WFId, compId, $scope.model).then(
                 function success(response) {
                     notify.showSuccess("Success", response.data.message);
@@ -472,7 +472,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         componentService.getConfig(WFId, componentKey).then(
             function success(response) {
                 $scope.model = {};
-                let curForm = JSON.parse(response.data.FORM);
+                let curForm = response.data.FORM;//JSON.parse(response.data.FORM);
 
                 for (let i in curForm.form) {//For assigning WFId and compId (for specializing API)
                     if (curForm.form[i].endpoint) {
