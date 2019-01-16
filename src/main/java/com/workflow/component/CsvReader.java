@@ -181,6 +181,9 @@ public class CsvReader implements Component{
 	public void setConfig(Entity config) {
 
 		this.config = config;
+		if(((ArrayList<String>)this.config.getEntity().get("filePath")).size()<1){
+			this.config.getEntity().put("headers",new ArrayList<String>());
+		}
 		//init(config);
 		setOutput(null);
 	}

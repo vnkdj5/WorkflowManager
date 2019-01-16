@@ -99,6 +99,9 @@ public class ComponentController {
 	@RequestMapping(value="/getOutput/{WFId}/{componentId}", method=RequestMethod.GET)
 	public ResponseEntity<ArrayList<JSONObject>> getOutput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		Entity response=componentService.getOutput(WFId, CId);
+		if(response==null){
+			return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<>((ArrayList<JSONObject>)response.getEntity().get("output"),HttpStatus.OK);
 	}
 
