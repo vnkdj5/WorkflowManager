@@ -238,7 +238,7 @@ public class Helper {
 
 					graph.setTimestamp(new Date());
 
-					System.out.println("UPDATE CONFIG: "+ graph.getNodes().get(1).getComponent().toString());
+					//System.out.println("UPDATE CONFIG: "+ graph.getNodes().get(1).getComponent().toString());
 
 					mongoTemplate.save(graph,"WFGraph");
 					return updatedConfig;
