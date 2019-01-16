@@ -96,13 +96,9 @@ public class Helper {
 		try {
 			MongoCredential credential = MongoCredential.createCredential("", database, "".toCharArray());
 			MongoClient mongoClient = new MongoClient(url);
-			System.out.println(mongoClient.getAddress());
-			
-			
 			checkResult.put("Connection", true);
 			MongoDatabase db = mongoClient.getDatabase(database);
 			for(String name : db.listCollectionNames()){
-				System.out.println(name);
 				if(name.equals(collection)) {
 					checkResult.put("Collection", true);
 					
@@ -142,7 +138,6 @@ public class Helper {
 		CSVReader reader=new CSVReader(fr);
 		try {
 			headers=reader.readNext();
-			entry=reader.readNext();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -150,25 +145,15 @@ public class Helper {
 		for(int i=0;i<headers.length;i++) {
 			JSONObject obj = new JSONObject();
 			obj.put("fieldName", headers[i]);
-			/*if(entry[i].toLowerCase().equals("true") || entry[i].toLowerCase().equals("false"))
-				obj.put("dataType", "boolean");
-			else if(StringUtils.isNumeric(entry[i]))
-				obj.put("dataType", "int");
-			else if(entry[i].matches("[0-9]([.][0-9])*[0-9]*"))
-				obj.put("dataType", "float");
-			else */
 			obj.put("dataType", "String");
 			obj.put("check", false);
 			headerInfo.put(obj);
 		}
-		System.out.println(headerInfo.toString());
 		return headerInfo;
 	}
 
     public boolean isValidLink(GraphLink link) {
-		System.out.println(link.toString());
-        List<GraphLink> validLinks = mongoTemplate.findAll(GraphLink.class, "validLinks");
-        System.out.println(validLinks.toString());
+		List<GraphLink> validLinks = mongoTemplate.findAll(GraphLink.class, "validLinks");
         for(GraphLink l : validLinks){
         	if(l.getFrom().equals(link.getFrom()) && l.getTo().equals(link.getTo())){
         		return true;
@@ -178,7 +163,6 @@ public class Helper {
     }
 
 	public Entity fileUploadConfig(String WFId,String CId,String path, JSONArray headers) {
-		System.out.println("cid: "+CId+"\nwfid:"+WFId);
 		Query query=new Query();
 		query.addCriteria(Criteria.where("id").is(WFId));
 		WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");
@@ -198,7 +182,6 @@ public class Helper {
 					if(filepaths==null){
 						filepaths = new ArrayList<>();
 						header=new ArrayList<>();
-						System.out.println("filepaths null");
 					}
 					ArrayList<String> newHeaders= new ArrayList<>();
 					for (int i=0;i<headers.length();i++){
@@ -206,7 +189,6 @@ public class Helper {
 					}
 					ArrayList<String> reqHeaders=new ArrayList<>(header);
 					if(reqHeaders.isEmpty()){
-						System.out.println("reqheaders empty");
 						header.addAll(newHeaders);
 					}
 					else{
@@ -225,8 +207,6 @@ public class Helper {
 							return res;
 						}
 					}
-					System.out.println("reqarr: "+reqHeaders);
-					System.out.println("newarr: "+ newHeaders);
 					filepaths.add(path);
 
 					Entity updatedConfig = new Entity();
@@ -234,12 +214,7 @@ public class Helper {
 					updatedConfig.addKeyValue("headers",headers.toList());
 
 					reader.setConfig(updatedConfig);
-					System.out.println(reader.toString());
-
 					graph.setTimestamp(new Date());
-
-					System.out.println("UPDATE CONFIG: "+ graph.getNodes().get(1).getComponent().toString());
-
 					mongoTemplate.save(graph,"WFGraph");
 					return updatedConfig;
 				}
