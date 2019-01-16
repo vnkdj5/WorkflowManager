@@ -154,7 +154,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
 
         // Then we check if the form is valid
-        if (form.$valid) {
+        if (form.$valid)    {
             componentService.setConfig(WFId, compId, $scope.model).then(
                 function success(response) {
                     notify.showSuccess("Success", response.data.message);
@@ -396,24 +396,71 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
      */
     $scope.mapperHandler = function () {
 
-        let fieldArray = JSON.parse(JSON.stringify($scope.model.field));
-
-        $scope.model.outputFields = [];
-
+        let fieldArray = $scope.model.field;// JSON.parse(JSON.stringify($scope.model.field));
+        if ($scope.model.outputFields == null)
+            $scope.model.outputFields = [];
+        let outputFieldArray = $scope.model.outputFields;
+        //loop for keeping previous and currently selected fields are in outputFields
         for (let i in fieldArray) {
-            if (fieldArray[i].check === true) {
-                $scope.model.outputFields.push(fieldArray[i]);
+
+            for (let j in outputFieldArray) {
+                if (fieldArray[i].fieldName == outputFieldArray[j].fieldName && fieldArray[i].check == false) {
+                    outputFieldArray.splice(j, 1);
+                    break;
+                }
             }
         }
+        //console.log("output first array: ", JSON.stringify(outputFieldArray));
+        for (let i in fieldArray) {
+            if (fieldArray[i].check === true) {
+                let flag = false;
+                for (let j in outputFieldArray) {
+                    if (fieldArray[i].fieldName == outputFieldArray[j].fieldName) {
+                        flag = true; //flag indicates field that is already in outputfields
+                        break;
+                    }
+                }
+                if (flag == false) {
+                    let obj = {
+                        "fieldName": fieldArray[i].fieldName,
+                        "newFieldName": fieldArray[i].fieldName,
+                        "dataType": fieldArray[i].dataType
+                    };
+                    $scope.model.outputFields.push(obj);
+                }
+            }
+        }
+        //console.log("output second array: ", JSON.stringify(outputFieldArray));
+
         // $scope.model1=$scope.model;
     };
 
     $scope.mapperAddAllHandler = function () {
-        var fieldArray = JSON.parse(JSON.stringify($scope.model.field));
-        $scope.model.outputFields = []; // initialize outputFields as empty
+        let fieldArray = $scope.model.field;// JSON.parse(JSON.stringify($scope.model.field));
+        if ($scope.model.outputFields == null)
+            $scope.model.outputFields = [];
+        let outputFieldArray = $scope.model.outputFields;
+        //loop for keeping previous and currently selected fields are in outputFields
+
+        //console.log("output first array: ", JSON.stringify(outputFieldArray));
         for (let i in fieldArray) {
             fieldArray[i].check = true;
-            $scope.model.outputFields.push(fieldArray[i]);
+            let flag = false;
+            for (let j in outputFieldArray) {
+                if (fieldArray[i].fieldName == outputFieldArray[j].fieldName) {
+                    flag = true; //flag indicates field that is already in outputfields
+                    break;
+                }
+            }
+            if (flag == false) {
+                let obj = {
+                    "fieldName": fieldArray[i].fieldName,
+                    "newFieldName": fieldArray[i].fieldName,
+                    "dataType": fieldArray[i].dataType
+                };
+                $scope.model.outputFields.push(obj);
+            }
+
         }
     };
     //Method for updating configuration of each component
@@ -425,13 +472,15 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         componentService.getConfig(WFId, componentKey).then(
             function success(response) {
                 $scope.model = {};
-                let curForm = JSON.parse(response.data.FORM);
+                let curForm = response.data.FORM;//JSON.parse(response.data.FORM);
 
                 for (let i in curForm.form) {//For assigning WFId and compId (for specializing API)
                     if (curForm.form[i].endpoint) {
                         curForm.form[i].endpoint += "?WFId=" + WFId + "&compId=" + componentKey;
                     }
                 }
+                console.log(curForm);
+                console.log("STRINGIFY", JSON.stringify(curForm));
                 $scope.schema = curForm.schema;
                 $scope.form = curForm.form;
                 $scope.model = response.data.MODEL;
@@ -924,7 +973,15 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             componentService.getInput(WFid, componentKey).then(
                 function success(response) { //response should be jsonArray
                     jsonData = response.data;
-
+                    if (!jsonData || jsonData.length == 0) {
+                        if (isInput) {
+                            divContainer.innerHTML = "No Input available for this component.";
+                        } else {
+                            divContainer.innerHTML = "No Output available for this component.";
+                        }
+                        $('#inputModal').modal('show');
+                        return;
+                    }
                     var col = [];
                     for (var i = 0; i < jsonData.length; i++) {
                         for (var key in jsonData[i]) {
@@ -972,6 +1029,17 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             componentService.getOutput(WFid, componentKey).then(
                 function success(response) {
                     jsonData = response.data;
+
+
+                    if (!jsonData || jsonData.length == 0) {
+                        if (isInput) {
+                            divContainer.innerHTML = "No Input available for this component.";
+                        } else {
+                            divContainer.innerHTML = "No Output available for this component.";
+                        }
+                        $('#inputModal').modal('show');
+                        return;
+                    }
                     //table logic
                     var col = [];
                     for (var i = 0; i < jsonData.length; i++) {
@@ -1013,15 +1081,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 }
             )
         }
-        if (!jsonData) {
-            if (isInput) {
-                divContainer.innerHTML = "No Input available for this component.";
-            } else {
-                divContainer.innerHTML = "No Output available for this component.";
-            }
-            $('#inputModal').modal('show');
-            return;
-        }
+
 
     };
 //End of Dynamic Table  generation for Input/Output of components

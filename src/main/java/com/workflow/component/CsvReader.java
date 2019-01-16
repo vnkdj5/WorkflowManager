@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import com.opencsv.*;
 import com.workflow.annotation.wfComponent;
+import org.json.JSONObject;
 
 @wfComponent(complete=true)
 public class CsvReader implements Component{
@@ -132,8 +133,10 @@ public class CsvReader implements Component{
 				+ "}"
 				+ "]"
 				+ "}";
+
+		JSONObject obj = new JSONObject(Configform);
 		Entity config = new Entity();
-		config.addKeyValue("FORM", Configform);
+		config.addKeyValue("FORM", obj.toMap());
 
 		//create model
 		if(this.config==null){
