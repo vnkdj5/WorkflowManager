@@ -22,7 +22,7 @@ public class CsvReader implements Component{
 
 	ArrayList<String> csvFilePath;
 	CSVReader reader;
-	String[] headers;
+	public String[] headers;
 	int totalFiles;
 	int readCompleteFile;
 	

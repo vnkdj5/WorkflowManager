@@ -233,12 +233,17 @@ public class Mapper implements Component{
 		HashMap<String,Object> model = new HashMap<>();
 
 		if(this.config==null) {
-			model.put("field", input.getEntity().get("input"));
+            if (input == null) {
+                input = new Entity();
+                model.put("field", new ArrayList<JSONObject>());
+            } else {
+                model.put("field", output.getEntity().get("input"));
+            }
 			if (output == null) {
 				output = new Entity();
 				model.put("outputFields", new ArrayList<JSONObject>());
 			} else {
-				model.put("outputFields", output.getEntity().get("outputFields"));
+				model.put("outputFields", output.getEntity().get("output"));
 			}
 			config.addKeyValue("MODEL", model);
 		}else{
