@@ -88,7 +88,7 @@ public class Mapper implements Component{
                 input = new Entity();
                 model.put("field", new ArrayList<JSONObject>());
             } else {
-                model.put("field", output.getEntity().get("input"));
+                model.put("field", input.getEntity().get("input"));
             }
 			if (output == null) {
 				output = new Entity();
