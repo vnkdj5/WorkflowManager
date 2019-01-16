@@ -3,6 +3,7 @@ package com.workflow.controller;
 import com.workflow.component.Entity;
 import com.workflow.service.ComponentService;
 import com.workflow.service.Helper;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,6 @@ public class UtilityController {
 
     @Autowired
     Helper helper;
-
-    @Autowired
-    ComponentService componentService;
 
     @RequestMapping(value="checkConnection",method= RequestMethod.POST)
     public ResponseEntity<ArrayList<String>> checkDatabaseConnection(@RequestBody HashMap data){
@@ -73,12 +71,13 @@ public class UtilityController {
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
                 stream.write(bytes);
                 stream.close();
-                List headers = helper.getHeaders(serverFile.getAbsolutePath()).toList();
-                map.put("headers", helper.getHeaders(serverFile.getAbsolutePath()));
+                JSONArray headers = helper.getHeaders(serverFile.getAbsolutePath());
+
+                map.put("headers", headers);
                 map.put("message", "File Uploaded successfully");
                 map.put("path",serverFile.getAbsolutePath());
 
-                Entity model = componentService.fileUploadConfig(WFId,CompId,map.get("path").toString(),headers);
+                Entity model = helper.fileUploadConfig(WFId,CompId,map.get("path").toString(),headers);
 
 
                 return new ResponseEntity<HashMap>(model.getEntity(),HttpStatus.OK);
