@@ -73,19 +73,21 @@ public class UtilityController {
                 stream.close();
                 JSONArray headers = helper.getHeaders(serverFile.getAbsolutePath());
 
-                map.put("headers", headers);
-                map.put("message", "File Uploaded successfully");
-                map.put("path",serverFile.getAbsolutePath());
+                Entity model = helper.fileUploadConfig(WFId,CompId,serverFile.getAbsolutePath(),headers);
 
-                Entity model = helper.fileUploadConfig(WFId,CompId,map.get("path").toString(),headers);
-
-
-                return new ResponseEntity<HashMap>(model.getEntity(),HttpStatus.OK);
+                if (model.getEntity().get("error")==null) {
+                    model.getEntity().put("message", "File Uploaded successfully");
+                    return new ResponseEntity<HashMap>(model.getEntity(), HttpStatus.OK);
+                }
+                else {
+                    model.getEntity().put("message", "Incompatible headers");
+                    return new ResponseEntity<HashMap>(model.getEntity(),HttpStatus.INTERNAL_SERVER_ERROR);
+                }
 
 
             } catch (Exception e) {
                 e.printStackTrace();
-                map.put("message", "File Uploade exception");
+                map.put("message", "File Upload exception");
                 return new ResponseEntity<HashMap>(map,HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {

@@ -161,6 +161,7 @@ public class Helper {
 			obj.put("check", false);
 			headerInfo.put(obj);
 		}
+		System.out.println(headerInfo.toString());
 		return headerInfo;
 	}
 
@@ -177,6 +178,7 @@ public class Helper {
     }
 
 	public Entity fileUploadConfig(String WFId,String CId,String path, JSONArray headers) {
+		System.out.println("cid: "+CId+"\nwfid:"+WFId);
 		Query query=new Query();
 		query.addCriteria(Criteria.where("id").is(WFId));
 		WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");
@@ -189,23 +191,23 @@ public class Helper {
 				GraphNode obj = it.next();
 				if (obj.getCId().equals(CId)) {
 					CsvReader reader=(CsvReader) obj.getComponent();
-					ArrayList<String> filepaths =(ArrayList<String>) obj.getComponent().getConfig().getObjectByName("filePath");
+
+					Entity conf =new Entity((HashMap)obj.getComponent().getConfig().getEntity().get("MODEL"));
+					ArrayList<String> filepaths=(ArrayList<String>) conf.getEntity().get("filePath");
+					ArrayList<String> header= (ArrayList<String>) conf.getEntity().get("headers");
 					if(filepaths==null){
 						filepaths = new ArrayList<>();
-						reader.headers=new String[0];
+						header=new ArrayList<>();
+						System.out.println("filepaths null");
 					}
 					ArrayList<String> newHeaders= new ArrayList<>();
 					for (int i=0;i<headers.length();i++){
 						newHeaders.add(((JSONObject)headers.get(i)).get("fieldName").toString());
 					}
-					ArrayList<String> reqHeaders=new ArrayList<>();
-					for(int i=0;i<reader.headers.length;i++){
-						reqHeaders.add(reader.headers[i]);
-					}
+					ArrayList<String> reqHeaders=new ArrayList<>(header);
 					if(reqHeaders.isEmpty()){
-
-						reader.headers=new String[newHeaders.size()];
-						reader.headers=newHeaders.toArray(reader.headers);
+						System.out.println("reqheaders empty");
+						header.addAll(newHeaders);
 					}
 					else{
 						boolean flag=true;
@@ -218,25 +220,25 @@ public class Helper {
 						if(!flag){
 							Entity res= new Entity();
 							res.addKeyValue("error",	"Incompatible headers");
-							File file=new File(path);
-							file.delete();
+							File del=new File(path);
+							del.delete();
 							return res;
 						}
 					}
-					System.out.println("reqarr: "+reader.headers.toString());
+					System.out.println("reqarr: "+reqHeaders);
 					System.out.println("newarr: "+ newHeaders);
 					filepaths.add(path);
 
 					Entity updatedConfig = new Entity();
 					updatedConfig.addKeyValue("filePath", filepaths);
-					updatedConfig.addKeyValue("headers",headers);
+					updatedConfig.addKeyValue("headers",headers.toList());
 
-					obj.getComponent().setConfig(updatedConfig);
-					System.out.println(obj.getComponent().getConfig().toString());
+					reader.setConfig(updatedConfig);
+					System.out.println(reader.toString());
 
 					graph.setTimestamp(new Date());
 
-					System.out.println("UPDATE CONFIG: "+ graph);
+					System.out.println("UPDATE CONFIG: "+ graph.getNodes().get(1).getComponent().toString());
 
 					mongoTemplate.save(graph,"WFGraph");
 					return updatedConfig;

@@ -360,19 +360,19 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
 
     $scope.loadComponents = function () {
-        this.result = [];
+        let result = [];
         componentService.getAll().then(
             function success(response) {
 
                 $scope.palleteModel = response.data.pallete;
                 //alert(JSON.stringify($scope.paletteModel));
-                this.result = response.data.pallete;
-                for (i in result) {
+                result = response.data.pallete;
+                for (let i in result) {
                     if (!(result[i].category == "Start" || result[i].category == "End")) {
                         $scope.addNodeToPalette(result[i].category);
                     }
                 }
-                $scope.myPalette.model.nodeDataArray = this.result;
+                $scope.myPalette.model.nodeDataArray = result;
 
             },
             function error(response) {
@@ -479,8 +479,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                         curForm.form[i].endpoint += "?WFId=" + WFId + "&compId=" + componentKey;
                     }
                 }
-                console.log(curForm);
-                console.log("STRINGIFY", JSON.stringify(curForm));
+                // console.log(curForm);
+                //console.log("STRINGIFY", JSON.stringify(curForm));
                 $scope.schema = curForm.schema;
                 $scope.form = curForm.form;
                 $scope.model = response.data.MODEL;
