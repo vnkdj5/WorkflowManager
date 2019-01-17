@@ -39,12 +39,13 @@ public class MongoQuery implements Component {
 
         String cmd = query.substring(0,query.indexOf("("));
         String q = query.substring(query.indexOf("(")+1,query.lastIndexOf(")"));
+        JSONObject obj = new JSONObject(q);
 
         System.out.println("MONGOQUERY: "+cmd+" "+q);
 
         command = new BasicDBObject();
         command.append(cmd,config.getObjectByName("collection").toString());
-        command.append("filter",new BasicDBObject());
+        command.append("filter",new BasicDBObject(obj.toMap()));
         return true;
     }
 
