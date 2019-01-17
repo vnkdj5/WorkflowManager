@@ -1018,7 +1018,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     $('#inputModal').modal('show');
                 },
                 function error(response) {
-                    notify.showError("Error!!", response.data.message);
+                    notify.showError("Error!!", response.statusText);
                 }
             );
         } else {
@@ -1077,7 +1077,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     $('#inputModal').modal('show');
                 },
                 function error(response) {
-                    notify.showError("Error!!", response.data.message);
+                    notify.showError("Error!!", response.statusText);
                 }
             )
         }

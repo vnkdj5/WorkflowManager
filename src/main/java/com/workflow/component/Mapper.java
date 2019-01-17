@@ -123,11 +123,12 @@
 		@Override
 		public void setInput(Entity input) {
 			// TODO Auto-generated method stub
+
+			this.input = new Entity();
+			this.input.addKeyValue("input", input.getObjectByName("output"));
 			if(!this.input.equals(input.getObjectByName("output"))){
 				output = null;
 			}
-			this.input = new Entity();
-			this.input.addKeyValue("input", input.getObjectByName("output"));
 
 		}
 
