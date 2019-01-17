@@ -1,6 +1,7 @@
 package com.workflow.component;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.Cursor;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.workflow.annotation.wfComponent;
@@ -9,6 +10,8 @@ import org.json.JSONObject;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 @wfComponent(complete=true)
 public class MongoQuery implements Component {
@@ -17,24 +20,31 @@ public class MongoQuery implements Component {
     Entity input;
     Entity output;
 
-    MongoTemplate mongoTemplate;
-    MongoCollection<Document> collection;
-    BasicDBObject command;
-
-
+    private Document result;
+    private MongoTemplate mongoTemplate;
+    private MongoCollection<Document> collection;
+    private BasicDBObject command;
+    private boolean flag;
+    private Iterator<Map.Entry<String,Object>> pointer;
     @Override
     public boolean init() {
+        flag=true;
         //mongoTemplate = new MongoClient(config.getObjectByName("url").toString(),27017);
         //db = mongo.getDatabase(config.getObjectByName("database").toString());
         //collection = db.getCollection(config.getObjectByName("collection").toString());
-
 
         return false;
     }
 
     @Override
     public Entity process(Entity input) {
-        return null;
+        if(flag){
+            result=mongoTemplate.executeCommand(String.valueOf(command));
+            System.out.println(result.toString());
+            pointer= result.entrySet().iterator();
+        }
+
+        return null;//new Entity((Map<String, Object>) pointer.next().getValue());
     }
 
     @Override
