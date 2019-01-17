@@ -17,16 +17,16 @@ public class MongoQuery implements Component {
     Entity input;
     Entity output;
 
-    MongoTemplate mongoTemplate;
-    MongoCollection<Document> collection;
-    BasicDBObject command;
+    private MongoTemplate mongo;
+    private MongoCollection<Document> collection;
+    private BasicDBObject command;
 
 
     @Override
     public boolean init() {
-        //mongoTemplate = new MongoClient(config.getObjectByName("url").toString(),27017);
-        //db = mongo.getDatabase(config.getObjectByName("database").toString());
-        //collection = db.getCollection(config.getObjectByName("collection").toString());
+        MongoClient mongoClient = new MongoClient(config.getObjectByName("url").toString(),27017);
+        mongo = new MongoTemplate(mongoClient,config.getObjectByName("database").toString());
+        collection = mongo.getCollection(config.getObjectByName("collection").toString());
 
 
         return false;
@@ -40,7 +40,7 @@ public class MongoQuery implements Component {
     @Override
     public Entity getConfig() {
 
-        String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"MongoReader\",\"properties\":{\"name\":{\"title\":\"Username\",\"type\":\"string\"},\"password\":{\"title\":\"Password\",\"type\":\"string\"},\"database\":{\"title\":\"Database Name\",\"type\":\"string\"},\"collection\":{\"title\":\"Collection Name\",\"type\":\"string\"},\"url\":{\"title\":\"Sever URL\",\"type\":\"string\"},\"query\":{\"title\":\"Query\",\"type\":\"string\"}},\"required\":[\"name\",\"password\",\"collection\",\"database\",\"url\"]},\"form\":[{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"name\"]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"password\"]}]},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"database\"]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"collection\"]}]},\"url\",{\"key\":\"query\",\"type\":\"textarea\",\"placeholder\":\"db.collectionName.operation()\"},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-12\",\"items\":[{\"type\":\"submit\",\"style\":\"btn-info text-right\",\"title\":\"Save\"}]},{\"type\":\"section\",\"htmlClass\":\"col-md-12\",\"items\":[{\"type\":\"button\",\"style\":\"btn-info testConBtn text-left\",\"title\":\"Test\",\"onClick\":\"testConn(myForm)\"}]}]}]}";
+        String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"MongoQuery\",\"properties\":{\"name\":{\"title\":\"Username\",\"type\":\"string\"},\"password\":{\"title\":\"Password\",\"type\":\"string\"},\"database\":{\"title\":\"Database Name\",\"type\":\"string\"},\"collection\":{\"title\":\"Collection Name\",\"type\":\"string\"},\"url\":{\"title\":\"Sever URL\",\"type\":\"string\"},\"query\":{\"title\":\"Query\",\"type\":\"string\"}},\"required\":[\"name\",\"password\",\"collection\",\"database\",\"url\"]},\"form\":[{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"name\"]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"password\"]}]},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"database\"]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"collection\"]}]},\"url\",{\"key\":\"query\",\"type\":\"textarea\",\"placeholder\":\"db.collectionName.operation()\"},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-12\",\"items\":[{\"type\":\"submit\",\"style\":\"btn-info text-right\",\"title\":\"Save\"}]},{\"type\":\"section\",\"htmlClass\":\"col-md-12\",\"items\":[{\"type\":\"button\",\"style\":\"btn-info testConBtn text-left\",\"title\":\"Test\",\"onClick\":\"testConn(myForm)\"}]}]}]}";
         JSONObject obj = new JSONObject(Configform);
         Entity config = new Entity();
         config.addKeyValue("FORM", obj.toMap());
@@ -61,12 +61,12 @@ public class MongoQuery implements Component {
 
     @Override
     public Entity getInput(Component component) {
-        return null;
+        return new Entity();
     }
 
     @Override
     public void setInput(Entity input) {
-
+        this.input = new Entity();
     }
 
     @Override
