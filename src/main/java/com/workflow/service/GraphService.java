@@ -1,5 +1,6 @@
 package com.workflow.service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -86,8 +87,15 @@ public class GraphService {
                         links.remove(i);
                     }
                 }
-                graph.setNodes(nodes);
-                graph.setLinks(links);
+                File dir = new File("uploadfiles/"+WFId+"/"+componentId);
+                if (dir.exists()) {
+                    String[]entries = dir.list();
+                    for(String s: entries){
+                        File currentFile = new File(dir.getPath(),s);
+                        currentFile.delete();
+                    }
+                    dir.delete();
+                }
                 graph.setTimestamp(new Date());
                 mongoTemplate.save(graph, COLLECTION);
                 return "Success";
@@ -119,7 +127,6 @@ public class GraphService {
                         flag++;
                     }
                 }
-                System.out.println(flag);
                 if (flag == 2) {
                 	System.out.println("in link add");
                     GraphLink checkLink = new GraphLink(fromNode.getCategory(), toNode.getCategory());
@@ -133,7 +140,6 @@ public class GraphService {
                         mongoTemplate.save(graph, COLLECTION);
                         return "Success";
                     } else {
-                    	System.out.println("Invalid link");
                     	return "Invalid link";
                     }
                     
@@ -225,12 +231,8 @@ public class GraphService {
         if (WFgraph != null) {
 			map.put("Found", true);
             map.put("Graph", WFgraph);
-            System.out.println(WFgraph.toString());
-			System.out.println("found");
-
-		}else {
+        }else {
 			map.put("Found",false);
-			System.out.println("not found");
 		}
 		return map;
 	}
@@ -247,11 +249,9 @@ public class GraphService {
             temp.put("id", graphlist.get(i).getId());
             temp.put("wfname", graphlist.get(i).getWFName());
             temp.put("timestamp", graphlist.get(i).getTimestamp());
-            System.out.println("obj:" + temp.toString());
             wflist.add(temp);
 		}
-		System.out.println(graphlist.toString());
-        return wflist;
+		return wflist;
 	}
 
     public JSONArray validLinks(){
@@ -259,7 +259,6 @@ public class GraphService {
 		query.addCriteria(Criteria.where("from").regex("^"));
 		JSONArray graphlist = new JSONArray();
 		graphlist.addAll((mongoTemplate.find(query,JSONObject.class,"validLinks")));
-		System.out.println(graphlist.toString());
 		return graphlist;
 	}
 }
