@@ -3,6 +3,7 @@ package com.workflow.component;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.workflow.annotation.wfComponent;
 import org.bson.Document;
 import org.json.JSONObject;
@@ -20,25 +21,38 @@ public class MongoQuery implements Component {
     Entity output;
 
     private Document result;
-    private MongoTemplate mongo;
+    private MongoClient mongo;
     private MongoCollection<Document> collection;
+    private MongoDatabase db;
     private BasicDBObject command;
     private boolean flag;
     private Iterator<Map.Entry<String,Object>> pointer;
+
     @Override
     public boolean init() {
         flag=true;
-        MongoClient mongoClient = new MongoClient(config.getObjectByName("url").toString(),27017);
-        mongo = new MongoTemplate(mongoClient,config.getObjectByName("database").toString());
-        collection = mongo.getCollection(config.getObjectByName("collection").toString());
+        mongo = new MongoClient(config.getObjectByName("url").toString(),27017);
+        db = mongo.getDatabase(config.getObjectByName("database").toString());
+        collection = db.getCollection(config.getObjectByName("collection").toString());
 
-        return false;
+        String query = config.getObjectByName("query").toString();
+
+        String cmd = query.substring(0,query.indexOf("("));
+        String q = query.substring(query.indexOf("(")+1,query.lastIndexOf(")"));
+
+        System.out.println("MONGOQUERY: "+cmd+" "+q);
+
+        command = new BasicDBObject();
+        command.append(cmd,config.getObjectByName("collection").toString());
+        command.append("filter",new BasicDBObject());
+        return true;
     }
 
     @Override
     public Entity process(Entity input) {
         if(flag){
-            result=mongo.executeCommand(String.valueOf(command));
+            MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
+            result=mongoTemplate.executeCommand(command.toString());
             System.out.println(result.toString());
             pointer= result.entrySet().iterator();
         }
