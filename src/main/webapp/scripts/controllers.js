@@ -575,6 +575,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             return false;
         }, false);
 
+        function hideContextMenu(obj, diagram, tool) {
+            cxElement.style.display = "block";
+
+        }
         function showContextMenu(obj, diagram, tool) {
             // Show only the relevant buttons given the current state.
             var cmd = diagram.commandHandler;
@@ -583,7 +587,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 document.getElementById("copy").style.display = cmd.canCopySelection() ? "block" : "none";
                 document.getElementById("paste").style.display = cmd.canPasteSelection() ? "block" : "none";
              */
-            document.getElementById("delete").style.display = cmd.canDeleteSelection() ? "block" : "none";
+            document.getElementById("delete").style.display = (obj !== null && cmd.canDeleteSelection()) ? "block" : "none";
             document.getElementById("componentConfig").style.display = (obj !== null ? "block" : "none");
             document.getElementById("componentInput").style.display = (obj !== null ? "block" : "none");
             document.getElementById("componentOutput").style.display = (obj !== null ? "block" : "none");
@@ -593,8 +597,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 $scope.selectedComponent.key = obj.data.key;
 
             }
-
-            // Now show the whole context menu element
+            if (diagram instanceof go.Palette)      //don't show context menu for palette elements
+                return;
+            // Now show the ,whole context menu element
             cxElement.style.display = "block";
             // we don't bother overriding positionContextMenu, we just do it here:
             var mousePt = diagram.lastInput.viewPoint;
@@ -935,12 +940,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     scrollsPageOnFocus: false,
                     contentAlignment: go.Spot.Top,
                     nodeTemplateMap: $scope.myDiagram.nodeTemplateMap,  // share the templates used by $scope.myDiagram
-                    layout: GO(go.GridLayout,
-                        {
+                    layout: GO(go.GridLayout, {
                             cellSize: new go.Size(1, 1),
                             wrappingColumn: 1, comparer: keyCompare
                         }),
-
                 });
 
         $scope.handlePreviousRequest();

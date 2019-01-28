@@ -1,4 +1,9 @@
-var app = angular.module('myApp', ['datatables', 'datatables.buttons']);
+var app = angular.module('myApp', ['datatables', 'datatables.buttons', 'angular-growl']);
+app.config(['growlProvider', function (growlProvider) {
+    growlProvider.globalDisableCountDown(true);
+    growlProvider.globalPosition('bottom-right');
+}]);
+
 app.service("welcomeService", function($http){
     this.newGraph = function (name) {
         data = {
@@ -14,6 +19,7 @@ app.service("welcomeService", function($http){
         });
 
     };
+
 this.deleteWorkflow = function(name){
 
 		return $http({
@@ -25,6 +31,23 @@ this.deleteWorkflow = function(name){
 		});
 	}
 });
+app.service("notificationService", ['growl', function (growl) {
+    this.showError = function (messageTitle, message) {
+        growl.error(message, {title: messageTitle, ttl: 10000});
+    };
+    this.showSuccess = function (messageTitle, message) {
+        growl.success(message, {title: messageTitle, ttl: 5000});
+    };
+
+    this.showInfo = function (messageTitle, message) {
+        growl.info(message, {title: messageTitle, ttl: 5000});
+    };
+
+    this.showWarning = function (messageTitle, message) {
+        growl.warning(message, {title: messageTitle, ttl: 5000});
+    }
+}]);
+
 app.filter('beginning_data', function() {
     return function(input, begin) {
         if (input) {
@@ -44,7 +67,7 @@ app.filter('prettyDate', function () {
         return [];
     }
 });
-app.controller('controller', function ($scope, $http, $timeout, welcomeService, DTOptionsBuilder) {
+app.controller('controller', ['$scope', '$http', '$timeout', 'welcomeService', 'DTOptionsBuilder', 'notificationService', function ($scope, $http, $timeout, welcomeService, DTOptionsBuilder, notify) {
 	$scope.workflow={};
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDisplayLength(5)
@@ -63,7 +86,7 @@ app.controller('controller', function ($scope, $http, $timeout, welcomeService, 
 					$scope.file.splice(index,1);
 					notify.showSuccess("Success!", "Workflow deleted Successsfully.");
 				},function error(response){
-					notify.showError("Error while deleting workflow!");
+                notify.showError("Error!!", "Error while deleting workflow!");
 				}
 		);
 	}
@@ -95,10 +118,11 @@ app.controller('controller', function ($scope, $http, $timeout, welcomeService, 
         $scope.data_limit = 10;
         $scope.filter_data = $scope.file.length;
         $scope.entire_user = $scope.file.length;
+            notify.showSuccess("Success", "Workflows list loaded.");
     }
-    
+
     	,function error(response){
-			notify.showError("Error while deleting workflow!");
+            notify.showError("Error!", "Error while deleting workflow!");
 		}
     );
 
@@ -107,9 +131,6 @@ app.controller('controller', function ($scope, $http, $timeout, welcomeService, 
             $scope.filter_data = $scope.searched.length;
         }, 20);
     };
- 
-    
-  
-	
 
-});
+
+}]);

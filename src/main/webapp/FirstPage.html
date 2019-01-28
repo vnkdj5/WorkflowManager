@@ -14,6 +14,7 @@
           crossorigin="anonymous">
     <link data-require="datatable-css@1.10.7" data-semver="1.10.7" rel="stylesheet"
           href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css"/>
+    <link href="css/angular-growl.min.css" rel="stylesheet" media="screen"/>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css">
     <style>
@@ -47,6 +48,7 @@ input[type=text]:focus {
     <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript"
             src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+    <script src="scripts/angular-growl.min.js"></script>
     <script src="http://l-lin.github.io/angular-datatables/archives/dist/angular-datatables.min.js"></script>
     <script src="http://l-lin.github.io/angular-datatables/archives/vendor/datatables-buttons/js/dataTables.buttons.js"></script>
     <script src="http://l-lin.github.io/angular-datatables/archives/dist/plugins/buttons/angular-datatables.buttons.min.js"></script>
@@ -56,8 +58,6 @@ input[type=text]:focus {
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
-
-    
     <script src="scripts/welcomeController.js"></script>
 
 
@@ -97,7 +97,7 @@ input[type=text]:focus {
              </div>&ndash;&gt;
          </div>
          <br />-->
-
+        <div growl></div>
         <table datatable="ng" dt-options="dtOptions" class="table table-hover">
             <thead>
             <tr>
