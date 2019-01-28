@@ -71,7 +71,9 @@ public class MongoWriter implements Component{
 	public void setInput(Entity input) {
 		// TODO Auto-generated method stub
 		this.input = new Entity();
-		this.input.addKeyValue("input", input.getEntity().get("output"));
+		if(input.getEntity().get("output")!=null) {
+			this.input.addKeyValue("input", input.getEntity().get("output"));
+		}
 	}
 
 	@Override
