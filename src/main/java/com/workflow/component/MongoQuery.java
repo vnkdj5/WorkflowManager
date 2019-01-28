@@ -1,14 +1,17 @@
 package com.workflow.component;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.Cursor;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.workflow.annotation.wfComponent;
 import org.bson.Document;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,7 +29,8 @@ public class MongoQuery implements Component {
     private MongoDatabase db;
     private BasicDBObject command;
     private boolean flag;
-    private Iterator<Map.Entry<String,Object>> pointer;
+    private int pointer;
+    private JSONArray entries;
 
     @Override
     public boolean init() {
@@ -39,9 +43,6 @@ public class MongoQuery implements Component {
 
         String cmd = query.substring(0,query.indexOf("("));
         String q = query.substring(query.indexOf("(")+1,query.lastIndexOf(")"));
-
-        System.out.println("MONGOQUERY: "+cmd+" "+q);
-
         command = new BasicDBObject();
         command.append(cmd,config.getObjectByName("collection").toString());
         command.append("filter",new BasicDBObject());
@@ -53,11 +54,22 @@ public class MongoQuery implements Component {
         if(flag){
             MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
             result=mongoTemplate.executeCommand(command.toString());
-            System.out.println(result.toString());
-            pointer= result.entrySet().iterator();
+            JSONObject obj=new JSONObject(result.toJson());
+            entries= (JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
+            pointer=0;
+            flag=false;
         }
-
-        return null;//new Entity((Map<String, Object>) pointer.next().getValue());
+        if(pointer>=entries.length())
+            return null;
+        Entity ret=new Entity();
+        JSONObject obj=(JSONObject) entries.get(pointer);
+        for(String key:obj.keySet()) {
+            ret.addKeyValue(key,obj.get(key));
+        }
+        pointer++;
+        System.out.println(ret.toString());
+        ret.getEntity().remove("_id");
+        return ret;//new Entity((Map<String, Object>) pointer.next().getValue());
     }
 
     @Override
