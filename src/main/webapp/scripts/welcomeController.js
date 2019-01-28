@@ -89,7 +89,7 @@ app.controller('controller', ['$scope', '$http', '$timeout', 'welcomeService', '
                 notify.showError("Error!!", "Error while deleting workflow!");
 				}
 		);
-	}
+	};
 	$scope.createWorkflow = function(){
 
         welcomeService.newGraph($scope.workflow.name).then(
@@ -122,7 +122,7 @@ app.controller('controller', ['$scope', '$http', '$timeout', 'welcomeService', '
     }
 
     	,function error(response){
-            notify.showError("Error!", "Error while deleting workflow!");
+            notify.showError("Error!", "Error while loading workflows!");
 		}
     );
 
