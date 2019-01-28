@@ -52,10 +52,25 @@ public class MongoQuery implements Component {
     @Override
     public Entity process(Entity input) {
         if(flag){
+            entries=new JSONArray();
             MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
-            result=mongoTemplate.executeCommand(command.toString());
+            result= mongoTemplate.executeCommand(command.toString());
             JSONObject obj=new JSONObject(result.toJson());
-            entries= (JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
+            Object nextbatch=((Document)result.get("cursor")).get("id");
+            JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
+            for(int i=0;i<batch.length();i++)
+                entries.put(batch.get(i));
+            while (nextbatch!=null && !nextbatch.toString().equals("0")) {
+
+                Document getMore = new Document("getMore", nextbatch).append("collection", config.getObjectByName("collection").toString());
+                result = mongoTemplate.executeCommand(getMore);
+                obj=new JSONObject(result.toJson());
+                batch=(JSONArray)((JSONObject)obj.get("cursor")).get("nextBatch");
+                for(int i=0;i<batch.length();i++)
+                    entries.put(batch.get(i));
+                nextbatch=((Document)result.get("cursor")).get("id");
+                System.out.println("in:" + nextbatch.toString());
+            }
             pointer=0;
             flag=false;
         }
