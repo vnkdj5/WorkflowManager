@@ -23,7 +23,7 @@ public class CodeGenerationController {
 
 	@Autowired
 	Helper helper;
-	
+
 	@RequestMapping(value="/run/{WFId}", method= RequestMethod.GET)
 	public ResponseEntity<HashMap> runWorkflow(@PathVariable("WFId") String WFId){
 
