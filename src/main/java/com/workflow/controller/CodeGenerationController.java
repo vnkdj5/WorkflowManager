@@ -2,6 +2,7 @@ package com.workflow.controller;
 
 import java.util.HashMap;
 
+import com.workflow.service.Helper;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -19,12 +20,14 @@ public class CodeGenerationController {
 	
 	@Autowired
 	CodeGenerationService codeGenerationService;
-	
+
+	@Autowired
+	Helper helper;
+
 	@RequestMapping(value="/run/{WFId}", method= RequestMethod.GET)
 	public ResponseEntity<HashMap> runWorkflow(@PathVariable("WFId") String WFId){
 
-		HashMap<String,Object> map = codeGenerationService.extract(WFId);
-
+		HashMap<String,Object> map = helper.extract(WFId);
 		System.out.println(map.toString());
 		if((boolean)map.get("error")) {
 			return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);

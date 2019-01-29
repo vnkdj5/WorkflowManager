@@ -8,6 +8,7 @@ import java.net.SocketTimeoutException;
 import java.util.*;
 
 import com.workflow.bean.GraphNode;
+import com.workflow.bean.LogicGraph;
 import com.workflow.bean.WFGraph;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -221,6 +222,76 @@ public class Helper {
 			}
 			return null;
 		}
-
+	}
+	public HashMap<String,Object> extract(String WFId){
+		HashMap<String,Object> ret= new HashMap<>();
+		Query query=new Query();
+		query.addCriteria(Criteria.where("id").is(WFId));
+		WFGraph graph=mongoTemplate.findOne(query, WFGraph.class, "WFGraph");
+		List<GraphNode> nodeList=graph.getNodes();
+		List<GraphLink> links=graph.getLinks();
+		ArrayList<GraphNode> nodeArray=new ArrayList<>();
+		String currentNode="Start";
+		GraphNode previous=null;
+		ArrayList<String> errorList=new ArrayList<>();
+		boolean error=false;
+		int flag=0;
+		for (int i = 0; i < links.size(); i++) {
+			if (links.get(i).getFrom().equals(currentNode)) {
+				currentNode = links.get(i).getTo();
+				previous=new GraphNode();
+				previous.setName(currentNode);
+				previous.setComponent(null);
+				break;
+			}
+		}
+		if(currentNode.equals("Start")){
+			errorList.add("No starting point specified.");
+			error=true;
+			currentNode=null;
+		}
+		while(!currentNode.equals("End") && currentNode!=null) {
+			GraphNode temp=null;
+			for (int i = 0; i < nodeList.size(); i++) {
+				if (nodeList.get(i).getCId().equals(currentNode)) {
+					temp=nodeList.get(i);
+					nodeArray.add(temp);
+					break;
+				}
+			}
+			if(temp==null){
+				errorList.add("Component missing after "+previous.getName()+".");
+				error=true;
+				break;
+			}
+			for (int i = 0; i < links.size(); i++) {
+				if (links.get(i).getFrom().equals(currentNode)) {
+					flag=1;
+					previous=temp;
+					currentNode = links.get(i).getTo();
+					break;
+				}
+			}
+			if(flag==0){
+				errorList.add("Disconnected at: "+temp.getName());
+				currentNode=null;
+				error=true;
+			}
+		}
+		for(int i=0;i<nodeList.size();i++) {
+			GraphNode node=nodeList.get(i);
+			if(!node.getComponent().isValid() && !node.getCId().equals("Start") && !node.getCId().equals("End")) {
+				errorList.add("Incomplete configuration at " + node.getName());
+				error=true;
+			}
+		}
+		LogicGraph lgraph=new LogicGraph();
+		lgraph.setId(WFId);
+		lgraph.setNodes(nodeArray);
+		ret.put("error",error );
+		if(error)
+			ret.put("cause", errorList);
+		ret.put("nodeList", lgraph);
+		return ret;
 	}
 }
