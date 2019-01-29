@@ -11,10 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 @wfComponent(complete=true)
 public class MongoQuery implements Component {
@@ -69,7 +66,6 @@ public class MongoQuery implements Component {
                 for(int i=0;i<batch.length();i++)
                     entries.put(batch.get(i));
                 nextbatch=((Document)result.get("cursor")).get("id");
-                System.out.println("in:" + nextbatch.toString());
             }
             pointer=0;
             flag=false;
@@ -82,9 +78,8 @@ public class MongoQuery implements Component {
             ret.addKeyValue(key,obj.get(key));
         }
         pointer++;
-        System.out.println(ret.toString());
         ret.getEntity().remove("_id");
-        return ret;//new Entity((Map<String, Object>) pointer.next().getValue());
+        return ret;
     }
 
     @Override
@@ -106,6 +101,7 @@ public class MongoQuery implements Component {
 
     @Override
     public Entity getOutput() {
+        setOutput(null);
         return output;
     }
 
@@ -122,16 +118,58 @@ public class MongoQuery implements Component {
     @Override
     public void setOutput(Entity output) {
         this.output = new Entity();
-
+        try{
+            init();
+            BasicDBObject cmd=new BasicDBObject(command);
+            cmd.append("batchSize",5);
+            MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
+            Document res= mongoTemplate.executeCommand(cmd.toString());
+            JSONObject obj=new JSONObject(res.toJson());
+            JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
+            Set<String> headers=new HashSet();
+            ArrayList<Document> out=new ArrayList<>();
+            for(int i=0;i<batch.length();i++)
+                headers.addAll((((JSONObject)batch.get(i)).toMap()).keySet());
+            for(String s:headers){
+                Document temp=new Document();
+                temp.put("fieldName",s);
+                temp.put("dataType", "String");
+                temp.put("check",false);
+                out.add(temp);
+            }
+            this.output.addKeyValue("output",out);
+        }catch(Exception e){}
+        command=null;
+        collection=null;
+        db=null;
+        mongo=null;
     }
 
     @Override
     public void setConfig(Entity config) {
         this.config = config;
-
         setOutput(null);
     }
 
+    public Entity testQuery(){
+        Entity ret=new Entity();
+        try{
+            init();
+            BasicDBObject cmd=new BasicDBObject(command);
+            cmd.append("batchSize",5);
+            MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
+            Document res= mongoTemplate.executeCommand(cmd.toString());
+            JSONObject obj=new JSONObject(res.toJson());
+            JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
+            ArrayList<Document> out=new ArrayList<>();
+            for(int i=0;i<batch.length();i++) {
+                Document temp=new Document(((JSONObject)batch.get(i)).toMap());
+                out.add(temp);
+            }
+            ret.addKeyValue("output",out);
+        }catch(Exception e){}
+        return  ret;
+    }
     @Override
     public boolean isValid() {
         return true;
