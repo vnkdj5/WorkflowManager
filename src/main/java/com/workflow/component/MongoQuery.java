@@ -151,23 +151,17 @@ public class MongoQuery implements Component {
         setOutput(null);
     }
 
-    public Entity testQuery(){
-        Entity ret=new Entity();
-        try{
-            init();
-            BasicDBObject cmd=new BasicDBObject(command);
-            cmd.append("batchSize",5);
-            MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
-            Document res= mongoTemplate.executeCommand(cmd.toString());
-            JSONObject obj=new JSONObject(res.toJson());
-            JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
-            ArrayList<Document> out=new ArrayList<>();
-            for(int i=0;i<batch.length();i++) {
-                Document temp=new Document(((JSONObject)batch.get(i)).toMap());
-                out.add(temp);
-            }
-            ret.addKeyValue("output",out);
-        }catch(Exception e){}
+    public ArrayList<String> testQuery(){
+        ArrayList<String> ret=new ArrayList<>();
+        init();
+        BasicDBObject cmd=new BasicDBObject(command);
+        cmd.append("batchSize",5);
+        MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
+        Document res= mongoTemplate.executeCommand(cmd.toString());
+        JSONObject obj=new JSONObject(res.toJson());
+        JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
+        for(int i=0;i<batch.length();i++)
+            ret.add(batch.get(i).toString());
         return  ret;
     }
     @Override

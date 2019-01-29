@@ -109,4 +109,19 @@ public class UtilityController {
         }
         return new ResponseEntity<String>("{\"message\":\"Cannot delete file\"}",HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @RequestMapping(value="/testQuery", method=RequestMethod.GET)
+    public ResponseEntity<ArrayList<String>> testQuery(@RequestParam("WFId")String WFId, @RequestParam("compId")String CompId) {
+        ArrayList<String> ret=new ArrayList<>();
+        try {
+            ret=helper.testQuery(WFId, CompId);
+            if(ret==null)
+                ret.add("Invalid request");
+        }catch (Exception e){
+            ret.add("Error in processing query");
+            return new ResponseEntity<>(ret,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(ret,HttpStatus.OK);
+    }
+
 }
