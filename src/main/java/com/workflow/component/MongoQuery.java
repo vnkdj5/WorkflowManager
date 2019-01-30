@@ -1,5 +1,7 @@
 package com.workflow.component;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Cursor;
 import com.mongodb.MongoClient;
@@ -9,6 +11,7 @@ import com.workflow.annotation.wfComponent;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.ArrayList;
@@ -31,6 +34,7 @@ public class MongoQuery implements Component {
     private boolean flag;
     private int pointer;
     private JSONArray entries;
+    private String opCmd;
 
     @Override
     public boolean init() {
@@ -45,7 +49,14 @@ public class MongoQuery implements Component {
         String q = query.substring(query.indexOf("(")+1,query.lastIndexOf(")"));
         command = new BasicDBObject();
         command.append(cmd,config.getObjectByName("collection").toString());
-        command.append("filter",new BasicDBObject());
+
+        if(cmd.equals("find")){
+            command.append("filter",new Gson().fromJson(q,Map.class));
+        }else if(cmd.equals("aggregate")){
+            command.append("pipeline",new Gson().fromJson(q,ArrayList.class));
+        }
+        opCmd=cmd;
+        System.out.println("COMMAND: " + command);
         return true;
     }
 
@@ -54,23 +65,37 @@ public class MongoQuery implements Component {
         if(flag){
             entries=new JSONArray();
             MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
-            result= mongoTemplate.executeCommand(command.toString());
+            result= mongoTemplate.executeCommand(command.toJson());
             JSONObject obj=new JSONObject(result.toJson());
-            Object nextbatch=((Document)result.get("cursor")).get("id");
-            JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
-            for(int i=0;i<batch.length();i++)
-                entries.put(batch.get(i));
-            while (nextbatch!=null && !nextbatch.toString().equals("0")) {
-
-                Document getMore = new Document("getMore", nextbatch).append("collection", config.getObjectByName("collection").toString());
-                result = mongoTemplate.executeCommand(getMore);
-                obj=new JSONObject(result.toJson());
-                batch=(JSONArray)((JSONObject)obj.get("cursor")).get("nextBatch");
+            System.out.println(result);
+            if(opCmd.equals("find")){
+                Object nextbatch=((Document)result.get("cursor")).get("id");
+                JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
                 for(int i=0;i<batch.length();i++)
                     entries.put(batch.get(i));
-                nextbatch=((Document)result.get("cursor")).get("id");
-                System.out.println("in:" + nextbatch.toString());
+                while (nextbatch!=null && !nextbatch.toString().equals("0")) {
+
+                    Document getMore = new Document("getMore", nextbatch).append("collection", config.getObjectByName("collection").toString());
+                    result = mongoTemplate.executeCommand(getMore);
+                    obj=new JSONObject(result.toJson());
+                    batch=(JSONArray)((JSONObject)obj.get("cursor")).get("nextBatch");
+                    for(int i=0;i<batch.length();i++)
+                        entries.put(batch.get(i));
+                    nextbatch=((Document)result.get("cursor")).get("id");
+                    System.out.println("in:" + nextbatch.toString());
+                }
+            }else if(opCmd.equals("aggregate")){
+                System.out.println("AGGREGATE RESULT " + result);
+
+                ArrayList<Document> batch = (ArrayList<Document>) result.get("result");
+
+                System.out.println("BATCH "+batch);
+
+                for(int i=0;i<batch.size();i++){
+                    entries.put(batch.get(i));
+                }
             }
+
             pointer=0;
             flag=false;
         }

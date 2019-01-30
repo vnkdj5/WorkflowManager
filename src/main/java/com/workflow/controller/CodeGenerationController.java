@@ -3,6 +3,7 @@ package com.workflow.controller;
 import java.util.HashMap;
 
 import com.workflow.service.Helper;
+import com.workflow.service.runmanager.DefaultRunManager;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -32,7 +33,8 @@ public class CodeGenerationController {
 		if((boolean)map.get("error")) {
 			return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
 		}else {
-			codeGenerationService.generateCode((LogicGraph)map.get("nodeList"));
+			//codeGenerationService.generateCode((LogicGraph)map.get("nodeList"));
+			new DefaultRunManager().run((LogicGraph) map.get("nodeList"),null);
 		}
 		
 		System.out.println(map.toString());
