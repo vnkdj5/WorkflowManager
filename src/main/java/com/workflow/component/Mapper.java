@@ -127,10 +127,14 @@
 			// TODO Auto-generated method stub
 
 			this.input = new Entity();
-			this.input.addKeyValue("input", input.getObjectByName("output"));
-			if(!this.input.equals(input.getObjectByName("output"))){
-				output = null;
+			//this.input.addKeyValue("input", input.getObjectByName("output"));
+			for(String h : this.input.getEntity().keySet()){
+				if(!input.getEntity().keySet().contains(h)){
+					output=null;
+					break;
+				}
 			}
+			this.input.addKeyValue("input", input.getObjectByName("output"));
 
 		}
 
