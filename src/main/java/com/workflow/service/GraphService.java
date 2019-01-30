@@ -59,7 +59,7 @@ public class GraphService {
                 int flag = 0;
                 List<GraphNode> nodes = graph.getNodes();
                 for (int i = 0; i < nodes.size(); i++) {
-                    if (nodes.get(i).getName().equals(componentName) || nodes.get(i).getCId().equals(componentId)) {
+                    if (nodes.get(i).getCId().equals(componentId)) {
                         flag = 1;
                         break;
                     }
@@ -128,8 +128,7 @@ public class GraphService {
                     }
                 }
                 if (flag == 2) {
-                	System.out.println("in link add");
-                    GraphLink checkLink = new GraphLink(fromNode.getCategory(), toNode.getCategory());
+                	GraphLink checkLink = new GraphLink(fromNode.getCategory(), toNode.getCategory());
                     if (help.isValidLink(checkLink)) {
                         List<GraphLink> links = graph.getLinks();
                         GraphLink newlink = new GraphLink(from, to);

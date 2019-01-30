@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class DefaultRunManager implements RunManager {
     @Override
     public ArrayList<String> run(LogicGraph logicGraph, Entity runConfig) {
-        Entity io=null;
         ArrayList<String> status=new ArrayList<>();
         boolean anchor;
         ArrayList<GraphNode> flow=logicGraph.getNodes();
@@ -20,12 +19,15 @@ public class DefaultRunManager implements RunManager {
             flow.get(i).getComponent().init();
         }
         do {
-            while(!flow.get(phaseEnd).getCategory().equals("Phase") && phaseEnd!=flow.size()-1){
+            while(phaseEnd!=flow.size() && !flow.get(phaseEnd).getCategory().equals("Phase")){
                 phaseEnd++;
             }
+            int count=0;
             do {
+                count++;
                 anchor=false;
                 int i=phaseStart;
+                Entity io=null;
                 try{
                     io = flow.get(phaseStart).getComponent().process(io);
                     for (i +=1; i < phaseEnd; i++) {
@@ -43,7 +45,9 @@ public class DefaultRunManager implements RunManager {
                 }
             } while (anchor);
             phaseStart=phaseEnd+1;
-        }while (phaseEnd!=flow.size()-1);
+            phaseEnd++;
+            System.out.println("phase over count:"+count+"\nphasestart:"+phaseStart+"\nphaseend:"+phaseEnd);
+        }while (phaseEnd<flow.size());
         status.add("success");
         return status;
     }

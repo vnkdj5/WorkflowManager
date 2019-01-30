@@ -24,7 +24,6 @@ public class RunManagerController {
 	public ResponseEntity<HashMap> runWorkflow(@PathVariable("WFId") String WFId){
 
 		HashMap<String,Object> map = helper.extract(WFId);
-		System.out.println(map.toString());
 		if((boolean)map.get("error")) {
 			return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
 		}else {
@@ -36,9 +35,6 @@ public class RunManagerController {
 				return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-		
-		System.out.println(map.toString());
-		
 		return new ResponseEntity<>(map,HttpStatus.OK);
 		
 	}

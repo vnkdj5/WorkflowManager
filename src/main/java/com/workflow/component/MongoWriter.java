@@ -24,9 +24,10 @@ public class MongoWriter implements Component{
 
 	@Override
 	public Entity process(Entity input) {
-		Document document = new Document(input.getEntity());
-		collection.insertOne(document);
-		//System.out.println("Writing to Mongo "+ document);
+		if(input!=null) {
+			Document document = new Document(input.getEntity());
+			collection.insertOne(document);
+		}
 		return null;
 	}
 
@@ -62,8 +63,7 @@ public class MongoWriter implements Component{
 	@Override
     public Entity getInput(Component component) {
 		// TODO Auto-generated method stub
-		System.out.println("MONGOWRITER "+component.getOutput());
-        setInput(component.getOutput());
+		setInput(component.getOutput());
 		return input;
 	}
 
@@ -87,8 +87,6 @@ public class MongoWriter implements Component{
 	public void setConfig(Entity config) {
 		// TODO Auto-generated method stub
 		this.config = config;
-		System.out.println("MONGOWRITER "+this.config.getEntity().toString());
-		//init(config);
 		setOutput(null);
 	}
 

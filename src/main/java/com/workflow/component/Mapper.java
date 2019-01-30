@@ -41,12 +41,13 @@
 				newLabels.put(header,newLabel);
 			}
 
-			System.out.println(newLabels.toString());
 			return true;
 		}
 
 		@Override
 		public Entity process(Entity input) {
+			if(input==null)
+				return null;
 			Entity out= new Entity();
 			HashMap<String, Object> in = input.getEntity();
 			for (Entry<String, Object> entry : in.entrySet()) {
@@ -81,8 +82,6 @@
 			String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"\",\"properties\":{\"field\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"check\":{\"title\":\"\",\"type\":\"boolean\"},\"fieldName\":{\"type\":\"string\",\"readonly\":true},\"dataType\":{\"type\":\"string\",\"readonly\":true,\"enum\":[\"boolean\",\"int\",\"float\",\"String\"]}}}},\"outputFields\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"check\":{\"title\":\"\",\"type\":\"boolean\"},\"newFieldName\":{\"type\":\"string\",\"readonly\":false},\"dataType\":{\"type\":\"string\",\"readonly\":false,\"enum\":[\"boolean\",\"int\",\"float\",\"String\"]}}}}},\"required\":[\"field\"]},\"form\":[{\"type\":\"button\",\"title\":\"Add >\",\"style\":\"btn-info float-btn\",\"htmlClass\":\"text-center\",\"onClick\":\"mapperHandler()\"},{\"type\":\"button\",\"title\":\"Add All\",\"style\":\"btn-info float-btn2\",\"htmlClass\":\"text-center\",\"onClick\":\"mapperAddAllHandler()\"},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[{\"key\":\"field\",\"htmlClass\":\"\",\"notitle\":false,\"add\":null,\"remove\":null,\"items\":[{\"type\":\"section\",\"htmlClass\":\"form-row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-2\",\"items\":[{\"key\":\"['field'][].['check']\",\"type\":\"checkbox\",\"title\":\"\",\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-4\",\"items\":[{\"key\":\"['field'][].['fieldName']\",\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-4\",\"items\":[{\"key\":\"['field'][].['dataType']\",\"notitle\":true}]}]}]}]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[{\"key\":\"outputFields\",\"htmlClass\":\"\",\"notitle\":false,\"add\":null,\"remove\":null,\"startEmpty\":true,\"items\":[{\"type\":\"section\",\"htmlClass\":\"form-row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-5\",\"items\":[{\"key\":\"['outputFields'][].['newFieldName']\",\"notitle\":true}]},{\"type\":\"section\",\"htmlClass\":\"col-md-5\",\"items\":[{\"key\":\"['outputFields'][].['dataType']\",\"notitle\":true}]}]}]}]}]},{\"type\":\"submit\",\"style\":\"btn-info btn\",\"htmlClass\":\"text-center\",\"title\":\"Save\"}]}";
 
 			JSONObject obj = new JSONObject(Configform);
-			System.out.println(obj.toString());
-
 			Entity config = new Entity();
 			config.addKeyValue("FORM", obj.toMap());
 
@@ -117,7 +116,6 @@
 		@Override
 		public Entity getInput(Component component) {
 			// TODO Auto-generated method stub
-			System.out.println("MAPPER GETINPUT"+component.getOutput().toString());
 			setInput(component.getOutput());
 			return input;
 		}
@@ -127,10 +125,14 @@
 			// TODO Auto-generated method stub
 
 			this.input = new Entity();
-			this.input.addKeyValue("input", input.getObjectByName("output"));
-			if(!this.input.equals(input.getObjectByName("output"))){
-				output = null;
+			//this.input.addKeyValue("input", input.getObjectByName("output"));
+			for(String h : this.input.getEntity().keySet()){
+				if(!input.getEntity().keySet().contains(h)){
+					output=null;
+					break;
+				}
 			}
+			this.input.addKeyValue("input", input.getObjectByName("output"));
 
 		}
 

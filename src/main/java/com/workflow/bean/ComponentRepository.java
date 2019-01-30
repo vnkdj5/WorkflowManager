@@ -31,7 +31,6 @@ public class ComponentRepository {
 		for (BeanDefinition bd : scanner.findCandidateComponents("com.workflow.component")) {
 			try {
 				Class<?> cls = Class.forName(bd.getBeanClassName().toString());
-				System.out.println(cls.isAnnotationPresent(wfComponent.class));
 				if(cls.getAnnotation(wfComponent.class).complete()) {
 					components.add(bd.getBeanClassName().replace("com.workflow.component.", ""));
 				}

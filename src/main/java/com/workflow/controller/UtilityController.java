@@ -67,7 +67,6 @@ public class UtilityController {
                 if(!serverFile.exists()) {
                     serverFile.createNewFile();
                 }
-                System.out.println(serverFile);
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
                 stream.write(bytes);
                 stream.close();
@@ -103,7 +102,6 @@ public class UtilityController {
     @RequestMapping(value="/deletefile", method=RequestMethod.POST)
     public ResponseEntity<String> deleteFile(@RequestBody HashMap data){
         File file=new File(data.get("file").toString());
-        System.out.println("del path:"+data.get("file").toString());
         if(file.delete()) {
             return new ResponseEntity<String>("{\"message\":\"File deleted\"}",HttpStatus.OK);
         }

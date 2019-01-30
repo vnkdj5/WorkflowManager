@@ -43,7 +43,6 @@ public class FileUploadControllerNew {
 
     @RequestMapping(value="/uploadfile2", method=RequestMethod.POST)
     public ResponseEntity<String> handleFileUpload(@RequestBody MultipartFile file) {
-System.out.println("File");
         storageService.store(file);
        
         return new ResponseEntity<String>("File Uploaded successfully",HttpStatus.OK);

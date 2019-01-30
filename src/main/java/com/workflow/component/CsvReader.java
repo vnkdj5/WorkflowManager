@@ -73,7 +73,6 @@ public class CsvReader implements Component{
 			e.printStackTrace();
 			return null;
 		}
-		//System.out.println("Reading from CSV " +  output);
 		return output;
 	}
 
@@ -174,7 +173,6 @@ public class CsvReader implements Component{
 	public void setOutput(Entity output) {
 		this.output = new Entity();
 		this.output.addKeyValue(OUTPUT,this.config.getObjectByName(HEADERS));
-		System.out.println("OUTPUT CSVREADDER"+this.config.getObjectByName(HEADERS));
 	}
 
 	@Override

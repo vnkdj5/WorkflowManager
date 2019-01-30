@@ -1,7 +1,10 @@
 package com.workflow.component;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Cursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -9,6 +12,7 @@ import com.workflow.annotation.wfComponent;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.*;
@@ -28,6 +32,7 @@ public class MongoQuery implements Component {
     private boolean flag;
     private int pointer;
     private JSONArray entries;
+    private String opCmd;
 
     @Override
     public boolean init() {
@@ -42,7 +47,15 @@ public class MongoQuery implements Component {
         String q = query.substring(query.indexOf("(")+1,query.lastIndexOf(")"));
         command = new BasicDBObject();
         command.append(cmd,config.getObjectByName("collection").toString());
-        command.append("filter",new BasicDBObject());
+        if(cmd.equals("find")){
+            if(q.length()==0)
+                command.append("filter",new BasicDBObject());
+            else
+                command.append("filter",(DBObject)(new JSONObject(q)));
+        }else if(cmd.equals("aggregate")){
+            command.append("pipeline",new Gson().fromJson(q,ArrayList.class));
+        }
+        opCmd=cmd;
         return true;
     }
 
@@ -51,22 +64,30 @@ public class MongoQuery implements Component {
         if(flag){
             entries=new JSONArray();
             MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
-            result= mongoTemplate.executeCommand(command.toString());
+            result= mongoTemplate.executeCommand(command.toJson());
             JSONObject obj=new JSONObject(result.toJson());
-            Object nextbatch=((Document)result.get("cursor")).get("id");
-            JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
-            for(int i=0;i<batch.length();i++)
-                entries.put(batch.get(i));
-            while (nextbatch!=null && !nextbatch.toString().equals("0")) {
-
-                Document getMore = new Document("getMore", nextbatch).append("collection", config.getObjectByName("collection").toString());
-                result = mongoTemplate.executeCommand(getMore);
-                obj=new JSONObject(result.toJson());
-                batch=(JSONArray)((JSONObject)obj.get("cursor")).get("nextBatch");
+            if(opCmd.equals("find")){
+                Object nextbatch=((Document)result.get("cursor")).get("id");
+                JSONArray batch=(JSONArray)((JSONObject)obj.get("cursor")).get("firstBatch");
                 for(int i=0;i<batch.length();i++)
                     entries.put(batch.get(i));
-                nextbatch=((Document)result.get("cursor")).get("id");
+                while (nextbatch!=null && !nextbatch.toString().equals("0")) {
+
+                    Document getMore = new Document("getMore", nextbatch).append("collection", config.getObjectByName("collection").toString());
+                    result = mongoTemplate.executeCommand(getMore);
+                    obj=new JSONObject(result.toJson());
+                    batch=(JSONArray)((JSONObject)obj.get("cursor")).get("nextBatch");
+                    for(int i=0;i<batch.length();i++)
+                        entries.put(batch.get(i));
+                    nextbatch=((Document)result.get("cursor")).get("id");
+                }
+            }else if(opCmd.equals("aggregate")){
+                ArrayList<Document> batch = (ArrayList<Document>) result.get("result");
+                for(int i=0;i<batch.size();i++){
+                    entries.put(batch.get(i));
+                }
             }
+
             pointer=0;
             flag=false;
         }
@@ -78,8 +99,9 @@ public class MongoQuery implements Component {
             ret.addKeyValue(key,obj.get(key));
         }
         pointer++;
-        ret.getEntity().remove("_id");
-        return ret;
+        if(opCmd.equals("find"))
+            ret.getEntity().remove("_id");
+        return ret;//new Entity((Map<String, Object>) pointer.next().getValue());
     }
 
     @Override
@@ -118,8 +140,9 @@ public class MongoQuery implements Component {
     @Override
     public void setOutput(Entity output) {
         this.output = new Entity();
-        try{
-            init();
+        init();
+        /*try{
+
             BasicDBObject cmd=new BasicDBObject(command);
             cmd.append("batchSize",5);
             MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
@@ -138,17 +161,42 @@ public class MongoQuery implements Component {
                 out.add(temp);
             }
             this.output.addKeyValue("output",out);
-        }catch(Exception e){}
+        }catch(Exception e){
+            e.printStackTrace();
+        }*/
+        Entity test=process(null);
+        if(test!=null) {
+            HashMap<String, Object> out = test.getEntity();
+            JSONArray outputE = new JSONArray();
+            for (String h : out.keySet()) {
+                JSONObject temp = new JSONObject();
+                temp.put("fieldName", h);
+                temp.put("dataType", "String");
+                temp.put("check", false);
+                outputE.put(temp);
+
+            }
+            this.output.addKeyValue("output", outputE.toList());
+        }
         command=null;
         collection=null;
         db=null;
         mongo=null;
+        opCmd=null;
+        entries=null;
+        result=null;
     }
 
     @Override
     public void setConfig(Entity config) {
         this.config = config;
+
         setOutput(null);
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
     }
 
     public ArrayList<String> testQuery(){
@@ -163,9 +211,5 @@ public class MongoQuery implements Component {
         for(int i=0;i<batch.length();i++)
             ret.add(batch.get(i).toString());
         return  ret;
-    }
-    @Override
-    public boolean isValid() {
-        return true;
     }
 }
