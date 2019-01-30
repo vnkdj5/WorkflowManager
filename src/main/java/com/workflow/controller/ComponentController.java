@@ -43,7 +43,7 @@ public class ComponentController {
 	public ResponseEntity<HashMap> getConfig(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		
 		Entity config = componentService.getConfig(WFId, CId);
-		System.out.println(config.getEntity());
+		//System.out.println(config.getEntity());
 		//add config model to the response and send back the entity.
 		if(config==null) {
 

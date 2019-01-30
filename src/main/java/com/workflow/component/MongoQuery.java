@@ -113,14 +113,16 @@ public class MongoQuery implements Component {
     @Override
     public Entity getConfig() {
 
-        String Configform = "{\"schema\":{\"type\":\"object\",\"title\":\"MongoQuery\",\"properties\":{\"name\":{\"title\":\"Username\",\"type\":\"string\"},\"password\":{\"title\":\"Password\",\"type\":\"string\"},\"database\":{\"title\":\"Database Name\",\"type\":\"string\"},\"collection\":{\"title\":\"Collection Name\",\"type\":\"string\"},\"url\":{\"title\":\"Sever URL\",\"type\":\"string\"},\"query\":{\"title\":\"Query\",\"type\":\"string\"}},\"required\":[\"name\",\"password\",\"collection\",\"database\",\"url\"]},\"form\":[{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"name\"]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"password\"]}]},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"database\"]},{\"type\":\"section\",\"htmlClass\":\"col-md-6\",\"items\":[\"collection\"]}]},\"url\",{\"key\":\"query\",\"type\":\"textarea\",\"placeholder\":\"db.collectionName.operation()\"},{\"type\":\"section\",\"htmlClass\":\"row\",\"items\":[{\"type\":\"section\",\"htmlClass\":\"col-md-12\",\"items\":[{\"type\":\"submit\",\"style\":\"btn-info text-right\",\"title\":\"Save\"}]},{\"type\":\"section\",\"htmlClass\":\"col-md-12\",\"items\":[{\"type\":\"button\",\"style\":\"btn-info testConBtn text-left\",\"title\":\"Test\",\"onClick\":\"testConn(myForm)\"}]}]}]}";
-        JSONObject obj = new JSONObject(Configform);
+        String Configform = "{ \"form\":[ { \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[\"name\" ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ \"password\" ] } ] },{ \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[\"database\" ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ \"collection\" ] } ] }, \"url\", { \"key\":\"query\", \"type\":\"textarea\", \"placeholder\":\"db.collectionName.operation()\" }, { \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ { \"type\": \"submit\", \"style\": \"btn-info text-right\", \"title\": \"Save\" } ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ { \"type\": \"button\", \"style\": \"btn-info testConBtn text-left\", \"title\": \"Test\" ,\"onClick\": function(){eval(\"console.log(\\\"hello\\\");\"); }} ] } ] }, { \"key\":\"output\", \"type:\":\"textarea\", \"readonly\":true }], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"output\": { \"title\":\"Output\", \"type\":\"string\" } }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] } }";
+        //JSONObject obj = new JSONObject(Configform);
         Entity config = new Entity();
-        config.addKeyValue("FORM", obj.toMap());
+        config.addKeyValue("FORM", Configform);// obj.toMap()
         HashMap<String, Object> model = null;
 
         if(this.config!=null){
             model = this.config.getEntity();
+        } else {
+            model = new HashMap<>();
         }
         config.addKeyValue("MODEL",model);
 

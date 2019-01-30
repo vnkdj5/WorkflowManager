@@ -172,7 +172,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.myDiagram.isModified = true;
         var button = document.getElementById("SaveButton");
         if (button) button.disabled = false;
-        $("#myModal").modal("hide");
+        //$("#myModal").modal("hide");   //Hide form when config is saved
     };
 
 //	run the workflow method
@@ -472,7 +472,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         componentService.getConfig(WFId, componentKey).then(
             function success(response) {
                 $scope.model = {};
-                let curForm = response.data.FORM;//JSON.parse(response.data.FORM);
+                let curForm = JSON.parse(response.data.FORM);//JSON.parse(response.data.FORM);
 
                 for (let i in curForm.form) {//For assigning WFId and compId (for specializing API)
                     if (curForm.form[i].endpoint) {
@@ -1099,3 +1099,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     });
 
 }]);  //Diagram controller end
+var x = " onSubmit(form);\n" +
+    "  componentService.getOutput(WFid, componentKey).then(\n" +
+    "   function success(response){\n" +
+    "      document.getElementById(\"output\").value=response.data;\n" +
+    "    }, function error(response)\n" +
+    "    {\n" +
+    "      notify.showError(response.data.message);\n" +
+    "    });"
