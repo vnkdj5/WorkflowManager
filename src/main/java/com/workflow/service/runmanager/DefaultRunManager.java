@@ -7,23 +7,44 @@ import com.workflow.component.Entity;
 
 import java.util.ArrayList;
 
+
 public class DefaultRunManager implements RunManager {
     @Override
-    public void run(LogicGraph logicGraph, Entity runConfig) {
+    public ArrayList<String> run(LogicGraph logicGraph, Entity runConfig) {
         Entity io=null;
-        boolean anchor=false;
+        ArrayList<String> status=new ArrayList<>();
+        boolean anchor;
         ArrayList<GraphNode> flow=logicGraph.getNodes();
+        int phaseStart=0, phaseEnd=0;
         for (int i=0;i<flow.size();i++){
             flow.get(i).getComponent().init();
         }
-        do{
-            io=flow.get(0).getComponent().process(io);
-            if(io!=null) {
-                anchor=true;
-            }else break;
-            for (int i=1;i<flow.size();i++){
-                io=flow.get(i).getComponent().process(io);
+        do {
+            while(!flow.get(phaseEnd).getCategory().equals("Phase") && phaseEnd!=flow.size()-1){
+                phaseEnd++;
             }
-        }while (anchor);
+            do {
+                anchor=false;
+                int i=phaseStart;
+                try{
+                    io = flow.get(phaseStart).getComponent().process(io);
+                    for (i +=1; i < phaseEnd; i++) {
+                        if(io!=null){
+                            anchor=true;
+                        }
+                        io = flow.get(i).getComponent().process(io);
+                    }
+                }catch (Exception e){
+                    status.add("Problem faced during execution of "+flow.get(phaseEnd).getName());
+                    status.add("Problem at: "+flow.get(i).getName());
+                    status.add("Cause: "+e.getMessage());
+                    e.printStackTrace();
+                    return status;
+                }
+            } while (anchor);
+            phaseStart=phaseEnd+1;
+        }while (phaseEnd!=flow.size()-1);
+        status.add("success");
+        return status;
     }
 }

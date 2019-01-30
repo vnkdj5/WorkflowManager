@@ -250,7 +250,7 @@ public class Helper {
 			error=true;
 			currentNode=null;
 		}
-		while(!currentNode.equals("End") && currentNode!=null) {
+		while(currentNode!=null && !currentNode.equals("End") ) {
 			GraphNode temp=null;
 			for (int i = 0; i < nodeList.size(); i++) {
 				if (nodeList.get(i).getCId().equals(currentNode)) {
@@ -292,6 +292,7 @@ public class Helper {
 		if(error)
 			ret.put("cause", errorList);
 		ret.put("nodeList", lgraph);
+		ret.put("runConfig",graph.getRunConfig());
 		return ret;
 	}
 

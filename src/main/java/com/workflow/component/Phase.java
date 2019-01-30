@@ -15,6 +15,10 @@ public class Phase implements Component {
 
     @Override
     public Entity process(Entity input) {
+        if(input.getObjectByName("completion")!=null){
+            completion=(boolean)input.getObjectByName("completion");
+        }
+
         return null;
     }
 
@@ -50,6 +54,6 @@ public class Phase implements Component {
 
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 }

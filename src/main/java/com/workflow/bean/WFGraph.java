@@ -19,6 +19,15 @@ public class WFGraph {
     private Date timestamp;
     private List<GraphNode> nodes = new ArrayList<GraphNode>();
     private List<GraphLink> links = new ArrayList<GraphLink>();
+    private Entity runConfig=new Entity();
+
+    public Entity getRunConfig() {
+        return runConfig;
+    }
+
+    public void setRunConfig(Entity runConfig) {
+        this.runConfig = runConfig;
+    }
 
     public String getId() {
         return id;

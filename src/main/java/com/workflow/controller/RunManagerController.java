@@ -1,25 +1,21 @@
 package com.workflow.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.workflow.component.Entity;
 import com.workflow.service.Helper;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import com.workflow.service.runmanager.DefaultRunManager;
+import com.workflow.service.runmanager.RunManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.workflow.bean.LogicGraph;
-import com.workflow.service.CodeGenerationService;
-import com.workflow.service.GraphService;
 
 @RestController
-public class CodeGenerationController {
-	
-	@Autowired
-	CodeGenerationService codeGenerationService;
+public class RunManagerController {
 
 	@Autowired
 	Helper helper;
@@ -32,7 +28,13 @@ public class CodeGenerationController {
 		if((boolean)map.get("error")) {
 			return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
 		}else {
-			codeGenerationService.generateCode((LogicGraph)map.get("nodeList"));
+			RunManager runManager=new DefaultRunManager();
+			ArrayList<String> res=runManager.run((LogicGraph)map.get("nodeList"),(Entity)map.get("runConfig"));
+			if(!res.get(0).equals("success")){
+				map.put("error",true);
+				map.put("cause",res);
+				return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
 		
 		System.out.println(map.toString());
