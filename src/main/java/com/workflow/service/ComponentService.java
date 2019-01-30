@@ -29,14 +29,18 @@ public class ComponentService {
         Query query=new Query();
         query.addCriteria(Criteria.where("id").is(WFId));
         WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");
-        if(graph==null)
+        if (graph == null) {
+            System.out.println("CID here");
             return null;
+        }
+
         else {
             ArrayList<GraphNode>nodeList=new ArrayList<>(graph.getNodes());
             Iterator<GraphNode> it=nodeList.iterator();
             while(it.hasNext()){
                 GraphNode obj=it.next();
                 if(obj.getCId().equals(CId)){
+                    System.out.println("CID" + CId);
                     return obj.getComponent().getConfig();
                 }
             }
