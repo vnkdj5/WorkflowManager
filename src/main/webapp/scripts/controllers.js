@@ -472,7 +472,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         componentService.getConfig(WFId, componentKey).then(
             function success(response) {
                 $scope.model = {};
-                let curForm = JSON.parse(response.data.FORM);//JSON.parse(response.data.FORM);
+                let curForm = response.data.FORM;//JSON.parse(response.data.FORM);
 
                 for (let i in curForm.form) {//For assigning WFId and compId (for specializing API)
                     if (curForm.form[i].endpoint) {
