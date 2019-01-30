@@ -57,13 +57,7 @@ public class ComponentService {
                 GraphNode obj = it.next();
                 if (obj.getCId().equals(CId)) {
                     obj.getComponent().setConfig(entity);
-
-                    System.out.println(obj.getComponent().getConfig().toString());
-
                     graph.setTimestamp(new Date());
-
-                    System.out.println("UPDATE CONFIG: "+ graph);
-
                     mongoTemplate.save(graph,"WFGraph");
                     return "Success";
                 }

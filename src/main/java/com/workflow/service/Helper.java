@@ -294,4 +294,22 @@ public class Helper {
 		ret.put("nodeList", lgraph);
 		return ret;
 	}
+
+	public ArrayList<String> testQuery(String WFId, String CId){
+		Query query=new Query();
+		query.addCriteria(Criteria.where("id").is(WFId));
+		WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");
+		if(graph!=null){
+			List<GraphNode> nodeList = graph.getNodes();
+			Iterator<GraphNode> it = nodeList.iterator();
+			while (it.hasNext()) {
+				GraphNode obj = it.next();
+				if (obj.getCId().equals(CId)) {
+					MongoQuery c=(MongoQuery) obj.getComponent();
+					return c.testQuery();
+				}
+			}
+		}
+		return null;
+	}
 }
