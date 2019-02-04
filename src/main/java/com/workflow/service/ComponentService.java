@@ -30,7 +30,6 @@ public class ComponentService {
         query.addCriteria(Criteria.where("id").is(WFId));
         WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");
         if (graph == null) {
-            System.out.println("CID here");
             return null;
         }
 
@@ -40,7 +39,6 @@ public class ComponentService {
             while(it.hasNext()){
                 GraphNode obj=it.next();
                 if(obj.getCId().equals(CId)){
-                    System.out.println("CID" + CId);
                     return obj.getComponent().getConfig();
                 }
             }

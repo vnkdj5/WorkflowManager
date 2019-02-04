@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import com.opencsv.*;
 import com.workflow.annotation.wfComponent;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 @wfComponent(complete=true)
@@ -172,7 +173,16 @@ public class CsvReader implements Component{
 	@Override
 	public void setOutput(Entity output) {
 		this.output = new Entity();
-		this.output.addKeyValue(OUTPUT,this.config.getObjectByName(HEADERS));
+		JSONArray list=new JSONArray();
+		ArrayList<String> headers=(ArrayList<String>) this.config.getEntity().get(HEADERS);
+		for(int i=0;i<headers.size();i++){
+			JSONObject temp=new JSONObject();
+			temp.put("fieldName", headers.get(i));
+			temp.put("dataType","String");
+			temp.put("check", false);
+			list.put(temp);
+		}
+		this.output.addKeyValue(OUTPUT,list.toList());
 	}
 
 	@Override
@@ -182,7 +192,6 @@ public class CsvReader implements Component{
 		if(((ArrayList<String>)this.config.getEntity().get("filePath")).size()<1){
 			this.config.getEntity().put("headers",new ArrayList<String>());
 		}
-		//init(config);
 		setOutput(null);
 	}
 
