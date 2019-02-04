@@ -83,7 +83,7 @@
 
 			JSONObject obj = new JSONObject(Configform);
 			Entity config = new Entity();
-			config.addKeyValue("FORM", obj.toMap());
+			config.addKeyValue("FORM", Configform);
 
 			HashMap<String,Object> model = new HashMap<>();
 
