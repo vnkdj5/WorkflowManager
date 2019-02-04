@@ -125,6 +125,8 @@ public class MongoQuery implements Component {
 
     @Override
     public Entity getOutput() {
+        if(config==null)
+            return null;
         setOutput(null);
         return output;
     }
