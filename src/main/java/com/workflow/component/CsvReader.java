@@ -135,7 +135,7 @@ public class CsvReader implements Component{
 
 		JSONObject obj = new JSONObject(Configform);
 		Entity config = new Entity();
-		config.addKeyValue("FORM", obj.toMap());
+		config.addKeyValue("FORM", Configform);
 
 		//create model
 		if(this.config==null){
