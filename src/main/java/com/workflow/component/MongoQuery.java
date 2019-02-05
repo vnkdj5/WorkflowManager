@@ -112,8 +112,13 @@ public class MongoQuery implements Component {
                 "var scope1 = angular.element($('#mainScope')).scope();" +
                 " scope1.testConn(myForm); " +
                 "scope1.onSubmit(myForm);" +
-                " let WFID=scope1.currentWorkflowName; let compKey=scope1.selectedComponent.key;" +
-                " document.getElementById('output').value=scope1.getOutput(WFID,compKey);" +
+                " let WFID=scope1.currentWorkflowName; let compId=scope1.selectedComponent.key;" +
+                " $http.get('getOutput/'+WFID+'/'+compId).then( function success(response){" +
+                //    "console.log(response.data);" +
+                "}," +
+                "function error(error){" +
+                // "console.log(error);" +
+                "};" +
                 "      }\" } ] } ] }, { \"key\":\"output\", \"type:\":\"textarea\", \"readonly\":true }], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"output\": { \"title\":\"Output\", \"type\":\"string\" } }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] }}";
 
 
