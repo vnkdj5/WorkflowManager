@@ -62,9 +62,10 @@
     </style>
 </head>
 
-<body ng-app="WorkflowManager" ng-controller="DiagramCtrl"
-      ng-init="init();">
-<div class="wrapper">
+<body>
+<div ng-app="WorkflowManager" ng-controller="DiagramCtrl"
+     ng-init="init();" id="mainScope">
+    <div class="wrapper">
     <header>
         <!-- Navigation Bar -->
         <nav class="navbar navbar-expand-md bg-dark navbar-dark">
@@ -171,6 +172,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Modal End -->

@@ -97,6 +97,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
 //	for database connection checking
 
+    $scope.showAlert = function () {
+        alert("hello to external scope");
+    }
     $scope.testConn = function (form) {
         $scope.$broadcast('schemaFormValidate');
         var testBtn = document.querySelector('.testConBtn');
@@ -163,12 +166,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     notify.showError("Error", response.data.message);
                 }
             );
-            $scope.selectedComponent = {};
+            // $scope.selectedComponent = {};
         } else if (form.$invalid) {
             notify.showError("Error!!", "Invalid config for " + $scope.selectedComponent.category);
         }
 
-        $scope.selectedComponent = {};
+        //$scope.selectedComponent = {};
         $scope.myDiagram.isModified = true;
         var button = document.getElementById("SaveButton");
         if (button) button.disabled = false;
@@ -959,6 +962,18 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     }; // end init
 
+    $scope.getOutput = function (WFID, compId) {
+        componentService.getOutput(WFID, compId).then(
+            function success(response) {
+                return response.data;
+
+            },
+            function onError(error) {
+                notify.showError("Error", error.statusText);
+                return null;
+            }
+        )
+    }
     $scope.inputOrOutput = "";
     // Start Dynamic Table generation for INPUT/OUTPUT Fields
     $scope.loadInputOutput = function (componentName, componentKey, isInput) {
@@ -1108,11 +1123,3 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     });
 
 }]);  //Diagram controller end
-var x = " onSubmit(form);\n" +
-    "  componentService.getOutput(WFid, componentKey).then(\n" +
-    "   function success(response){\n" +
-    "      document.getElementById(\"output\").value=response.data;\n" +
-    "    }, function error(response)\n" +
-    "    {\n" +
-    "      notify.showError(response.data.message);\n" +
-    "    });"
