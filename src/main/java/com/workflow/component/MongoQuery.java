@@ -117,12 +117,12 @@ public class MongoQuery implements Component {
                 "xhttp.onreadystatechange = function() {" +
                 "    if (this.readyState == 4 && this.status == 200) {" +
                 "       console.log(xhttp.responseText);" +
-                "       document.getElementById('output').value=xhttp.responseText" +
+                "       document.getElementById('queryOutput').value=xhttp.responseText" +
                 "    }" +
                 "};" +
                 "xhttp.open('GET', 'getOutput/'+WFID+'/'+compId, true);" +
                 "xhttp.send();" +
-                "      }\" } ] } ] }, { \"key\":\"output\", \"type:\":\"textarea\", \"readonly\":true }], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"output\": { \"title\":\"Output\", \"type\":\"string\" } }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] }}";
+                "      }\" } ] } ] }, {\"key\":\"queryOutput\",\"type\":\"textarea\",\"placeholder\":\"Output\", \"readonly\":true}], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"queryOutput\":{\"title\":\"Query Output\", \"type\":\"string\"} }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] }}";
 
 
         //FORM INSIDE CODE:: $scope.onSubmit(form);let WFID=$scope.workflowName; let componentKey=$scope.selectedComponent.key; componentService.getOutput(WFID, componentKey).then( function success(response){ document.getElementById(\"output\").value=response.data; }, function error(response { notify.showError(response.data.message); });

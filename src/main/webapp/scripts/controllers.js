@@ -125,7 +125,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 }
             );
         }
-
+        /* else{
+                 testBtn.innerHTML = "Checking Connection Failed";
+                 testBtn.classList.add('spinning');
+             }*/
     };
 
 //	for request
