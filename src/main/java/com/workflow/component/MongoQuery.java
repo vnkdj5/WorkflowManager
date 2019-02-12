@@ -120,7 +120,7 @@ public class MongoQuery implements Component {
                 "       document.getElementById('queryOutput').value=xhttp.responseText" +
                 "    }" +
                 "};" +
-                "xhttp.open('GET', 'getOutput/'+WFID+'/'+compId, true);" +
+                "xhttp.open('GET', 'testQuery/'+WFID+'/'+compId, true);" +
                 "xhttp.send();" +
                 "      }\" } ] } ] }, {\"key\":\"queryOutput\",\"type\":\"textarea\",\"placeholder\":\"Output\", \"readonly\":true}], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"queryOutput\":{\"title\":\"Query Output\", \"type\":\"string\"} }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] }}";
 
