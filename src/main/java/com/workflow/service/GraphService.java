@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -225,8 +227,13 @@ public class GraphService {
 		HashMap<String,Object> map=new HashMap<>();
 		Query query=new Query();
         query.addCriteria(Criteria.where("id").is(WFId));
-        WFGraph WFgraph = new WFGraph();
-        WFgraph = mongoTemplate.findOne(query, WFGraph.class, COLLECTION);
+        WFGraph WFgraph;
+        try {
+            WFgraph=mongoTemplate.findOne(query,WFGraph.class, COLLECTION);
+        }catch (Exception e){
+            e.printStackTrace();
+            WFgraph=null;
+        }
         if (WFgraph != null) {
 			map.put("Found", true);
             map.put("Graph", WFgraph);
@@ -237,7 +244,6 @@ public class GraphService {
 	}
 
     public List getWF(){
-		Map<String,Date> WFList=new HashMap<>();
 		Query query=new Query();
         query.addCriteria(Criteria.where("WFName").regex("^"));
         List<WFGraph> graphlist = new ArrayList<WFGraph>();

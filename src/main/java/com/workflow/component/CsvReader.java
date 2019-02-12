@@ -30,7 +30,7 @@ public class CsvReader implements Component{
 	
 	@Override
 	public boolean init() {
-
+		System.out.println("in I csv");
 		csvFilePath = (ArrayList<String>) config.getObjectByName(FILEPATH);
 		totalFiles = csvFilePath.size();
 		readCompleteFile=0;
@@ -46,6 +46,7 @@ public class CsvReader implements Component{
 
 	@Override
 	public Entity process(Entity input) {
+		System.out.println("in P csv");
 		Entity output = new Entity();
 		String[] record;
 		
@@ -79,6 +80,7 @@ public class CsvReader implements Component{
 
 	@Override
 	public Entity getConfig() {
+		System.out.println("in getC csv");
 		// TODO Auto-generated method stub
 		String Configform =  "{\"schema\":"
 				+ "{"
@@ -134,7 +136,7 @@ public class CsvReader implements Component{
 				+ "]"
 				+ "}";
 
-		JSONObject obj = new JSONObject(Configform);
+		//JSONObject obj = new JSONObject(Configform);
 		Entity config = new Entity();
 		config.addKeyValue("FORM", Configform);
 
@@ -148,12 +150,13 @@ public class CsvReader implements Component{
 
 	@Override
 	public Entity getOutput() {
-
+		System.out.println("in getO csv");
 		return output;
 	}
 
 	@Override
     public Entity getInput(Component component) {
+		System.out.println("in getI csv");
 		if(component!=null){
 			setInput(component.getOutput());
 		}else{
@@ -166,12 +169,14 @@ public class CsvReader implements Component{
 
 	@Override
 	public void setInput(Entity input) {
+		System.out.println("in setI csv");
 		this.input = new Entity();
 		this.input.addKeyValue(INPUT, null);
 	}
 
 	@Override
 	public void setOutput(Entity output) {
+		System.out.println("in setO csv");
 		this.output = new Entity();
 		JSONArray list=new JSONArray();
 		ArrayList<String> headers=(ArrayList<String>) this.config.getEntity().get(HEADERS);
@@ -187,7 +192,7 @@ public class CsvReader implements Component{
 
 	@Override
 	public void setConfig(Entity config) {
-
+		System.out.println("in setC csv");
 		this.config = config;
 		if(((ArrayList<String>)this.config.getEntity().get("filePath")).size()<1){
 			this.config.getEntity().put("headers",new ArrayList<String>());
@@ -197,6 +202,7 @@ public class CsvReader implements Component{
 
 	@Override
 	public boolean isValid() {
+		System.out.println("in isV csv");
 		return true;
 	}
 
