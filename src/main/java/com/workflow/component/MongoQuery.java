@@ -110,11 +110,26 @@ public class MongoQuery implements Component {
     public Entity getConfig() {
         System.out.println("in getC mq");
 
-        String Configform = "{ \"form\":[ { \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[\"name\" ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ \"password\" ] } ] },{ \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[\"database\" ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ \"collection\" ] } ] }, \"url\", { \"key\":\"query\", \"type\":\"textarea\", \"placeholder\":\"db.collectionName.operation()\", \"onChange\": \"function(modelValue,form) { try{ balanced.matches({source: modelValue, open: ['{', '(', '['], close: ['}', ')', ']'], balance: true, exceptions: true}); document.getElementById('query').style.borderColor='green'; } catch (error) {errorMessage = error.message;console.log(error.message); document.getElementById('query').style.borderColor='red'; } }\" }, { \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ { \"type\": \"submit\", \"style\": \"btn-info text-right\", \"title\": \"Save\" } ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ { \"type\": \"button\", \"style\": \"btn-info testConBtn text-left\", \"title\": \"Test\", \"onClick\": \"function(modelValue,myForm){   testConn(myForm);        }\" } ] } ] }, { \"key\":\"output\", \"type:\":\"textarea\", \"readonly\":true }], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"output\": { \"title\":\"Output\", \"type\":\"string\" } }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] }}";
+        String Configform = "{ \"form\":[ { \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[\"name\" ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ \"password\" ] } ] },{ \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[\"database\" ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ \"collection\" ] } ] }, \"url\", { \"key\":\"query\", \"type\":\"textarea\", \"placeholder\":\"db.collectionName.operation()\", \"onChange\": \"function(modelValue,form) { try{ balanced.matches({source: modelValue, open: ['{', '(', '['], close: ['}', ')', ']'], balance: true, exceptions: true}); document.getElementById('query').style.borderColor='green'; } catch (error) {errorMessage = error.message;console.log(error.message); document.getElementById('query').style.borderColor='red'; } }\" }, { \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ { \"type\": \"submit\", \"style\": \"btn-info text-right\", \"title\": \"Save\" } ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ { \"type\": \"button\", \"style\": \"btn-info testConBtn text-left\", \"title\": \"Test\", " +
+                "\"onClick\": \"function(modelValue,myForm){ " +
+                "var scope1 = angular.element($('#mainScope')).scope();" +
+                "scope1.testConn(myForm); " +
+                "scope1.onSubmit(myForm);" +
+                " let WFID=scope1.currentWorkflowName; let compId=scope1.selectedComponent.key;" +
+                "var xhttp = new XMLHttpRequest();" +
+                "xhttp.onreadystatechange = function() {" +
+                "    if (this.readyState == 4 && this.status == 200) {" +
+                "       console.log(xhttp.responseText);" +
+                "       document.getElementById('queryOutput').value=xhttp.responseText" +
+                "    }" +
+                "};" +
+                "xhttp.open('GET', 'getOutput/'+WFID+'/'+compId, true);" +
+                "xhttp.send();" +
+                "      }\" } ] } ] }, {\"key\":\"queryOutput\",\"type\":\"textarea\",\"placeholder\":\"Output\", \"readonly\":true}], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"queryOutput\":{\"title\":\"Query Output\", \"type\":\"string\"} }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] }}";
 
 
         //FORM INSIDE CODE:: $scope.onSubmit(form);let WFID=$scope.workflowName; let componentKey=$scope.selectedComponent.key; componentService.getOutput(WFID, componentKey).then( function success(response){ document.getElementById(\"output\").value=response.data; }, function error(response { notify.showError(response.data.message); });
-        JSONObject obj = new JSONObject(Configform);
+       // JSONObject obj = new JSONObject(Configform);
         Entity config = new Entity();
         config.addKeyValue("FORM", Configform);// obj.toMap()
         HashMap<String, Object> model;
