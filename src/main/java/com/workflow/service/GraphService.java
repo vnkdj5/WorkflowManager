@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import org.bson.Document;
 import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -225,8 +228,14 @@ public class GraphService {
 		HashMap<String,Object> map=new HashMap<>();
 		Query query=new Query();
         query.addCriteria(Criteria.where("id").is(WFId));
-        WFGraph WFgraph = new WFGraph();
-        WFgraph = mongoTemplate.findOne(query, WFGraph.class, COLLECTION);
+        query.fields().exclude("nodes.component");
+        WFGraph WFgraph;
+        try {
+            WFgraph=mongoTemplate.findOne(query,WFGraph.class, COLLECTION);
+        }catch (Exception e){
+            e.printStackTrace();
+            WFgraph=null;
+        }
         if (WFgraph != null) {
 			map.put("Found", true);
             map.put("Graph", WFgraph);
@@ -237,17 +246,18 @@ public class GraphService {
 	}
 
     public List getWF(){
-		Map<String,Date> WFList=new HashMap<>();
 		Query query=new Query();
-        query.addCriteria(Criteria.where("WFName").regex("^"));
-        List<WFGraph> graphlist = new ArrayList<WFGraph>();
-        graphlist.addAll(mongoTemplate.find(query, WFGraph.class, COLLECTION));
+        query.fields().include("_id");
+        query.fields().include("WFName");
+        query.fields().include("timestamp");
+        List<Document> graphlist = new ArrayList<Document>();
+        graphlist.addAll(mongoTemplate.find(query,Document.class, "WFGraph"));
         List<JSONObject> wflist = new ArrayList<>();
 		for(int i=0;i<graphlist.size();i++) {
             JSONObject temp = new JSONObject();
-            temp.put("id", graphlist.get(i).getId());
-            temp.put("wfname", graphlist.get(i).getWFName());
-            temp.put("timestamp", graphlist.get(i).getTimestamp());
+            temp.put("id", graphlist.get(i).get("_id").toString());
+            temp.put("wfname", graphlist.get(i).get("WFName"));
+            temp.put("timestamp", graphlist.get(i).get("timestamp"));
             wflist.add(temp);
 		}
 		return wflist;

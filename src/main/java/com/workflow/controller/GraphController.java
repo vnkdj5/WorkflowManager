@@ -81,9 +81,9 @@ public class GraphController {
 		}
         HashMap<String, Object> map = graphService.getWorkflow(WFId);
 		if((Boolean)map.get("Found")) {
-			return new ResponseEntity<HashMap>(map,HttpStatus.OK);
+			return new ResponseEntity<>(map,HttpStatus.OK);
 		}else {
-			return new ResponseEntity<HashMap>(map,HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<>(map,HttpStatus.EXPECTATION_FAILED);
 		}
 	}
 

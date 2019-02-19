@@ -100,12 +100,12 @@
             <div class="row">
 
                 <div id="myPaletteDiv" class="col-sm-2"
-                     style="background-color: whitesmoke; border: solid 1px black"></div>
+                     style="background-color: whitesmoke; border: solid 1px black;height: 600px"></div>
                 <div
                         style="position: relative; padding-left: 0px; padding-right: 0px;"
                         class="col-sm-10">
                     <div id="myDiagramDiv" class="col-sm-12"
-                         style="flex-grow: 1; height: 85vh; border: solid 1px black"></div>
+                         style="flex-grow: 1; height: 600px/*85vh*/; border: solid 1px black"></div>
                     <div id="contextMenu">
                         <ul>
                             <!-- <li id="cut" ng-click="cxcommand($event)">
@@ -133,6 +133,7 @@
                         </ul>
                     </div>
                 </div>
+                //
             </div>
         </div>
     </main>
@@ -183,6 +184,20 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+<script>
+    // helper function to get an element's exact position
+    function getPosition(el) {
+        var xPosition = el.clientX;
+        var yPosition = el.clientY;
 
+        console.log(xPosition,yPosition);
+        return {
+            x: xPosition,
+            y: yPosition
+        };
+    }
+
+    document.getElementById('myDiagramDiv').addEventListener("click", getPosition, false);
+</script>
 </body>
 </html>

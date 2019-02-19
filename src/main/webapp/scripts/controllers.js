@@ -125,7 +125,10 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 }
             );
         }
-
+        /* else{
+                 testBtn.innerHTML = "Checking Connection Failed";
+                 testBtn.classList.add('spinning');
+             }*/
     };
 
 //	for request
@@ -940,8 +943,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             var at = a.data.key;
             var bt = b.data.key;
             //update logic when categorizing components
-            if (at < bt) return -1;
-            if (at > bt) return -1;
+            if (at < bt) return 1;
+            if (at > bt) return 1;
             return 0;
         }
 

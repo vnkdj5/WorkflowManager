@@ -132,7 +132,9 @@
 					break;
 				}
 			}
+			if(input!=null)
 			this.input.addKeyValue("input", input.getObjectByName("output"));
+			else this.input=null;
 
 		}
 
@@ -146,7 +148,6 @@
 		public void setConfig(Entity config) {
 			// TODO method updation
 			this.config = config;
-			//init(config);
 			setOutput(null);
 		}
 

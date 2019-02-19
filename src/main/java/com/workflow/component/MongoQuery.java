@@ -36,6 +36,7 @@ public class MongoQuery implements Component {
 
     @Override
     public boolean init() {
+        System.out.println("in I mq");
         flag=true;
         mongo = new MongoClient(config.getObjectByName("url").toString(),27017);
         db = mongo.getDatabase(config.getObjectByName("database").toString());
@@ -61,6 +62,7 @@ public class MongoQuery implements Component {
 
     @Override
     public Entity process(Entity input) {
+        System.out.println("in P mq");
         if(flag){
             entries=new JSONArray();
             MongoTemplate mongoTemplate = new MongoTemplate(mongo,db.getName());
@@ -106,6 +108,7 @@ public class MongoQuery implements Component {
 
     @Override
     public Entity getConfig() {
+        System.out.println("in getC mq");
 
         String Configform = "{ \"form\":[ { \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[\"name\" ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ \"password\" ] } ] },{ \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[\"database\" ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ \"collection\" ] } ] }, \"url\", { \"key\":\"query\", \"type\":\"textarea\", \"placeholder\":\"db.collectionName.operation()\", \"onChange\": \"function(modelValue,form) { try{ balanced.matches({source: modelValue, open: ['{', '(', '['], close: ['}', ')', ']'], balance: true, exceptions: true}); document.getElementById('query').style.borderColor='green'; } catch (error) {errorMessage = error.message;console.log(error.message); document.getElementById('query').style.borderColor='red'; } }\" }, { \"type\":\"section\", \"htmlClass\":\"row\", \"items\":[ { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ { \"type\": \"submit\", \"style\": \"btn-info text-right\", \"title\": \"Save\" } ] }, { \"type\":\"section\", \"htmlClass\":\"col-md-6\", \"items\":[ { \"type\": \"button\", \"style\": \"btn-info testConBtn text-left\", \"title\": \"Test\", " +
                 "\"onClick\": \"function(modelValue,myForm){ " +
@@ -117,20 +120,19 @@ public class MongoQuery implements Component {
                 "xhttp.onreadystatechange = function() {" +
                 "    if (this.readyState == 4 && this.status == 200) {" +
                 "       console.log(xhttp.responseText);" +
-                "       scope1.model.output = xhttp.responseText" +
-         //       "       document.getElementById('output').value=xhttp.responseText" +
+                "       document.getElementById('queryOutput').value=xhttp.responseText" +
                 "    }" +
                 "};" +
-                "xhttp.open('GET', 'getOutput/'+WFID+'/'+compId, true);" +
+                "xhttp.open('GET', 'testQuery/'+WFID+'/'+compId, true);" +
                 "xhttp.send();" +
-                "      }\" } ] } ] }, { \"key\":\"output\", \"type:\":\"textarea\", \"readonly\":true }], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"output\": { \"title\":\"Output\", \"type\":\"string\" } }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] }}";
+                "      }\" } ] } ] }, {\"key\":\"queryOutput\",\"type\":\"textarea\",\"placeholder\":\"Output\", \"readonly\":true}], \"schema\":{ \"type\": \"object\", \"title\": \"MongoReader\", \"properties\": { \"name\": { \"title\": \"Username\", \"type\": \"string\" }, \"password\": { \"title\": \"Password\", \"type\": \"string\" }, \"database\": { \"title\": \"Database Name\", \"type\": \"string\" }, \"collection\": { \"title\": \"Collection Name\", \"type\": \"string\" }, \"url\": { \"title\": \"Sever URL\", \"type\": \"string\" }, \"query\": { \"title\":\"Query\", \"type\":\"string\" }, \"queryOutput\":{\"title\":\"Query Output\", \"type\":\"string\"} }, \"required\": [\"name\", \"password\", \"collection\", \"database\", \"url\"] }}";
 
 
         //FORM INSIDE CODE:: $scope.onSubmit(form);let WFID=$scope.workflowName; let componentKey=$scope.selectedComponent.key; componentService.getOutput(WFID, componentKey).then( function success(response){ document.getElementById(\"output\").value=response.data; }, function error(response { notify.showError(response.data.message); });
        // JSONObject obj = new JSONObject(Configform);
         Entity config = new Entity();
         config.addKeyValue("FORM", Configform);// obj.toMap()
-        HashMap<String, Object> model = null;
+        HashMap<String, Object> model;
 
         if(this.config!=null){
             model = this.config.getEntity();
@@ -144,6 +146,7 @@ public class MongoQuery implements Component {
 
     @Override
     public Entity getOutput() {
+        System.out.println("in getO mq");
         if(config==null)
             return null;
         setOutput(null);
@@ -152,16 +155,19 @@ public class MongoQuery implements Component {
 
     @Override
     public Entity getInput(Component component) {
+        System.out.println("in getI mq");
         return new Entity();
     }
 
     @Override
     public void setInput(Entity input) {
+        System.out.println("in setI mq");
         this.input = new Entity();
     }
 
     @Override
     public void setOutput(Entity output) {
+        System.out.println("in setO mq");
         this.output = new Entity();
         init();
         /*try{
@@ -187,7 +193,14 @@ public class MongoQuery implements Component {
         }catch(Exception e){
             e.printStackTrace();
         }*/
-        Entity test=process(null);
+        Entity test;
+        try{
+            test=process(null);
+        }
+        catch (Exception e){
+            System.out.println("db exception");
+            test=null;
+        }
         if(test!=null) {
             HashMap<String, Object> out = test.getEntity();
             JSONArray outputE = new JSONArray();
@@ -212,17 +225,19 @@ public class MongoQuery implements Component {
 
     @Override
     public void setConfig(Entity config) {
+        System.out.println("in setC mq");
         this.config = config;
-
         setOutput(null);
     }
 
     @Override
     public boolean isValid() {
+        System.out.println("in isV mq");
         return true;
     }
 
     public ArrayList<String> testQuery(){
+        System.out.println("in testQ mq");
         ArrayList<String> ret=new ArrayList<>();
         init();
         BasicDBObject cmd=new BasicDBObject(command);
