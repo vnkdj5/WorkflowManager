@@ -117,7 +117,8 @@ public class MongoQuery implements Component {
                 "xhttp.onreadystatechange = function() {" +
                 "    if (this.readyState == 4 && this.status == 200) {" +
                 "       console.log(xhttp.responseText);" +
-                "       document.getElementById('output').value=xhttp.responseText" +
+                "       scope1.model.output = xhttp.responseText" +
+         //       "       document.getElementById('output').value=xhttp.responseText" +
                 "    }" +
                 "};" +
                 "xhttp.open('GET', 'getOutput/'+WFID+'/'+compId, true);" +
