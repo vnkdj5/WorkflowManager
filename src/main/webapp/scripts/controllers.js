@@ -182,22 +182,43 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     };
 
 //	run the workflow method
+    $scope.stompClient = null;
     $scope.runWorkflow = function () {
         var WFId = $scope.workflow.name; //Name is also Id
         //console.log("RUN name   "+ name);
         notify.showInfo("Info:" + WFId, "Workflow checking and execution started.");
 
+        let socket = new SockJS('wss://echo.websocket.org');
+        $scope.stompClient = Stomp.over(socket);
+        $scope.stompClient.connect({}, function onConnect(frame) {
 
+                console.log('Connected: ' + frame);
+                let subscription = $scope.stompClient.subscribe('/echo', function (response) {
+                    notify.showInfo(WFId, JSON.parse(response.body).progressStatus);
+                });
+                console.log("Subscription ID", subscription);
+            }, function onError(error) {
+                console.log("STOMP connection error", error);
+            }
+        );
         graphService.runWorkflow(WFId).then(
             function success(response) {
                 //console.log(response.data);
                 notify.showSuccess("Success!", "Workflow Execution Finished.");
+                if ($scope.stompClient !== null) {
+                    $scope.stompClient.disconnect();
+                }
+
+                console.log("Disconnected");
 
             },
             function error(response) {
-                var errors = response.data.cause;
-                for (var i = 0; i < errors.length; i++) {
+                let errors = response.data.cause;
+                for (let i = 0; i < errors.length; i++) {
                     notify.showError("Error in Workflow!", errors[i]);
+                }
+                if ($scope.stompClient !== null) {
+                    $scope.stompClient.disconnect();
                 }
             }
         );
@@ -290,7 +311,21 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     // Show the diagram's model in JSON format that the user may edit
     $scope.save = function () {
         $scope.workflow = $scope.myDiagram.model;
-        console.log("Saving Workflow : ", $scope.workflow.name);
+        console.log("in save || testing sockets");
+        let socket = new SockJS('workflow-execution-websocket');
+        $scope.stompClient = Stomp.over(socket);
+        $scope.stompClient.connect({}, function onConnect(frame) {
+
+                console.log('Connected: ' + frame);
+                let subscription = $scope.stompClient.subscribe('/echo', function (response) {
+                    notify.showInfo(WFId, JSON.parse(response.body).progressStatus);
+                });
+                console.log("Subscription ID", subscription);
+            }, function onError(error) {
+                console.log("STOMP connection error", error);
+            }
+        );
+        /*console.log("Saving Workflow : ", $scope.workflow.name);
         if ($scope.workflow.name == "" || $scope.workflow.name == undefined) {
             $("#newWorkflowModal").modal("show");
         } else {
@@ -314,7 +349,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 }
             );
 
-        }
+        }*/
 
     };
     $scope.loadWorkflow = function () {
