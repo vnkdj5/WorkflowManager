@@ -188,12 +188,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         //console.log("RUN name   "+ name);
         notify.showInfo("Info:" + WFId, "Workflow checking and execution started.");
 
-        let socket = new SockJS('wss://echo.websocket.org');
+        let socket = new SockJS('workflow-execution-websocket');
         $scope.stompClient = Stomp.over(socket);
         $scope.stompClient.connect({}, function onConnect(frame) {
 
                 console.log('Connected: ' + frame);
-                let subscription = $scope.stompClient.subscribe('/echo', function (response) {
+            let subscription = $scope.stompClient.subscribe('/completion/status', function (response) {
                     notify.showInfo(WFId, JSON.parse(response.body).progressStatus);
                 });
                 console.log("Subscription ID", subscription);
@@ -317,7 +317,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.stompClient.connect({}, function onConnect(frame) {
 
                 console.log('Connected: ' + frame);
-                let subscription = $scope.stompClient.subscribe('/echo', function (response) {
+            let subscription = $scope.stompClient.subscribe('/completion/status', function (response) {
                     notify.showInfo(WFId, JSON.parse(response.body).progressStatus);
                 });
                 console.log("Subscription ID", subscription);
