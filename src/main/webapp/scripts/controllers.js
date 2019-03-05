@@ -125,10 +125,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 }
             );
         }
-        /* else{
+        /* else
+        {
                  testBtn.innerHTML = "Checking Connection Failed";
                  testBtn.classList.add('spinning');
-             }*/
+        }
+        */
     };
 
 //	for request
@@ -148,7 +150,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     };
 
-
+    var source = new EventSource('stream-sse');
+    source.onmessage = function (evt) {
+        var eventData = evt.data;
+        console.log("message:", eventData);
+    }
     /*
      * onSubmit() is used for saving the components configurations.
      */
@@ -183,10 +189,23 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
 //	run the workflow method
     $scope.stompClient = null;
+    $scope.wfStatus = {percent: 100, status: "Execution Started"};
     $scope.runWorkflow = function () {
         var WFId = $scope.workflow.name; //Name is also Id
         //console.log("RUN name   "+ name);
         notify.showInfo("Info:" + WFId, "Workflow checking and execution started.");
+        var progressStatus = document.getElementById("wfstatus");
+        progressStatus.style.display = "block";
+        notify.showInfo(WFId, "<div class=\"progressDiv\" id=\"wfstatus\">\n" +
+            "            <div class=\"progress\">\n" +
+            "                <div class=\"progress-bar progress-bar-success active\" role=\"progressbar\"\n" +
+            "                     aria-valuenow=\"{{wfStatus.percent}}\" aria-valuemin=\"0\" aria-valuemax=\"100\"\n" +
+            "                     style=\"width:{{wfStatus.percent}}%\">\n" +
+            "                    {{wfStatus.percent}}%\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "            <p class=\"text-center\"> {{wfStatus.status}}</p>\n" +
+            "        </div>");
 
         let socket = new SockJS('workflow-execution-websocket');
         $scope.stompClient = Stomp.over(socket);
@@ -195,6 +214,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 console.log('Connected: ' + frame);
             let subscription = $scope.stompClient.subscribe('/completion/status', function (response) {
                     notify.showInfo(WFId, JSON.parse(response.body).progressStatus);
+                $scope.wfStatus.percent = response.body.percent;
                 });
                 console.log("Subscription ID", subscription);
             }, function onError(error) {
@@ -313,6 +333,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.workflow = $scope.myDiagram.model;
         console.log("in save || testing sockets");
         let socket = new SockJS('workflow-execution-websocket');
+        var progressStatus = document.getElementById("wfstatus");
+        progressStatus.style.display = "block";
         $scope.stompClient = Stomp.over(socket);
         $scope.stompClient.connect({}, function onConnect(frame) {
 
