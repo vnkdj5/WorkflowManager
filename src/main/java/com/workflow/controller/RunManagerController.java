@@ -19,7 +19,7 @@ public class RunManagerController {
 
 	@Autowired
 	Helper helper;
-
+    static int count = 0;
 	@RequestMapping(value="/run/{WFId}", method= RequestMethod.GET)
 	public ResponseEntity<HashMap> runWorkflow(@PathVariable("WFId") String WFId){
 
@@ -38,7 +38,20 @@ public class RunManagerController {
 		return new ResponseEntity<>(map,HttpStatus.OK);
 		
 	}
-	
+
+    @RequestMapping(value = "/executionStatus/{WFId}", method = RequestMethod.GET)
+    public ResponseEntity<HashMap> getStatus(@PathVariable("WFId") String WFId) {
+        HashMap<String, String> status = new HashMap<>();
+        if (count == 5) {
+            count = 0;
+            status.put("message", "success");
+        } else {
+            count++;
+            status.put("message", "Executing WF " + (count * 20));
+        }
+
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
 	
 	
 }

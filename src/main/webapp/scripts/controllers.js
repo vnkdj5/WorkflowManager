@@ -9,7 +9,7 @@ app.filter('beginning_data', function () {
     }
 });
 
-app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphService', 'componentService', '$q', 'notificationService', '$http', '$location', '$timeout', function ($scope, $rootScope, fileUpload, graphService, componentService, $q, notify, $http, $location, $timeout) {
+app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphService', 'componentService', '$q', 'notificationService', '$http', '$location', '$timeout', 'growl', '$interval', function ($scope, $rootScope, fileUpload, graphService, componentService, $q, notify, $http, $location, $timeout, growl, $interval) {
     $scope.schema = null;
     $scope.form = [];
     $scope.model = {};
@@ -150,11 +150,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
     };
 
-    var source = new EventSource('stream-sse');
-    source.onmessage = function (evt) {
-        var eventData = evt.data;
-        console.log("message:", eventData);
-    }
+
     /*
      * onSubmit() is used for saving the components configurations.
      */
@@ -188,16 +184,20 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     };
 
 //	run the workflow method
-    $scope.stompClient = null;
+
     $scope.wfStatus = {percent: 100, status: "Execution Started"};
     $scope.runWorkflow = function () {
         var WFId = $scope.workflow.name; //Name is also Id
-        //console.log("RUN name   "+ name);
+
         notify.showInfo("Info:" + WFId, "Workflow checking and execution started.");
-        var progressStatus = document.getElementById("wfstatus");
-        progressStatus.style.display = "block";
-        notify.showInfo(WFId, "<div class=\"progressDiv\" id=\"wfstatus\">\n" +
-            "            <div class=\"progress\">\n" +
+
+        //var progressStatus = document.getElementById("wfstatus");
+        //progressStatus.style.display = "block";
+
+
+        /*
+        "<div class=\"progressDiv\" id=\"wfstatus\">\n"+
+            "           <div class=\"progress\">\n" +
             "                <div class=\"progress-bar progress-bar-success active\" role=\"progressbar\"\n" +
             "                     aria-valuenow=\"{{wfStatus.percent}}\" aria-valuemin=\"0\" aria-valuemax=\"100\"\n" +
             "                     style=\"width:{{wfStatus.percent}}%\">\n" +
@@ -205,7 +205,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             "                </div>\n" +
             "            </div>\n" +
             "            <p class=\"text-center\"> {{wfStatus.status}}</p>\n" +
-            "        </div>");
+            "        </div>")
+
+        STOMP CODE
 
         let socket = new SockJS('workflow-execution-websocket');
         $scope.stompClient = Stomp.over(socket);
@@ -220,28 +222,48 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             }, function onError(error) {
                 console.log("STOMP connection error", error);
             }
-        );
+        );*/
+        var statusPromise;
+        $scope.currentInfo = "";
         graphService.runWorkflow(WFId).then(
             function success(response) {
                 //console.log(response.data);
                 notify.showSuccess("Success!", "Workflow Execution Finished.");
-                if ($scope.stompClient !== null) {
-                    $scope.stompClient.disconnect();
-                }
 
-                console.log("Disconnected");
 
             },
             function error(response) {
                 let errors = response.data.cause;
+                console.log("Error DATA", response.data);
                 for (let i = 0; i < errors.length; i++) {
                     notify.showError("Error in Workflow!", errors[i]);
                 }
-                if ($scope.stompClient !== null) {
-                    $scope.stompClient.disconnect();
-                }
             }
         );
+
+        var getStatus = function (WFId) {
+            graphService.getExecutionStatus(WFId).then(
+                function success(response) {
+                    if (response.data.message == "success") {
+                        $interval.cancel(statusPromise);
+                    }
+                    console.log("Status", response.data.message);
+                    $scope.currentInfo = response.data.message;
+                    document.getElementById("statusDiv").innerHTML = "<strong>Execution Status: </strong>" + response.data.message;
+                    //notify.showInfo("Executing "+WFId, response.data.message);
+                },
+                function error(response) {
+
+                    notify.showError("Error in Workflow!", response.statusText);
+                    $scope.currentInfo = response.data.statusText;
+
+                    $interval.cancel(statusPromise);
+
+                })
+        };
+        //schedule a task
+        statusPromise = $interval(getStatus, 3000);
+
 
     };
 

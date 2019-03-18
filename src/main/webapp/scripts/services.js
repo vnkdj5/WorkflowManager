@@ -71,6 +71,11 @@ app.service("graphService", function ($http) {
         return $http.get("run/" + name);
     };
 
+    //Get workflow Executing status
+    this.getExecutionStatus = function (WFID) {
+        return $http.get("executionStatus/" + WFID);
+    };
+
     this.checkDBConnection = function (data) {
         return $http({
             method: "POST",
