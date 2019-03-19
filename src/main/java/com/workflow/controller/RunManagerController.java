@@ -18,6 +18,9 @@ import com.workflow.bean.LogicGraph;
 public class RunManagerController {
 
 	@Autowired
+	DefaultRunManager runManager;
+
+	@Autowired
 	Helper helper;
     static int count = 0;
 	@RequestMapping(value="/run/{WFId}", method= RequestMethod.GET)
@@ -27,7 +30,7 @@ public class RunManagerController {
 		if((boolean)map.get("error")) {
 			return new ResponseEntity<>(map,HttpStatus.INTERNAL_SERVER_ERROR);
 		}else {
-			RunManager runManager=new DefaultRunManager();
+
 			ArrayList<String> res=runManager.run((LogicGraph)map.get("nodeList"),(Entity)map.get("runConfig"));
 			if(!res.get(0).equals("success")){
 				map.put("error",true);

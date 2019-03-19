@@ -15,20 +15,27 @@ import java.util.Date;
 @Service("DefaultRM")
 public class DefaultRunManager implements RunManager {
 
+    private final SimpMessagingTemplate template;
+
     @Autowired
-    SimpMessagingTemplate template;
+    DefaultRunManager(SimpMessagingTemplate template) {
+        this.template = template;
+    }
+
 
 
     @Override
     public ArrayList<String> run(LogicGraph logicGraph, Entity runConfig) {
 
-        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + "- " + "Running In Progressss");
+        //this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + "- " + "Ru");
+        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + " Execution Started");
         ArrayList<String> status=new ArrayList<>();
         boolean anchor;
         ArrayList<GraphNode> flow=logicGraph.getNodes();
         int phaseStart=0, phaseEnd=0;
         for (int i=0;i<flow.size();i++){
             flow.get(i).getComponent().init();
+            this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + " " +flow.get(i).getComponent().getClass().getName()+" is initialized.");
         }
         do {
             while(phaseEnd!=flow.size() && !flow.get(phaseEnd).getCategory().equals("Phase")){
@@ -40,6 +47,7 @@ public class DefaultRunManager implements RunManager {
                 anchor=false;
                 int i=phaseStart;
                 Entity io=null;
+                this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + " phase "+ phaseEnd+ " in execution.");
                 try{
                     io = flow.get(phaseStart).getComponent().process(io);
                     for (i +=1; i < phaseEnd; i++) {
@@ -53,6 +61,7 @@ public class DefaultRunManager implements RunManager {
                     status.add("Problem at: "+flow.get(i).getName());
                     status.add("Cause: "+e.getMessage());
                     e.printStackTrace();
+                    this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  +  " Error in Execution.");
                     return status;
                 }
             } while (anchor);
@@ -61,7 +70,8 @@ public class DefaultRunManager implements RunManager {
             System.out.println("phase over count:"+count+"\nphasestart:"+phaseStart+"\nphaseend:"+phaseEnd);
         }while (phaseEnd<flow.size());
         status.add("success");
-        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + "- " + "Running");
+        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  +  " Execution Completed.");
+
         return status;
     }
 }
