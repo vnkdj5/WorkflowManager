@@ -221,6 +221,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
 
         /*
+
         "<div class=\"progressDiv\" id=\"wfstatus\">\n"+
             "           <div class=\"progress\">\n" +
             "                <div class=\"progress-bar progress-bar-success active\" role=\"progressbar\"\n" +
@@ -235,51 +236,32 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
      ;*/
 
 
-        //initializeWebSocketConnection();
-
-
-
-
-        var statusPromise;
-        $scope.currentInfo = "";
+        //Start execution of workflow
         graphService.runWorkflow(WFId).then(
             function success(response) {
                 //console.log(response.data);
                 notify.showSuccess("Success!", "Workflow Execution Finished.");
-
+                if (stompClient !== null) {
+                    stompClient.disconnect();
+                }
 
             },
             function error(response) {
                 let errors = response.data.cause;
-                console.log("Error DATA", response.data);
-                for (let i = 0; i < errors.length; i++) {
-                    notify.showError("Error in Workflow!", errors[i]);
+                // console.log("Error DATA", response.data);
+                if (stompClient !== null) {
+                    stompClient.disconnect();
                 }
-            }
-        );
-
-        var getStatus = function (WFId) {
-            graphService.getExecutionStatus(WFId).then(
-                function success(response) {
-                    if (response.data.message == "success") {
-                        $interval.cancel(statusPromise);
+                try {
+                    for (let i = 0; i < errors.length; i++) {
+                        notify.showError("Error in Workflow!", errors[i]);
                     }
-                    console.log("Status", response.data.message);
-                    $scope.currentInfo = response.data.message;
-                    document.getElementById("statusDiv").innerHTML = "<strong>Execution Status: </strong>" + response.data.message;
-                    //notify.showInfo("Executing "+WFId, response.data.message);
-                },
-                function error(response) {
+                } catch (error) {
+                    console.log(error);
+                }
+            });
 
-                    notify.showError("Error in Workflow!", response.statusText);
-                    $scope.currentInfo = response.data.statusText;
 
-                    $interval.cancel(statusPromise);
-
-                })
-        };
-        //schedule a task
-        statusPromise = $interval(getStatus, 3000);
 
 
     };
