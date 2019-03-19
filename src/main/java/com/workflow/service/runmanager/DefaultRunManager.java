@@ -4,13 +4,25 @@ import com.workflow.bean.GraphNode;
 import com.workflow.bean.LogicGraph;
 import com.workflow.bean.WFGraph;
 import com.workflow.component.Entity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-
+@Service("DefaultRM")
 public class DefaultRunManager implements RunManager {
+
+    @Autowired
+    SimpMessagingTemplate template;
+
+
     @Override
     public ArrayList<String> run(LogicGraph logicGraph, Entity runConfig) {
+
+        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + "- " + "Running In Progressss");
         ArrayList<String> status=new ArrayList<>();
         boolean anchor;
         ArrayList<GraphNode> flow=logicGraph.getNodes();
@@ -49,6 +61,7 @@ public class DefaultRunManager implements RunManager {
             System.out.println("phase over count:"+count+"\nphasestart:"+phaseStart+"\nphaseend:"+phaseEnd);
         }while (phaseEnd<flow.size());
         status.add("success");
+        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + "- " + "Running");
         return status;
     }
 }

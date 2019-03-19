@@ -20,7 +20,7 @@ public class WebSocetController {
     }
 
     //@MessageMapping("/send/message?wfid=dd")
-    @Scheduled(fixedDelay = 2000)
+    //@Scheduled(fixedDelay = 2000)
     public void onReceiveMessage() {
         this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  + "- " + "chahhhaha");
     }
