@@ -186,9 +186,34 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 //	run the workflow method
 
     $scope.wfStatus = {percent: 100, status: "Execution Started"};
+
+    const serverUrl = '/WorkflowManager/socket'
+    let stompClient;
+
+    $scope.initializeWebSocketConnection = function () {
+        let ws = new SockJS(serverUrl);
+        stompClient = Stomp.over(ws);
+        let self = this;
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe("/chat", (message) => {
+                if (message.body) {
+                    //$(".chat").append("<div class='message'>"+message.body+"</div>")
+                    notify.showInfo("Executing Workflow", message.body);
+                    console.log(message.body);
+                }
+            });
+        });
+    };
+
+    function sendMessage() {
+        var message = document.getElementById("inputTxt").value;
+        stompClient.send("/app/send/message", {}, message);
+        $('#input').val('');
+    }
+
     $scope.runWorkflow = function () {
         var WFId = $scope.workflow.name; //Name is also Id
-
+        $scope.initializeWebSocketConnection();
         notify.showInfo("Info:" + WFId, "Workflow checking and execution started.");
 
         //var progressStatus = document.getElementById("wfstatus");
@@ -207,22 +232,14 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             "            <p class=\"text-center\"> {{wfStatus.status}}</p>\n" +
             "        </div>")
 
-        STOMP CODE
+     ;*/
 
-        let socket = new SockJS('workflow-execution-websocket');
-        $scope.stompClient = Stomp.over(socket);
-        $scope.stompClient.connect({}, function onConnect(frame) {
 
-                console.log('Connected: ' + frame);
-            let subscription = $scope.stompClient.subscribe('/completion/status', function (response) {
-                    notify.showInfo(WFId, JSON.parse(response.body).progressStatus);
-                $scope.wfStatus.percent = response.body.percent;
-                });
-                console.log("Subscription ID", subscription);
-            }, function onError(error) {
-                console.log("STOMP connection error", error);
-            }
-        );*/
+        //initializeWebSocketConnection();
+
+
+
+
         var statusPromise;
         $scope.currentInfo = "";
         graphService.runWorkflow(WFId).then(
