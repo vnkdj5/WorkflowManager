@@ -42,6 +42,12 @@ public class RunManagerController {
 		
 	}
 
+	/*
+	Explicitly checking status of execution by execution by sending REST Request
+	Need to add status as a variable in Workflow class where current status of execution will be stored
+	Not recommended.
+	P.S. Replaced with web socket implementation
+	 */
     @RequestMapping(value = "/executionStatus/{WFId}", method = RequestMethod.GET)
     public ResponseEntity<HashMap> getStatus(@PathVariable("WFId") String WFId) {
         HashMap<String, String> status = new HashMap<>();

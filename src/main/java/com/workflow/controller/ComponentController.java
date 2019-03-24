@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
+import com.workflow.exceptions.NoDataFoundException;
 import com.workflow.service.ComponentService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -41,14 +42,18 @@ public class ComponentController {
 	
 	@RequestMapping(value="/getConfig/{WFId}/{componentId}", method= RequestMethod.GET)
 	public ResponseEntity<HashMap> getConfig(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
-		
-		Entity config = componentService.getConfig(WFId, CId);
+		Entity config;
+		try {
+			config = componentService.getConfig(WFId, CId);
+		} catch (Exception ex) {
+			throw new NoDataFoundException(WFId, CId, "Configuration not found");
+		}
 		//add config model to the response and send back the entity.
 		if(config==null) {
-
-			HashMap obj=new HashMap<String,String>();
+			throw new NoDataFoundException(WFId, CId, "Configuration not found");
+			/*HashMap obj=new HashMap<String,String>();
 			obj.put("message","No config found");
-			return new ResponseEntity<>(obj,HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(obj,HttpStatus.INTERNAL_SERVER_ERROR);*/
 		}else {
 			return new ResponseEntity<>(config.getEntity(),HttpStatus.OK);
 		}
@@ -87,7 +92,16 @@ public class ComponentController {
 	
 	@RequestMapping(value="/getInput/{WFId}/{componentId}", method=RequestMethod.GET)
 	public ResponseEntity<ArrayList<JSONObject>> getInput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
-		Entity response=componentService.getInput(WFId, CId);
+		Entity response;
+		try {
+			response = componentService.getInput(WFId, CId);
+		} catch (RuntimeException ex) {
+			System.out.println("Get input error");
+			throw new NoDataFoundException(WFId, CId, "No input present ");
+		}
+		if (response == null) {
+			throw new NoDataFoundException(WFId, CId, "No input present ");
+		}
 		return new ResponseEntity<>((ArrayList<JSONObject>)response.getEntity().get("input"),HttpStatus.OK);
 	}
 
@@ -95,7 +109,7 @@ public class ComponentController {
 	public ResponseEntity<ArrayList<JSONObject>> getOutput(@PathVariable("WFId") String WFId, @PathVariable("componentId") String CId){
 		Entity response=componentService.getOutput(WFId, CId);
 		if(response==null){
-			return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new NoDataFoundException(WFId, CId, "No output present ");
 		}
 		return new ResponseEntity<>((ArrayList<JSONObject>)response.getEntity().get("output"),HttpStatus.OK);
 	}

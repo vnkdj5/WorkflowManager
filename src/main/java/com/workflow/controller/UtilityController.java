@@ -1,6 +1,7 @@
 package com.workflow.controller;
 
 import com.workflow.component.Entity;
+import com.workflow.exceptions.GenericRuntimeException;
 import com.workflow.service.ComponentService;
 import com.workflow.service.Helper;
 import org.json.JSONArray;
@@ -79,21 +80,17 @@ public class UtilityController {
                     return new ResponseEntity<HashMap>(model.getEntity(), HttpStatus.OK);
                 }
                 else {
-                    model.getEntity().put("message", "Incompatible headers");
-                    return new ResponseEntity<HashMap>(model.getEntity(),HttpStatus.INTERNAL_SERVER_ERROR);
+                    throw new GenericRuntimeException(CompId, "Incompatible headers");
                 }
 
 
             } catch (Exception e) {
                 e.printStackTrace();
-                map.put("message", "File Upload exception");
-                return new ResponseEntity<HashMap>(map,HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new GenericRuntimeException(CompId, "File upload exception.");
             }
         } else {
-            //return "You failed to upload " + name
-            //		+ " because the file was empty.";
-            map.put("message", "File Uploade error");
-            return new ResponseEntity<HashMap>(map,HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new GenericRuntimeException(CompId, "File upload error at server.");
+
         }
 
         //return new ResponseEntity<String>("{\"message\":\"File Uploaded successfully\"}",HttpStatus.OK);
@@ -105,7 +102,7 @@ public class UtilityController {
         if(file.delete()) {
             return new ResponseEntity<String>("{\"message\":\"File deleted\"}",HttpStatus.OK);
         }
-        return new ResponseEntity<String>("{\"message\":\"Cannot delete file\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new GenericRuntimeException("File deletion failed.");
     }
 
     @RequestMapping(value="/testQuery/{WFId}/{compId}", method=RequestMethod.GET)
@@ -116,8 +113,8 @@ public class UtilityController {
             if(ret==null)
                 ret.add("Invalid request");
         }catch (Exception e){
-            ret.add("Error in processing query");
-            return new ResponseEntity<>(ret,HttpStatus.INTERNAL_SERVER_ERROR);
+
+            throw new GenericRuntimeException(CompId, "Error in processing query");
         }
         return new ResponseEntity<>(ret,HttpStatus.OK);
     }

@@ -587,8 +587,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                 //Add notification show "Component not found"
                 $scope.schema = null;
                 $scope.form = null;
-                $scope.form.model = null;
-                notify.showError("Error!", response.data);
+                // $scope.form.model = null;
+                notify.showError("Error!", response.data.message);
 
             });
     };
@@ -1050,7 +1050,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
 
             },
             function onError(error) {
-                notify.showError("Error", error.statusText);
+                notify.showError("Error", error.data.message);
                 return null;
             }
         )
@@ -1126,7 +1126,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     $('#inputModal').modal('show');
                 },
                 function error(response) {
-                    notify.showError("Error!!", response.statusText);
+                    notify.showError("Error!!", response.data.message);
                 }
             );
         } else {
@@ -1185,7 +1185,7 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
                     $('#inputModal').modal('show');
                 },
                 function error(response) {
-                    notify.showError("Error!!", response.statusText);
+                    notify.showError("Error!!", response.data.message);
                 }
             )
         }

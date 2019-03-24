@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Date;
 
 import com.workflow.bean.GraphLink;
+import com.workflow.exceptions.GenericRuntimeException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -44,7 +45,8 @@ public class GraphController {
             }
 		}catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("{\"message\":\"Workflow Save Error! Try Again\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new GenericRuntimeException(WFId, "Workflow save error. Try again after some time.");
+			//return new ResponseEntity<String>("{\"message\":\"Workflow Save Error! Try Again\"}",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		return new ResponseEntity<String>("{\"message\":\"Workflow Saved Successfully\"}",HttpStatus.OK);
@@ -61,6 +63,8 @@ public class GraphController {
 			e.printStackTrace();
 		}
 		HashMap<String,Object> map = graphService.newWorkflow(iname);
+		if (map == null)
+			throw new GenericRuntimeException(name, "Error while creating workflow");
 		if(map!=null && (Boolean)map.get("Found")) {
 			return new ResponseEntity<HashMap>(map,HttpStatus.FOUND);
 		}else {
@@ -92,7 +96,8 @@ public class GraphController {
 		try {
             graphService.deleteGraph(id);
 		}catch(Exception e) {
-			return new ResponseEntity<String>("{\"message\":\"Workflow Deletion Error! Try Again\"}",HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new GenericRuntimeException(id, "Workflow Deletion Error! Try Again");
+			//return new ResponseEntity<String>("{\"message\":\"Workflow Deletion Error! Try Again\"}",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		return new ResponseEntity<String>("{\"message\":\"Workflow Deleted Successfully\"}",HttpStatus.OK);
