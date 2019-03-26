@@ -6,40 +6,43 @@ To build a workflow manager that will help Predii to generate intelligent insigh
 
 ## Objectives 
 
-Simplify data integration and handling. 
+  - Simplify data integration and handling. 
 
-Eradicate the need of manual coding for integration of modules. 
+  - Eradicate the need of manual coding for integration of modules. 
 
-Speedup the development process 
+  - Speedup the development process 
 
  
 
 ## Software Requirements 
 
-IntelliJ IDEA (with Spring Framework support). 
+  - IntelliJ IDEA (with Spring Framework support). 
 
-MongoDB 3.2.2
+  - MongoDB 3.2.2
 
-Java 1.8 and above 
+  - Java 1.8 and above 
 
-Apache Tomcat server 
+  - Apache Tomcat server 
 
 ## Technologies Used 
 
-Angular JS 1.7.2 
+### Client Side Technologies
 
-Angular Schema-form
+  - Angular JS 1.7.2 
+  - Angular Schema-form
+  - Go JS 
 
-Go JS 
 
-Spring Framework 
+### Server Side Technologies
 
-Apache Tomcat 
+  - Spring 5
+  - Java 8
+  - Apache Tomcat 
+  - Web Socket 
+  
+### Database
 
-Mongo DB Atlas 
-
-Web Socket 
-
+  - Mongo DB  
  
 
 ## Steps to run  
