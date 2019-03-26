@@ -23,7 +23,20 @@ MongoDB
 Java 1.8 and above 
 
 Apache Tomcat server 
- 
+
+## Technologies Used 
+
+Angular JS 1.7.2 
+
+Go JS 
+
+Spring Framework 
+
+Apache Tomcat 
+
+Mongo DB Atlas 
+
+Web Socket 
 
  
 
@@ -39,6 +52,15 @@ Set up apache tomcat server configurations.
 
 Build and deploy the project. 
 
+Create new workflow  
+
+Drag and drop the required components 
+
+Setup the component configurations (input, valid links, config,output) 
+
+ Check for the validations of component 
+
+Save and run the workflow 
  
 
 ## Component Designing Protocols 
