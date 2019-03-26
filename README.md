@@ -1,10 +1,10 @@
-#Workflow Manager 
+# Workflow Manager 
 
-#Problem Statement 
+## Problem Statement 
 
 To build a workflow manager that will help Predii to generate intelligent insights from raw data by creating and executing tasks using Graphical User Interface. Platform should have ability to create, manage and monitor workflows. 
 
-#Objectives 
+## Objectives 
 
 Simplify data integration and handling. 
 
@@ -14,7 +14,7 @@ Speedup the development process
 
  
 
-#Software Requirements 
+## Software Requirements 
 
 IntelliJ IDEA or Eclipse (with Spring Framework support). 
 
@@ -28,7 +28,7 @@ Go JS libraries
 
  
 
-#Steps to run  
+## Steps to run  
 
  Clone the project from 
 
@@ -42,7 +42,7 @@ Build and deploy the project.
 
  
 
-#Component Designing Protocols 
+## Component Designing Protocols 
 
 Create a java class file with component name as class name. 
 
