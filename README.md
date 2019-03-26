@@ -23,8 +23,7 @@ MongoDB
 Java 1.8 and above 
 
 Apache Tomcat server 
-
-Go JS libraries 
+ 
 
  
 
