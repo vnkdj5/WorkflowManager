@@ -194,10 +194,11 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         let ws = new SockJS(serverUrl);
         stompClient = Stomp.over(ws);
         let self = this;
+        $("#statusDiv").innerHTML="";
         stompClient.connect({}, function (frame) {
             stompClient.subscribe("/chat", (message) => {
                 if (message.body) {
-                    //$(".chat").append("<div class='message'>"+message.body+"</div>")
+                    $("#statusDiv").append("<p class='message'>"+message.body+"</p>")
                     notify.showInfo("Executing Workflow", message.body);
                     console.log(message.body);
                 }
