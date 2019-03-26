@@ -55,6 +55,10 @@ https://github.com/vnkdj5/WorkflowManager.git
 
   - Set up apache tomcat server configurations. 
 
+  - Set up mongodb database: 
+      Update MongoDB URI in 'config.properties' file(src/main/resources/config.properties).
+      Use 'dump.zip' to populate the database.
+
   - Build and deploy the project. 
 
   - Run http://localhost:8080/WorkflowManager/ 
