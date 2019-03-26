@@ -28,6 +28,8 @@ Apache Tomcat server
 
 Angular JS 1.7.2 
 
+Angular Schema-form
+
 Go JS 
 
 Spring Framework 
@@ -52,8 +54,9 @@ Set up apache tomcat server configurations.
 
 Build and deploy the project. 
 
-Run http://localhost:4005/WorkflowManager/ 
-
+Run http://localhost:<port>/WorkflowManager/ 
+<port> : port number for apache tomcat server
+ 
 Create new workflow  
 
 Drag and drop the required components 
@@ -79,7 +82,7 @@ Process(): provide actual processing of component.
 
 Implement required component specific APIs in Utility. 
 
- 
+Update the valid links of added component in "validLinks" collection in database.  
 
  
 
