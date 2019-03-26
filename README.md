@@ -52,6 +52,8 @@ Set up apache tomcat server configurations.
 
 Build and deploy the project. 
 
+Run http://localhost:4005/WorkflowManager/ 
+
 Create new workflow  
 
 Drag and drop the required components 
