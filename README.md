@@ -18,7 +18,7 @@ To build a workflow manager that will help Predii to generate intelligent insigh
 
   - IntelliJ IDEA (with Spring Framework support). 
 
-  - MongoDB 3.2.2
+  - MongoDB 4.0.7
 
   - Java 1.8 and above 
 
