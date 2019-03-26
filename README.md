@@ -30,7 +30,7 @@ To build a workflow manager that will help Predii to generate intelligent insigh
 
   - Angular JS 1.7.2 
   - Angular Schema-form
-  - Go JS 
+  - Go JS 1.8.29
 
 
 ### Server Side Technologies
@@ -56,8 +56,8 @@ https://github.com/vnkdj5/WorkflowManager.git
   - Set up apache tomcat server configurations. 
 
   - Set up mongodb database: 
-      Update MongoDB URI in 'config.properties' file(src/main/resources/config.properties).
-      Use 'dump.zip' to populate the database.
+     -  Update MongoDB URI in 'config.properties' file(src/main/resources/config.properties).
+     -  Use 'dump.zip' to populate the database.
 
   - Build and deploy the project. 
 
