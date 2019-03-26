@@ -44,28 +44,27 @@ Web Socket
 
 ## Steps to run  
 
- Clone the project from 
+  -  Clone the project from 
 
 https://github.com/vnkdj5/WorkflowManager.git 
 
-Import the project in Eclipse or IntelliJ IDEA as maven project. 
+  - Import the project in Eclipse or IntelliJ IDEA as maven project. 
 
-Set up apache tomcat server configurations. 
+  - Set up apache tomcat server configurations. 
 
-Build and deploy the project. 
+  - Build and deploy the project. 
 
-Run http://localhost:<port>/WorkflowManager/ 
-<port> : port number for apache tomcat server
- 
-Create new workflow  
+  - Run http://localhost:8080/WorkflowManager/ 
 
-Drag and drop the required components 
+  - Create new workflow  
 
-Setup the component configurations (input, valid links, config,output) 
+  - Drag and drop the required components 
 
- Check for the validations of component 
+  - Setup the component configurations (input, valid links, config,output) 
 
-Save and run the workflow 
+   - Check for the validations of component 
+
+  - Save and run the workflow 
  
 
 ## Component Designing Protocols 
