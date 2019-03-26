@@ -16,9 +16,9 @@ Speedup the development process
 
 ## Software Requirements 
 
-IntelliJ IDEA or Eclipse (with Spring Framework support). 
+IntelliJ IDEA (with Spring Framework support). 
 
-MongoDB 
+MongoDB 3.2.2
 
 Java 1.8 and above 
 
@@ -48,7 +48,7 @@ Web Socket
 
 https://github.com/vnkdj5/WorkflowManager.git 
 
-  - Import the project in Eclipse or IntelliJ IDEA as maven project. 
+  - Import the project in IntelliJ IDEA as maven project. 
 
   - Set up apache tomcat server configurations. 
 
@@ -69,19 +69,19 @@ https://github.com/vnkdj5/WorkflowManager.git
 
 ## Component Designing Protocols 
 
-Create a java class file with component name as class name. 
+  - Create a java class file with component name as class name. 
 
-Implement the Component Interface. 
+  - Implement the Component Interface. 
 
-Provide definitions to methods:  
+  - Provide definitions to methods:  
 
-Init(): Configuration initialization 
+  - Init(): Configuration initialization 
 
-Process(): provide actual processing of component. 
+  - Process(): provide actual processing of component. 
 
-Implement required component specific APIs in Utility. 
+  - Implement required component specific APIs in Utility. 
 
-Update the valid links of added component in "validLinks" collection in database.  
+  - Update the valid links of added component in "validLinks" collection in database.  
 
  
 
