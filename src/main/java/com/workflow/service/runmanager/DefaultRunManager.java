@@ -61,7 +61,7 @@ public class DefaultRunManager implements RunManager {
                     status.add("Problem at: "+flow.get(i).getName());
                     status.add("Cause: "+e.getMessage());
                     e.printStackTrace();
-                    this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  +  " Error in Execution.");
+                    this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  +  " Error in Execution" + status);
                     return status;
                 }
             } while (anchor);
@@ -70,7 +70,7 @@ public class DefaultRunManager implements RunManager {
             System.out.println("phase over count:"+count+"\nphasestart:"+phaseStart+"\nphaseend:"+phaseEnd);
         }while (phaseEnd<flow.size());
         status.add("success");
-        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  +  " Execution Completed.");
+        this.template.convertAndSend("/chat", new SimpleDateFormat("HH:mm:ss").format(new Date())  +  " Execution Completed "+ status);
 
         return status;
     }
