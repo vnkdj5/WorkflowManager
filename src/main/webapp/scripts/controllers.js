@@ -159,7 +159,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         $scope.$broadcast('schemaFormValidate');
         let compId = $scope.selectedComponent.key;
         let WFId = $scope.currentWorkflowName;
-
+        $scope.model.WFId = WFId;
+        $scope.model.ComponentId = compId;
 
         // Then we check if the form is valid
         if (form.$valid)    {
