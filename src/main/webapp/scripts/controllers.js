@@ -167,6 +167,9 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
             componentService.setConfig(WFId, compId, $scope.model).then(
                 function success(response) {
                     notify.showSuccess("Success", response.data.message);
+                    if (response.data.config != null || response.data.config != undefined) {
+                        $scope.model = response.data.config;
+                    }
                 },
                 function error(response) {
                     notify.showError("Error", response.data.message);
