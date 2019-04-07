@@ -93,7 +93,7 @@
 
 			HashMap<String,Object> model = new HashMap<>();
 
-			if(this.config!=null){
+			if(this.config.getEntity().keySet().size()>2){
 				config.addKeyValue("MODEL",this.config.getEntity());
 			}else {
 				if (input == null) {
@@ -147,7 +147,12 @@
 		@Override
 		public void setOutput(Entity output) {
 			this.output = new Entity();
-			this.output.addKeyValue("output",this.config.getEntity().get("outputFields"));
+			if(this.config.getEntity().get("outputFields")==null){
+				this.output.addKeyValue("output",new ArrayList<JSONObject>());
+			}else{
+				this.output.addKeyValue("output",this.config.getEntity().get("outpu	tFields"));
+			}
+
 		}
 
 		@Override
