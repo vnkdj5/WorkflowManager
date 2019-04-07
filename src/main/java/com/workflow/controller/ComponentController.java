@@ -76,14 +76,15 @@ public class ComponentController {
 		if(hmap.isEmpty()) {
 			HashMap<String,String> ret=new HashMap<>();
 			ret.put("message", "Success");
+
 			return new ResponseEntity<>(ret, HttpStatus.OK);
 		}
 		else{
 		    pass.setEntity(hmap);
-		    String res=componentService.setConfig(WFId,CId,pass);
-		    HashMap<String,String> ret=new HashMap<>();
-		    ret.put("message", res);
-		    if(res.equals("Success"))
+			HashMap<String,Object> ret=componentService.setConfig(WFId,CId,pass);
+
+
+		    if(ret.get("message").equals("Success"))
                 return new ResponseEntity<>(ret,HttpStatus.OK);
             return new ResponseEntity<>(ret,HttpStatus.INTERNAL_SERVER_ERROR);
         }

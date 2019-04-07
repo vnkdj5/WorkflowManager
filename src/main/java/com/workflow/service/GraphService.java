@@ -57,6 +57,10 @@ public class GraphService {
                 double x = Double.parseDouble(update.get("x").toString());
                 double y = Double.parseDouble(update.get("y").toString());
                 Component newNode = help.getObjectByClassName(componentCategory);
+                Entity config = new Entity();
+                config.addKeyValue("WFId",WFId);
+                config.addKeyValue("ComponentId",componentId);
+                newNode.setConfig(config);
                 GraphNode graphNode = new GraphNode(componentId, newNode, componentCategory, x, y, componentName);
 
                 int flag = 0;

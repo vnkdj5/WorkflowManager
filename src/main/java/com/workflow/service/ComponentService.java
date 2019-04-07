@@ -10,10 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service("componentService")
 public class ComponentService {
@@ -46,13 +43,17 @@ public class ComponentService {
         }
     }
 
-    public String setConfig(String WFId, String CId, Entity entity){
+    public HashMap<String,Object> setConfig(String WFId, String CId, Entity entity){
+        HashMap<String,Object> ret=new HashMap<>();
+
         Query query=new Query();
         query.addCriteria(Criteria.where("id").is(WFId));
         WFGraph graph=mongoTemplate.findOne(query,WFGraph.class,"WFGraph");
-        if(graph==null)
-            return "Workflow does not exist!";
-        else {
+        if(graph==null) {
+            ret.put("message", "Workflow does not exist!");
+            return ret;
+
+        }else {
             List<GraphNode> nodeList = graph.getNodes();
             Iterator<GraphNode> it = nodeList.iterator();
             while (it.hasNext()) {
@@ -61,10 +62,13 @@ public class ComponentService {
                     obj.getComponent().setConfig(entity);
                     graph.setTimestamp(new Date());
                     mongoTemplate.save(graph,"WFGraph");
-                    return "Success";
+                    ret.put("message", "Success");
+                    ret.put("config",obj.getComponent().getConfig().getEntity().get("MODEL"));
+                    return ret;
                 }
             }
-            return "Component does not exist";
+            ret.put("message", "Component does not exist");
+            return ret;
         }
     }
 
