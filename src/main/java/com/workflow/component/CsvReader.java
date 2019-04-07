@@ -180,6 +180,9 @@ public class CsvReader implements Component{
 		this.output = new Entity();
 		JSONArray list=new JSONArray();
 		ArrayList<String> headers=(ArrayList<String>) this.config.getEntity().get(HEADERS);
+		if(headers==null){
+			headers=new ArrayList<>();
+		}
 		for(int i=0;i<headers.size();i++){
 			JSONObject temp=new JSONObject();
 			temp.put("fieldName", headers.get(i));
@@ -194,10 +197,12 @@ public class CsvReader implements Component{
 	public void setConfig(Entity config) {
 		System.out.println("in setC csv");
 		this.config = config;
-		if(((ArrayList<String>)this.config.getEntity().get("filePath")).size()<1){
+		if((ArrayList<String>)this.config.getEntity().get("filePath")!=null && ((ArrayList<String>)this.config.getEntity().get("filePath")).size()<1){
 			this.config.getEntity().put("headers",new ArrayList<String>());
+
 		}
 		setOutput(null);
+
 	}
 
 	@Override

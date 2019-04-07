@@ -169,7 +169,41 @@ public class MongoQuery implements Component {
     public void setOutput(Entity output) {
         System.out.println("in setO mq");
         this.output = new Entity();
-        init();
+        if(this.config.getEntity().keySet().size()>2){
+            init();
+
+            Entity test;
+            try{
+                test=process(null);
+            }
+            catch (Exception e){
+                System.out.println("db exception");
+                test=null;
+            }
+            if(test!=null) {
+                HashMap<String, Object> out = test.getEntity();
+                JSONArray outputE = new JSONArray();
+                for (String h : out.keySet()) {
+                    JSONObject temp = new JSONObject();
+                    temp.put("fieldName", h);
+                    temp.put("dataType", "String");
+                    temp.put("check", false);
+                    outputE.put(temp);
+
+                }
+                this.output.addKeyValue("output", outputE.toList());
+            }
+            command=null;
+            collection=null;
+            db=null;
+            mongo=null;
+            opCmd=null;
+            entries=null;
+            result=null;
+        }else{
+            this.output = new Entity();
+        }
+
         /*try{
 
             BasicDBObject cmd=new BasicDBObject(command);
@@ -193,34 +227,7 @@ public class MongoQuery implements Component {
         }catch(Exception e){
             e.printStackTrace();
         }*/
-        Entity test;
-        try{
-            test=process(null);
-        }
-        catch (Exception e){
-            System.out.println("db exception");
-            test=null;
-        }
-        if(test!=null) {
-            HashMap<String, Object> out = test.getEntity();
-            JSONArray outputE = new JSONArray();
-            for (String h : out.keySet()) {
-                JSONObject temp = new JSONObject();
-                temp.put("fieldName", h);
-                temp.put("dataType", "String");
-                temp.put("check", false);
-                outputE.put(temp);
 
-            }
-            this.output.addKeyValue("output", outputE.toList());
-        }
-        command=null;
-        collection=null;
-        db=null;
-        mongo=null;
-        opCmd=null;
-        entries=null;
-        result=null;
     }
 
     @Override

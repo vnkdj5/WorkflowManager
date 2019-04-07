@@ -55,17 +55,23 @@
 					if (allowedheaders.contains(entry.getKey())) {
 						//improve logic here
 						String datatype = allowedHeadersDatatypes.get(allowedheaders.indexOf(entry.getKey()));
-						if (datatype.equals("boolean")) {
-							out.addKeyValue(newLabels.get(entry.getKey()), Boolean.parseBoolean((String) entry.getValue()));
-						} else if (datatype.equals("int")) {
-							out.addKeyValue(newLabels.get(entry.getKey()), Integer.parseInt((String) entry.getValue()));
-						} else if (datatype.equals("float")) {
-							out.addKeyValue(newLabels.get(entry.getKey()), Float.parseFloat((String) entry.getValue()));
-						} else {
-							out.addKeyValue(newLabels.get(entry.getKey()), entry.getValue());
+
+						try {
+							if (datatype.equals("boolean")) {
+								out.addKeyValue(newLabels.get(entry.getKey()), Boolean.parseBoolean((String) entry.getValue()));
+							} else if (datatype.equals("int")) {
+								out.addKeyValue(newLabels.get(entry.getKey()), Integer.parseInt((String) entry.getValue()));
+							} else if (datatype.equals("float")) {
+								out.addKeyValue(newLabels.get(entry.getKey()), Float.parseFloat((String) entry.getValue()));
+							} else {
+								out.addKeyValue(newLabels.get(entry.getKey()), entry.getValue());
+							}
+						}catch (Exception e){
+							out.addKeyValue(newLabels.get(entry.getKey()),Double.NaN);
 						}
 					}
 				} catch (NumberFormatException e) {
+					e.printStackTrace();
 					out.addKeyValue(newLabels.get(entry.getKey()), 0);
 				}
 
