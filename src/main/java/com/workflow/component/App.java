@@ -2,6 +2,8 @@ package com.workflow.component;
 
 import com.workflow.service.Helper;
 
+import javax.sound.sampled.Line;
+
 public class App {
 	public static void main(String[] args) {
 		
@@ -33,5 +35,14 @@ public class App {
 		Helper help = new Helper();
 		//System.out.println(help.checkMongoConnection("","akshay", "akshay".toCharArray(), "akshay"));
 		System.out.println("finished");
+
+		///MissingValuesHandler handler = new MissingValuesHandler();
+		//handler.process(null);
+
+		//LinearRegression r = new LinearRegression();
+		//r.process(null);
+
+		KNNClassifier r = new KNNClassifier();
+		r.process(null);
 	}
 }

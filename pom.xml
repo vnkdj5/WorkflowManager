@@ -7,6 +7,16 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>WorkflowManager Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+
+	<repositories>
+		<repository>
+			<id>java-ds</id>
+			<url>https://raw.githubusercontent.com/alexeygrigorev/maven-repo/master/</url>
+		</repository>
+	</repositories>
+
+
+
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 		<dependency>
@@ -126,6 +136,35 @@
 			<artifactId>jfreechart</artifactId>
 			<version>1.0.13</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.sourceforge/javaml -->
+		<dependency>
+			<groupId>net.sourceforge</groupId>
+			<artifactId>javaml</artifactId>
+			<version>0.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>be.abeel</groupId>
+			<artifactId>ajt</artifactId>
+			<version>2.9</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable -->
+		<dependency>
+			<groupId>nz.ac.waikato.cms.weka</groupId>
+			<artifactId>weka-stable</artifactId>
+			<version>3.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>tech.tablesaw</groupId>
+			<artifactId>tablesaw-core</artifactId>
+			<version>0.32.6</version>
+		</dependency>
+		<dependency>
+			<groupId>tech.tablesaw</groupId>
+			<artifactId>tablesaw-jsplot</artifactId>
+			<version>0.32.6</version>
+		</dependency>
+
 
 
 	</dependencies>

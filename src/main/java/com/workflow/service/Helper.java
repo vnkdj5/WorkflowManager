@@ -10,6 +10,7 @@ import java.util.*;
 import com.workflow.bean.GraphNode;
 import com.workflow.bean.LogicGraph;
 import com.workflow.bean.WFGraph;
+import com.workflow.exceptions.GenericRuntimeException;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,8 @@ import com.mongodb.client.MongoIterable;
 import com.opencsv.CSVReader;
 import com.workflow.bean.GraphLink;
 import com.workflow.component.*;
+import sun.security.jca.GetInstance;
+import weka.core.Instance;
 
 @Service("helper")
 public class Helper {
@@ -309,6 +312,31 @@ public class Helper {
                 if (obj.getCId().equals(CId)) {
                     MongoQuery c = (MongoQuery) obj.getComponent();
                     return c.testQuery();
+                }
+            }
+        }
+        return null;
+    }
+
+    public HashMap<String, Object> predict(ArrayList<HashMap<String,Object>> map, String wfId, String compId) {
+
+        HashMap<String, Object> df = new HashMap<>();
+        for(int i=0;i<map.size();i++){
+            df.put((String)map.get(i).get("featureName"),map.get(i).get("featureValue"));
+        }
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(wfId));
+        WFGraph graph = mongoTemplate.findOne(query, WFGraph.class, "WFGraph");
+
+        if (graph != null) {
+            List<GraphNode> nodeList = graph.getNodes();
+            Iterator<GraphNode> it = nodeList.iterator();
+            while (it.hasNext()) {
+                GraphNode obj = it.next();
+                if (obj.getCId().equals(compId)) {
+                    //TODO: make this code generic by separating machinelearning components interface
+                    return ((MLComponent)obj.getComponent()).predict(df);
                 }
             }
         }

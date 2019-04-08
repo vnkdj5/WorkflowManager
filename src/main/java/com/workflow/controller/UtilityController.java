@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import weka.core.Instance;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -118,5 +119,17 @@ public class UtilityController {
         }
         return new ResponseEntity<>(ret,HttpStatus.OK);
     }
+
+    @RequestMapping(value="/predict/{WFId}/{compId}", method=RequestMethod.POST)
+    public ResponseEntity<HashMap<String,Object>> prediction(@RequestBody ArrayList<HashMap<String,Object>> map,@PathVariable("WFId")String WFId, @PathVariable("compId")String CompId) {
+        HashMap<String,Object> predictresult = new HashMap<>();
+        try{
+            predictresult= helper.predict(map,WFId,CompId);
+        }catch (Exception e){
+            throw new GenericRuntimeException(CompId,"Error in Predicting Value");
+        }
+        return new ResponseEntity<>(predictresult,HttpStatus.OK);
+    }
+
 
 }

@@ -149,8 +149,10 @@
 			this.output = new Entity();
 			if(this.config.getEntity().get("outputFields")==null){
 				this.output.addKeyValue("output",new ArrayList<JSONObject>());
+
 			}else{
-				this.output.addKeyValue("output",this.config.getEntity().get("outpu	tFields"));
+				this.output.addKeyValue("output",this.config.getEntity().get("outputFields"));
+				System.out.println("in    in   in");
 			}
 
 		}
