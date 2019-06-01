@@ -209,3 +209,27 @@ footer {
     display: none;
     z-index: 100;
 }
+
+span.save_widget {
+    height: 30px;
+    margin-top: 4px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    width: 50%;
+    flex: 1;
+}
+
+
+span.save_widget span.filename {
+    height: 100%;
+
+    margin-left: 16px;
+    border: none;
+    color: white;
+    font-size: 140%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: 2px;
+}

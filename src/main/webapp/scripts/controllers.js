@@ -19,6 +19,8 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
     $scope.json = JSON.stringify($scope.workflow, undefined, 4);
     $scope.content = $scope.json;
     $scope.paletteModel = [];
+    $scope.textWFName = "";
+    $scope.saveStatus = "";
     $scope.currentWorkflowName = "";
     $scope.selectedComponent = {};
 
@@ -407,11 +409,12 @@ app.controller('DiagramCtrl', ['$scope', '$rootScope', 'fileUpload', 'graphServi
         graphService.loadGraph($scope.currentWorkflowName).then(
             function success(response) {
                 var graph = response.data.Graph;
-
+                $scope.textWFName = graph.wfname;
+                $scope.saveStatus = " (Autosaved)";
                 graph = $scope.converter(graph);
                 // console.log(JSON.stringify(graph));
                 $scope.myDiagram.model = go.Model.fromJson(graph);
-
+                //console.log("Diagram: ",$scope.myDiagram);
                 //console.log($scope.myDiagram.model.toJson());  //Check graph configuration
                 //component= $scope.myDiagram.model.nodeDataArray.find(component => component.text!=null);
                 //console.log(component);
