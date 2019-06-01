@@ -348,6 +348,7 @@ public class KNNClassifier implements MLComponent{
 
             map = new HashMap<>();
             map.put("prediction",data.classAttribute().name()+":"+labels[maxI]);
+            map.put("evaluation",evaluation);
             // map.put("Evaluation",evaluation);
 
         } catch (Exception e) {
